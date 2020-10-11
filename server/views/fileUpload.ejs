@@ -1,0 +1,296 @@
+<html>
+    <head>
+    <style>
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        #dropZone{	
+            width:800px;
+            height: auto;
+            outline: 4px dashed #92b0b3;
+            outline-offset:-10px;
+        }
+        
+        .upload-btn {
+            border: 2px solid gray;
+            color: gray;
+            background-color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        
+        #fileDragDesc {
+            width: 100%;
+            height: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 5px;
+            text-align: center;
+            line-height: 300px;
+            vertical-align:middle;
+        }
+    </style>
+    
+    
+    </head>
+    <body>
+        
+        <div class="upload-btn-wrapper">
+            <input type="file" id="input_file" multiple="multiple" style="height: 100%;" />
+            <button class="upload-btn">파일선택</button>
+        </div>
+    
+        <form name="uploadForm" id="uploadForm" enctype="multipart/form-data" method="get">
+            <div id="dropZone">
+                <div id="fileDragDesc"> 파일을 드래그 해주세요. </div>
+                <table id="fileListTable" width="100%" border="0px">
+                    <tbody id="fileTableTbody">
+    
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        
+        <input type="button" onclick="uploadFile(); return false;" class="btn bg_01" value="파일 업로드" name="imgUploads">
+    
+        <script src="https://code.jquery.com/jquery-latest.js"></script>
+    
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#input_file").bind('change', function() {
+                    selectFile(this.files);
+                });
+            });
+            var uploadFiles = [];
+            // 파일 리스트 번호
+            var fileIndex = 0;
+            // 등록할 전체 파일 사이즈
+            var totalFileSize = 0;
+            // 파일 리스트
+            var fileList = new Array();
+            // 파일 사이즈 리스트
+            var fileSizeList = new Array();
+    
+            $('#dropZone')
+                .on("dragover",dragOver)
+                .on("dragleave",dragLeave)
+                .on("drop",dropFile);
+
+            function dragOver(e){
+                e.stopPropagation();
+                e.preventDefault();
+                $(e.target).css({
+                    "background-color": "#E3F2FC",
+                });
+            }
+            function dragLeave(e){
+                e.stopPropagation();
+                e.preventDefault();
+                $(e.target).css({
+                    "background-color": "#FFFFFF",
+                });
+            }
+            function dropFile(e){
+                e.preventDefault();
+                $(e.target).css({
+                    "background-color": "#FFFFFF",
+                });
+                var files = e.originalEvent.dataTransfer.files;
+                if (files != null) {
+                    if (files.length < 1) {
+                        console.log("폴더 업로드 불가");
+                        return;
+                    } else {
+                        selectFile(files)
+                    }
+                } else {
+                    alert("ERROR");
+                }
+            }
+    
+            // 파일 선택시
+            function selectFile(fileObject) {
+                var files = null;
+    
+                if (fileObject != null) {
+                    // 파일 Drag 이용하여 등록시
+                    files = fileObject;
+                } else {
+                    // 직접 파일 등록시
+                    files = $('#multipaartFileList_' + fileIndex)[0].files;
+                }
+    
+                // 다중파일 등록
+                if (files != null) {
+                    
+                    if (files != null && files.length > 0) {
+                        $("#fileDragDesc").hide();
+                        $("fileListTable").show();
+                    } else {
+                        $("#fileDragDesc").show();
+                        $("fileListTable").hide();
+                    }
+                    
+                    for (var i = 0; i < files.length; i++) {
+                        // 파일 이름
+                        var fileName = files[i].name;
+                        var fileNameArr = fileName.split("\.");
+                        // 확장자
+                        var ext = fileNameArr[fileNameArr.length - 1];
+                        
+                        var fileSize = files[i].size; // 파일 사이즈(단위 :byte)
+                        console.log("fileSize="+fileSize);
+                        if (fileSize <= 0) {
+                            console.log("0kb file return");
+                            return;
+                        }
+                        
+                        var fileSizeKb = fileSize / 1024; // 파일 사이즈(단위 :kb)
+                        var fileSizeMb = fileSizeKb / 1024; // 파일 사이즈(단위 :Mb)
+                        
+                        var fileSizeStr = "";
+                        if ((1024*1024) <= fileSize) {  // 파일 용량이 1메가 이상인 경우
+                            console.log("fileSizeMb="+fileSizeMb.toFixed(2));
+                            fileSizeStr = fileSizeMb.toFixed(2) + " Mb";
+                        } else if ((1024) <= fileSize) {
+                            console.log("fileSizeKb="+parseInt(fileSizeKb));
+                            fileSizeStr = parseInt(fileSizeKb) + " kb";
+                        } else {
+                            console.log("fileSize="+parseInt(fileSize));
+                            fileSizeStr = parseInt(fileSize) + " byte";
+                        }
+                        if ($.inArray(ext, [ 'hwp', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'png', 'pdf', 'jpg', 'jpeg', 'gif', 'zip' ]) <= 0) {
+                            // 확장자 체크
+                            /* alert("등록이 불가능한 파일 입니다.");
+                            break; */
+                            alert("등록이 불가능한 파일 입니다.("+fileName+")");
+                        } else {
+                            // 전체 파일 사이즈
+                            totalFileSize += fileSizeMb;
+    
+                            // 파일 배열에 넣기
+                            fileList[fileIndex] = files[i];
+    
+                            // 파일 사이즈 배열에 넣기
+                            fileSizeList[fileIndex] = fileSizeMb;
+    
+                            // 업로드 파일 목록 생성
+                            var file = files[i];
+                            var size = uploadFiles.push(file);
+                            addFileList(fileIndex, fileName, fileSizeStr,file,size);
+    
+                            // 파일 번호 증가
+                            fileIndex++;
+                        }
+                    }
+                } else {
+                    alert("ERROR");
+                }
+				console.log(files);
+            }
+    
+            // 업로드 파일 목록 생성
+            function addFileList(fIndex, fileName, fileSizeStr,file,idx) {
+                /* if (fileSize.match("^0")) {
+                    alert("start 0");
+                } */
+                var reader = new FileReader();
+                reader.onload = (function(f,idx){
+                    return function(e){
+                        var html = "";
+                        html += "<tr id='fileTr_" + fIndex + "'>";
+                        html += '    <td>';
+                        html += '    <img src="' + e.target.result + '" title="' + escape(f.name) + '"/>';
+                        html += '    </td>';
+                        html += " <td id='dropZonetd' class='left' >";
+                        html += fileName + " (" + fileSizeStr +") "
+                                //+ "<a href='#' onclick='deleteFile(" + fIndex + "); return false;' class='btn small bg_02'> 삭제</a>"
+                                
+                                + "<input value='삭제' type='button' href='#' onclick='deleteFile(" + fIndex + "); return false;'>"
+                        html += " </td>"
+                        html += "</tr>"
+            
+                        $('#fileTableTbody').append(html);
+                    };
+                })(file,idx);
+                reader.readAsDataURL(file);
+                
+            }
+    
+            // 업로드 파일 삭제
+            function deleteFile(fIndex) {
+                console.log("deleteFile.fIndex=" + fIndex);
+                // 전체 파일 사이즈 수정
+                totalFileSize -= fileSizeList[fIndex];
+    
+                // 파일 배열에서 삭제
+                delete fileList[fIndex];
+    
+                // 파일 사이즈 배열 삭제
+                delete fileSizeList[fIndex];
+    
+                // 업로드 파일 테이블 목록에서 삭제
+                $("#fileTr_" + fIndex).remove();
+                
+                console.log("totalFileSize="+totalFileSize);
+                
+                if (totalFileSize > 0) {
+                    $("#fileDragDesc").hide();
+                    $("fileListTable").show();
+                } else {
+                    $("#fileDragDesc").show();
+                    $("fileListTable").hide();
+                }
+            }
+    
+            // 파일 등록
+            function uploadFile() {
+                // 등록할 파일 리스트
+                var uploadFileList = Object.keys(fileList);
+    
+                // 파일이 있는지 체크
+                if (uploadFileList.length == 0) {
+                    // 파일등록 경고창
+                    alert("파일이 없습니다.");
+                    return;
+                }
+    
+                if (confirm("파일 업로드 하시겠습니까?")) {
+                    var form = $('#uploadForm');
+                    var formData = new FormData(form[0]);
+                    for (var i = 0; i < uploadFileList.length; i++) {
+                        formData.append('imgUploads', fileList[uploadFileList[i]]);
+                    }
+                    $.ajax({
+                        url : "/upload",
+                        data : formData,
+                        type : 'POST', //여기부분 POST로 바꾸면 오류나서 GET방식으로 바꿨습니다.
+                        enctype : 'multipart/form-data',
+                        processData : false,
+                        contentType : false,
+                        cache : false,
+                        success: function (data) {
+                            alert("complete");
+                        },
+                        error: function (e) {
+                            console.log("ERROR : ", e);
+                            alert("fail");
+                        }
+                    });
+                }
+            }
+        </script>
+    </body>
+</html>

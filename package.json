@@ -1,0 +1,18 @@
+{
+  "name": "vue-with-express",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "server": "cd server && npm start",
+    "client": "cd client && npm run serve",
+    "start": "concurrently \"npm run client\" \"npm run server\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
