@@ -1,9 +1,13 @@
 <template>
   <div id="app">
-    
-    <select-page/>
-    <router-view/>
-  </div>
+    <div class ="child_1">
+		<select-page/>
+		
+	</div>
+    <div class = "child_2">
+		<router-view/>	
+	</div>
+    </div>
 </template>
 
 
@@ -27,8 +31,14 @@ body{
 }
 #app {
   text-align: center;
-    
+  display : flex;   
 }
+	.child_1{
+		flex : 1;
+	}
+	.child_2{
+		flex : 9;
+	}
 
 #nav {
   padding: 30px;
