@@ -98,8 +98,11 @@
 				(res) => {  //로그인 성공
 					alert(res.data.message);
 					// this.$router.push('/main')  // 로그인한 뒤 메인 페이지로 이동시켜야함
-					if (res.data.success == true)
+					if (res.data.success == true){
 						this.$router.push({name: 'Main', params: {userid : this.loginUser.id}})
+						this.$router.go()
+						sessionStorage.setItem("userid",this.loginUser.id);
+					}
 				},
 				(err) => { // error 를 보여줌
 					alert('Login failed! please check your id or password');

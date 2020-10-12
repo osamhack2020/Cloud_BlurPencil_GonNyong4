@@ -1,18 +1,25 @@
 <template>
   <div class="sidenav">
     <div v-for="item in items" :key="item.link_to" class = "sidemenu">
-      <template v-if="item.link_to !== ''">
-      <router-link :to="item.link_to">{{item.title}}</router-link>
-      </template>
-      <template v-else>
-        <button @click="clickMenuBtn($event)" class="dropdown-btn">{{item.title}}</button>
-        <div class="dropdown-container">
-        <div v-for="subItem in item.sub_menu" :key="subItem.link_to">
-          <router-link :to="subItem.link_to">{{subItem.title}}</router-link>
-        </div>
-        </div>
-      </template>
-    </div>
+		<template v-if="item.link_to !== ''">
+			<router-link :to="item.link_to">{{item.title}}</router-link>
+		</template>
+		<template v-else>
+			<button @click="clickMenuBtn($event)" class="dropdown-btn">{{item.title}}</button>
+			<div class="dropdown-container">
+				<div v-for="subItem in item.sub_menu" :key="subItem.link_to">
+			<router-link :to="subItem.link_to">{{subItem.title}}</router-link>
+				</div>
+			</div>
+		</template>
+	</div>
+	<template v-if = "isUser">
+		<!-- <router-link v-on:click.native = "logout" to="/">Logout</router-link> -->
+		<a href="/" v-on:click = "logout">Logout</a>
+	</template>
+	<template v-else>
+		<router-link to="/login">Login</router-link>
+	</template>
   </div>
 </template>
 
@@ -27,13 +34,12 @@
     //     { title: 'Test3', link_to: '/test3' }
     //   ]
     // },
-	{ title: 'Login', link_to: '/login'},
+	// { title: 'Login', link_to: '/login'},
   ]
-
   export default {
     data(){
 		return{
-			items : menuList,	
+			items : menuList,
 		}
     },
     methods: {
@@ -43,8 +49,21 @@
         } else {
           event.target.nextElementSibling.style.display = 'none';
         }
-      }
-    }
+      },
+		logout(){
+			sessionStorage.setItem("userid",'');
+		},
+    },
+	computed :{
+		isUser(){
+			var userid = sessionStorage.getItem("userid");
+			if(userid){
+				return true
+			}
+			return false
+		}
+		
+	}
   }
 
 </script>
@@ -68,12 +87,12 @@
 	.sidenav a, .dropdown-btn {
 		padding: 6px 6px 6px 6px;
 		text-decoration: none;
-		font-size: 20px;
+		font-size: 1.5vw;
 		color: #818181;
 		display: block;
 		border: none;
 		background: none;
-		width:80%;
+		width:100%;
 		text-align: center;
 		cursor: pointer;
 		outline: none;
