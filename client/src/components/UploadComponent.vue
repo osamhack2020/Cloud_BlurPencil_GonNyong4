@@ -84,8 +84,9 @@ export default{
 			}
 			
 			const formData = new FormData();
+			const userid = sessionStorage.getItem('userid');
 			formData.append('imgUploads',this.sendFile);
-			
+			formData.append('userid',userid);
 			this.$http.post('/api/upload',formData,{
 				headers : {
 					'Content-Type' : 'multipart/form-data'
