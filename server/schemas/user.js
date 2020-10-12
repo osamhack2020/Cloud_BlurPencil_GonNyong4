@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const { Types: { ObjectId } } = Schema;
 const userSchema = new Schema({
 	// 아이디
 	user_id: {
@@ -13,11 +12,6 @@ const userSchema = new Schema({
 	user_pw: {
 		type: String,
 		required: true
-	},
-	// 작업내역
-	user_work: {
-		type: [String],
-		default: []
 	},
 	// 로그
 	user_log: {
