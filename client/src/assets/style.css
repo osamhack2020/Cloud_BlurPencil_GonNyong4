@@ -1,12 +1,14 @@
 * {
     font-family: sans-serif;
 }
-.wraps {
-    width: 100%;
-    background-position: center;
+.Login {
+    width: 90%;
+    height : 100%;
+	background-position: center;
     background-size: cover;
     position: absolute;
 	margin : 0;
+	
 }
 .message{
 	padding-top : 40px;

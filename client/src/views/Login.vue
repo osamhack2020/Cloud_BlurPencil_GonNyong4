@@ -1,6 +1,5 @@
 <template>
     <div class = "Login">
-		<div class="wraps">
 			<div class = "message">
 				<p>자동 모자이크 웹 서비스</p>	
 			</div>
@@ -27,9 +26,10 @@
 								v-model="loginUser.password"
 								required
 								placeholder="Enter password"
+								@keyup.enter="login"
 							></b-form-input>
 						</b-form-group>
-						<button class="submit" @click = "login">Login</button>
+						<button class="submit" @click = "login" >Login</button>
 					</div>
 				</div>	
 				<div class = "Register">
@@ -48,13 +48,13 @@
 								v-model="registerUser.password"
 								required
 								placeholder="Enter password"
+								@keyup.enter="register"
 							></b-form-input>
 						</b-form-group>
 						<button class="submit" @click = "register">Register</button>
 					</div>
 				</div>	
             </div>
-        </div>
 	</div>
 </template>
 
@@ -98,8 +98,11 @@
 				(res) => {  //로그인 성공
 					alert(res.data.message);
 					// this.$router.push('/main')  // 로그인한 뒤 메인 페이지로 이동시켜야함
-					if (res.data.success == true)
+					if (res.data.success == true){
 						this.$router.push({name: 'Main', params: {userid : this.loginUser.id}})
+						this.$router.go()
+						sessionStorage.setItem("userid",this.loginUser.id);
+					}
 				},
 				(err) => { // error 를 보여줌
 					alert('Login failed! please check your id or password');
@@ -140,5 +143,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+	
     @import '../assets/style.css'
 </style>
