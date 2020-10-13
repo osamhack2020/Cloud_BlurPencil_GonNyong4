@@ -37,14 +37,21 @@ router.post('/login', function(req, res, next) {
 		.then((result) => {
 			if (!result) {
 				// 이메일도 비밀번호도 틀림
-				res.json(200, { success:false, message:`아이디도 비밀번호도 틀림` });
+				return { success:false, message:`아이디도 비밀번호도 틀림` };
 			} else if (result.user_pw === user.user_pw) {
 				// 로그인 성공
-				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공` });
+				return User.updateOne({ user_id: user.user_id }, { user_updatedAt: new Date().toISOString() });		
 			} else {
 				// 이메일만 성공
-				res.json(200, { success:false, message:`비밀번호가 틀림` });
+				return { success:false, message:`비밀번호가 틀림` };
 			}
+		})
+		.then((result) => {
+			if (result.ok)
+				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공` });
+			else
+				res.json(200, result);
+			
 		})
 		.catch((err) => {
 			console.error(err);
