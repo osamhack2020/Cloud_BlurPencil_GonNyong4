@@ -13,5 +13,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Vue config & goorm IDE local config
 vue.config.js
 goorm.manifest
