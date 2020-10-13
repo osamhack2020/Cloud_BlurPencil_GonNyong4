@@ -37,11 +37,13 @@ export default {
 		}
 	},
 	created () {
-		this.$http.post('/api/users/checkuser',{
-			user: this.finduser
-		}).then((response) => {
-			this.users = response.data.data
-		})
+		var userid = sessionStorage.getItem("userid");
+		this.users = userid;
+		// this.$http.post('/api/users/checkuser',{
+		// 	user: this.finduser
+		// }).then((response) => {
+		// 	this.users = response.data.data
+		// })
 	}
 }
 </script>
