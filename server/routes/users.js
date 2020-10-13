@@ -65,7 +65,6 @@ router.post('/login', function(req, res, next) {
  * POST /api/users/register
  */
 router.post('/register', function(req, res, next) {
-	console.log('register in');
 	const user = new User({
 		user_id: req.body.user.id,
 		user_pw: req.body.user.password
@@ -73,16 +72,17 @@ router.post('/register', function(req, res, next) {
 	
 	user.save()
 		.then((result) => {
-			console.log(result);
 			res.json(200, { success:true, message:'회원가입에 성공했습니다. 같은 메세지' });
 		})
 		.catch((err) => {
-			console.error(err);
-			next(err);
+		    if (err) {
+				if (err.name === 'MongoError' && err.code === 11000)
+					res.send({ success: false, message: '이미 존재한 아이디입니다.' });
+				else
+					next(err);
+			}
 		});
 	
 });
-
-
 
 module.exports = router;
