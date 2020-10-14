@@ -22,3 +22,6 @@ goorm.manifest
 
 # Test images
 logo_detection/test_imgs/
+
+# Google Drive helper script
+get_pth.py

@@ -1,3 +1,6 @@
+'''
+A helper script to fetch pth file from my drive.
+'''
 import requests
 import sys
 
