@@ -18,5 +18,4 @@ vue.config.js
 goorm.manifest
 
 # PyTorch pretrained model files
-logo_detection/*.pth
 *.pth
