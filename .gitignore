@@ -19,3 +19,6 @@ goorm.manifest
 
 # PyTorch pretrained model files
 *.pth
+
+# Python cache
+logo_detection/__pycache__/

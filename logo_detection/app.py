@@ -2,8 +2,10 @@ from PIL import Image
 import io
 import torch
 from flask import Flask, request
+from flask_cors import CORS
 from model import get_fasterrcnn_model, get_transform
 app = Flask(__name__)
+CORS(app)
 
 config = dict()
 model = None
