@@ -37,14 +37,21 @@ router.post('/login', function(req, res, next) {
 		.then((result) => {
 			if (!result) {
 				// 이메일도 비밀번호도 틀림
-				res.json(200, { success:false, message:`아이디도 비밀번호도 틀림` });
+				return { success:false, message:`아이디도 비밀번호도 틀림` };
 			} else if (result.user_pw === user.user_pw) {
 				// 로그인 성공
-				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공` });
+				return User.updateOne({ user_id: user.user_id }, { user_updatedAt: new Date().toISOString() });		
 			} else {
 				// 이메일만 성공
-				res.json(200, { success:false, message:`비밀번호가 틀림` });
+				return { success:false, message:`비밀번호가 틀림` };
 			}
+		})
+		.then((result) => {
+			if (result.ok)
+				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공` });
+			else
+				res.json(200, result);
+			
 		})
 		.catch((err) => {
 			console.error(err);
@@ -58,7 +65,6 @@ router.post('/login', function(req, res, next) {
  * POST /api/users/register
  */
 router.post('/register', function(req, res, next) {
-	console.log('register in');
 	const user = new User({
 		user_id: req.body.user.id,
 		user_pw: req.body.user.password
@@ -66,16 +72,17 @@ router.post('/register', function(req, res, next) {
 	
 	user.save()
 		.then((result) => {
-			console.log(result);
 			res.json(200, { success:true, message:'회원가입에 성공했습니다. 같은 메세지' });
 		})
 		.catch((err) => {
-			console.error(err);
-			next(err);
+		    if (err) {
+				if (err.name === 'MongoError' && err.code === 11000)
+					res.send({ success: false, message: '이미 존재한 아이디입니다.' });
+				else
+					next(err);
+			}
 		});
 	
 });
-
-
 
 module.exports = router;
