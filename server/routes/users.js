@@ -22,12 +22,33 @@ router.post('/checkuser', function (req, res) {
 		});
 });
 
+
+/**
+ * 유저정보
+ * GET /api/users
+ */
+router.get('/', function(req, res, next) {
+	const user_id = req.body.user_id || req.params.user_id;
+	
+	User.findOne({ user_id: user_id }, { user_pw: false })
+		.then((result) => {
+			if (result)
+				res.json(200, { success:true, data:result, message:`${user_id} 의 정보` });
+			else
+				res.json(404, { success:false, message:`${user_id}는 없는 유저입니다.` });
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		})
+});
+
+
 /**
  * 로그인
  * POST /api/users/login
  */
 router.post('/login', function(req, res, next) {
-	console.log('login in');
 	const user = new User({
 		user_id: req.body.user.id,
 		user_pw: req.body.user.password
