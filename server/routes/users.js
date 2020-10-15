@@ -28,7 +28,7 @@ router.post('/checkuser', function (req, res) {
  * GET /api/users
  */
 router.get('/', function(req, res, next) {
-	const user_id = req.body.user_id || req.params.user_id;
+	const user_id = req.query.user_id;
 	
 	User.findOne({ user_id: user_id }, { user_pw: false })
 		.then((result) => {
