@@ -1,7 +1,11 @@
 <template>
   <div class="sidenav">
 	<div class = "userwrap">
-		<p class = "userinfo" v-html = "userinfo"></p>
+		<p class = "userinfo" v-html = "userdata"></p>
+		<div class = "userprofile" v-if ="isUser">
+			<img src= "../images/profile.png">
+			<router-link class = "profile_text" to="/profile">profile</router-link>
+		</div>
 	</div>
 	<div class = "menuwrap">
 		<div v-if = "isUser" class = "sidemenu">
@@ -48,7 +52,7 @@
     data(){
 		return{
 			items : menuList,
-			userid : '',
+			userdata : '',
 		}
     },
     methods: {
@@ -71,14 +75,23 @@
 			}
 			return false
 		},
-		userinfo(){
-			var userid = sessionStorage.getItem("userid");
-			if(userid){
-				return userid+'<br>님 환영합니다.'
-			}
-			else
-				return '로그인이 <br>필요합니다.';
-		}
+		// userinfo(){
+		// 	var userid = sessionStorage.getItem("userid");
+		// 	if(userid){
+		// 		return userid+'<br>님 환영합니다.'
+		// 	}
+		// 	else
+		// 		return '로그인이 <br>필요합니다.';
+		// }
+	},
+	created(){
+		const userid = sessionStorage.getItem("userid");
+		this.$http.get('/api/users?user_id='+userid)
+			.then((response) => {
+			this.userdata = response.data.data.user_id+'님<br>환영합니다.'
+		}).catch((err) =>{
+			this.userdata = '로그인이 <br>필요합니다.';
+		})
 	}
   }
 
@@ -95,7 +108,24 @@
 	}
 	.userinfo{
 		color : white;
-		padding-top : 3vh;
+		padding-top : 1.4vh;
+	}
+	.userprofile{
+		width : fit-content;
+		height : 3.5vh;
+		margin : 0 auto;
+		border : 2px solid white;
+		border-radius : 6px;
+	}
+	.userprofile img{
+		width : 15px;
+		height : 15px;
+		float : left;
+		margin-top : 6px;
+	}
+	.profile_text{
+		float : left;
+		color : black;
 	}
 	.menuwrap{
 		padding-top : 2.2vh;
@@ -115,7 +145,7 @@
 		background-color : #898870;
 	}
 
-	.sidenav a, .dropdown-btn {
+	.menuwrap a, .dropdown-btn {
 		padding: 6px 6px 6px 6px;
 		text-decoration: none;
 		font-size: 1.5vw;
@@ -129,7 +159,7 @@
 		outline: none;
 	}
 
-	.sidenav a:hover {
+	.menuwrap a:hover {
 		color: #f1f1f1;
 	}
 	@media screen and (max-height: 450px) {
