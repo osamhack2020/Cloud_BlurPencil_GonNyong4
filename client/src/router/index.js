@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Upload from '../views/Upload.vue'
 import Main from '../views/Main.vue'
+import Profile from '../views/Profile.vue'
 
 Vue.use(VueRouter)
 
@@ -11,7 +12,7 @@ const requireAuth = () => (to, from, next) =>{
 	if (sessionStorage.getItem("userid")){
 		return next();
 	}
-	alert('로그인 해주세요');
+	alert('잘못된 접근입니다. 로그인 해주세요');
 	next('/login');
 }
 
@@ -36,6 +37,12 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+	path : '/profile',
+	name : 'Profile',
+	component : Profile,
+	beforeEnter : requireAuth()
   }
 ]
 
