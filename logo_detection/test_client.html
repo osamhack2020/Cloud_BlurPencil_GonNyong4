@@ -1,0 +1,41 @@
+<html>
+    <body>
+        
+            <form>
+        <div>
+            <label>Select file to upload</label>
+            <input id="fileinput" type="file">
+        </div>
+        <button type="submit">Convert</button>
+    </form>
+    </body>
+        
+        <script>
+                    // Select your input type file and store it in a variable
+            const input = document.getElementById('fileinput');
+
+            // This will upload the file after having read it
+            const upload = (file) => {
+              fetch('https://osam2020-4gb-uokiv.run.goorm.io/predict', { // Your POST endpoint
+                method: 'POST',
+                
+                body: file // This is your file object
+              }).then(
+                response => response.json() // if the response is a JSON object
+              ).then(
+                success => console.log(success) // Handle the success response object
+              ).catch(
+                error => console.log(error) // Handle the error response object
+              );
+            };
+
+            // Event handler executed when a file is selected
+            const onSelectFile = () => upload(input.files[0]);
+
+            // Add a listener on your input
+            // It will be triggered when a file will be selected
+            input.addEventListener('change', onSelectFile, false);
+        </script>
+        
+
+</html>
