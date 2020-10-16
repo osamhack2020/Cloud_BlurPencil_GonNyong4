@@ -134,5 +134,24 @@ router.put('/password', function(req, res, next) {
 		});
 });
 
+/**
+ * 회원 탈퇴
+ * DELETE /api/users
+ */
+router.delete('/', function(req, res, next) {
+	const user_id = req.body.id, 
+		  user_pw = req.body.password;
+	console.log('dd ' , user_id);
+	
+	User.deleteOne({ user_id: user_id, user_pw: user_pw })
+		.then((result) => {
+			console.log(result);
+			res.json(200, { success:true, message:`${user_id} : 회원탈퇴`});
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		})
+});
 
 module.exports = router;
