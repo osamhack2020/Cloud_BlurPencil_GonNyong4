@@ -9,6 +9,7 @@ var index = require('./routes/index');
 var upload = require('./routes/upload');
 var users = require('./routes/users');
 var uploadpage = require('./routes/uploadpage');
+var cors = require('cors')
 
 var connectMongoDB = require('./schemas');
 
@@ -20,6 +21,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 // app.set('views', __dirname + '/views');
 
+app.use(cors())
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
