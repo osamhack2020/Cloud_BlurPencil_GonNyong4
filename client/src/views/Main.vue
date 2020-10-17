@@ -9,8 +9,12 @@
 
 		<h2>userid: {{ $route.params.userid}}</h2>
 		<h2>
-			받아온것 : {{users}}
+			받아온것 : {{ workData }}
 		</h2>
+		<div v-for="(i, idx) in workData" v-bind:key="idx" >
+			<img class="worked-image" v-bind:src="serverUrl + i.fileName"/>
+			{{ i }}
+		</div>
 	</div>
   </div>
 </template>
@@ -32,21 +36,28 @@ export default {
 	},
 	data () {
 		return {
-			users : '',
+			workData : '',
 			finduser : this.$route.params.userid
 		}
 	},
 	created () {
 		var userid = sessionStorage.getItem("userid");
-		this.users = userid;
-		// this.$http.post('/api/users/checkuser',{
-		// 	user: this.finduser
-		// }).then((response) => {
-		// 	this.users = response.data.data
-		// })
+
+		this.$http.get('/api/works?user_id=' + userid)
+			.then((response) => {
+				this.workData = response.data;
+				if (this.workData.length > 0) {
+					// 작업물이 한개 이상이라도 있으면
+				}
+			})
+			.catch((err) =>{
+				this.workData = err;
+			})
 	}
 }
 </script>
 <style>
-
+.worked-image {
+	width: 100px;
+}
 </style>

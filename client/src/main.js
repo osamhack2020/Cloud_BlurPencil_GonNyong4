@@ -11,6 +11,8 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 
+Vue.prototype.serverUrl = 'https://osam-server.run.goorm.io/'
+
 new Vue({
   router,
   render: h => h(App)
