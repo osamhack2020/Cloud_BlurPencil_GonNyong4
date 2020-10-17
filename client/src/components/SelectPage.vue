@@ -90,11 +90,7 @@
 			this.userdata = response.data.data.user_id+'님<br>환영합니다.'
 		}).catch((err) =>{
 			this.userdata = '로그인이 <br>필요합니다.';
-<<<<<<< HEAD
-			console.log(err);
-=======
 			console.error(err);
->>>>>>> master
 		})
 	}
   }
