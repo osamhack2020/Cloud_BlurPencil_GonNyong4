@@ -88,6 +88,7 @@ router.post('/login', function(req, res, next) {
 router.post('/register', function(req, res, next) {
 	const user = new User({
 		user_id: req.body.user.id,
+		user_email: req.body.user.email,
 		user_pw: req.body.user.password
 	});
 	
@@ -109,9 +110,9 @@ router.post('/register', function(req, res, next) {
 
 /**
  * 비밀번호 변경
- * PUT /api/users/password
+ * PATCH /api/users/password
  */
-router.put('/password', function(req, res, next) {
+router.patch('/password', function(req, res, next) {
 	const user_id = req.body.user_id;
 	const user_prev_pw = req.body.user_prev_pw;
 	const user_want_pw = req.body.user_want_pw;
@@ -123,7 +124,7 @@ router.put('/password', function(req, res, next) {
 			return { success:false, message:`아이디 혹은 비밀번호가 틀렸습니다.` };
 		})
 		.then((result) => {
-			if (result.ok)
+			if (result.ok && result.nModified)
 				res.json(200, { success:true, message:`${user_id}의 비밀번호가 변경되었습니다.` });
 			else
 				res.json(400, result);
@@ -134,5 +135,47 @@ router.put('/password', function(req, res, next) {
 		});
 });
 
+/**
+ * 비밀번호 분실시
+ * POST /api/users/password
+ * TODO : 차후 이메일 인증 기능을 넣게 되면 이메일 인증코드를 받고나서 가능하도록 변경해야함.
+ */
+router.post('/password', function(req, res, next) {
+	const user_id = req.body.user_id;
+	const user_email = req.body.user_email;
+	const user_want_pw = req.body.user_want_pw;
+	
+	User.updateOne({ user_id: user_id, user_email: user_email }, { user_pw: user_want_pw })
+		.then((result) => {
+			if (result.ok && result.nModified)
+				res.json(200, { success:true, message:`${user_id}의 비밀번호가 변경되었습니다.` });
+			else
+				res.json(400, result);
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		});
+});
+
+/**
+ * 회원 탈퇴
+ * DELETE /api/users
+ */
+router.delete('/', function(req, res, next) {
+	const user_id = req.body.id, 
+		  user_pw = req.body.password;
+	console.log('dd ' , user_id);
+	
+	User.deleteOne({ user_id: user_id, user_pw: user_pw })
+		.then((result) => {
+			console.log(result);
+			res.json(200, { success:true, message:`${user_id} : 회원탈퇴`});
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		})
+});
 
 module.exports = router;
