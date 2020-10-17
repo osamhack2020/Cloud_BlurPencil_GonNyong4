@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
+// import Login from '../views/Login.vue'
 import Upload from '../views/Upload.vue'
 import Main from '../views/Main.vue'
 import Profile from '../views/Profile.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -22,28 +23,31 @@ const routes = [
     name: 'Home',
     component: Home
   },
-  { // 로그인해야들어갈수있음
-    path: '/upload',
-    name: 'Upload',
-	component: Upload,
-	beforeEnter : requireAuth()
-  },
-  { 
-    path: '/main',
-    name: 'Main',
-    component: Main
-  },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
+	path : '/dashboard',
+	name : 'Dashboard',
+	component : Dashboard,
+	children : [
+		{ // 로그인해야들어갈수있음
+			path: '/upload',
+			name: 'Upload',
+			component: Upload,
+			beforeEnter : requireAuth()
+		},
+		{ 
+			path: '/main',
+			name: 'Main',
+			component: Main
+		},
+		{
+			path : '/profile',
+			name : 'Profile',
+			component : Profile,
+			beforeEnter : requireAuth()
+		}
+	],
   },
-  {
-	path : '/profile',
-	name : 'Profile',
-	component : Profile,
-	beforeEnter : requireAuth()
-  }
+  
 ]
 
 const router = new VueRouter({
