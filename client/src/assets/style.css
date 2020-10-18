@@ -30,7 +30,7 @@
 }
 .button-wraps {
     width: 223px;
-	margin : 35px auto;
+	margin : 10px auto;
 	top : 10px;
     transition: .5s;
     position: relative;
@@ -65,7 +65,7 @@
     cursor: pointer;
 }
 .input-groups {
-    top: 150px;
+    top: 100px;
     position: absolute;
     width: 280px;
     transition: .5s;
