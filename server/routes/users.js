@@ -160,12 +160,11 @@ router.post('/password', function(req, res, next) {
 
 /**
  * 회원 탈퇴
- * DELETE /api/users
+ * POST /api/users/delete
  */
-router.delete('/', function(req, res, next) {
-	const user_id = req.body.id, 
-		  user_pw = req.body.password;
-	console.log('dd ' , user_id);
+router.post('/', function(req, res, next) {
+	const user_id = req.body.user_id, 
+		  user_pw = req.body.user_pw;
 	
 	User.deleteOne({ user_id: user_id, user_pw: user_pw })
 		.then((result) => {
