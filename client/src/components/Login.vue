@@ -14,20 +14,28 @@
 					<div class="input-groups" :style = "{left : loginLeft}">
 						<b-form-group id="input-group-2" label="Your ID:" label-for="input-2">
 							<b-form-input
-								id="input-2"
+								id="login-1"
 								v-model="loginUser.id"
 								required
 								placeholder="Enter ID"
+								:state = "loginState.id"
 							></b-form-input>
+							<b-form-invalid-feedback id="login-1">
+								아이디를 입력해주세요.
+							</b-form-invalid-feedback>
 						</b-form-group>
 						<b-form-group id="input-group-2" label="Your Password:" label-for="input-2">
 							<b-form-input
-								id="input-2"
+								id="login-2"
 								v-model="loginUser.password"
 								required
 								placeholder="Enter password"
+								:state = "loginState.password"
 								@keyup.enter="login"
 							></b-form-input>
+							<b-form-invalid-feedback id="login-2">
+								비밀번호를 입력해주세요.
+							</b-form-invalid-feedback>
 						</b-form-group>
 						<button class="submit" @click = "login" >Login</button>
 					</div>
@@ -36,20 +44,41 @@
 					<div class="input-groups" :style = "{left : registerLeft}">
 						<b-form-group id="input-group-2" label="Your ID:" label-for="input-2">
 							<b-form-input
-								id="input-2"
+								id="register-1"
 								v-model="registerUser.id"
 								required
 								placeholder="Enter ID"
+								:state = "registerState.id"
 							></b-form-input>
+							<b-form-invalid-feedback id="register-1">
+								아이디를 입력해주세요.
+							</b-form-invalid-feedback>
+						</b-form-group>
+						<b-form-group id="input-group-2" label="Your Email:" label-for="input-2">
+							<b-form-input
+								id="register-2"
+								v-model="registerUser.email"
+								required
+								placeholder="Enter email"
+								:state = "registerState.email"
+							></b-form-input>
+							<b-form-invalid-feedback id="register-2">
+								이메일을 입력해주세요.
+							</b-form-invalid-feedback>
 						</b-form-group>
 						<b-form-group id="input-group-2" label="Your Password:" label-for="input-2">
 							<b-form-input
-								id="input-2"
+								type = "password"
+								id="register-3"
 								v-model="registerUser.password"
 								required
 								placeholder="Enter password"
+								:state = "registerState.password"
 								@keyup.enter="register"
 							></b-form-input>
+							<b-form-invalid-feedback id="register-3">
+								비밀번호를 입력해주세요.
+							</b-form-invalid-feedback>
 						</b-form-group>
 						<button class="submit" @click = "register">Register</button>
 					</div>
@@ -69,11 +98,21 @@
 				registerUser : {
 					id : '',
 					password : '',
+					email : '',
 				},
 				loginUser : {
 					id : '',
 					password : '',
 				},
+				loginState : {
+					id : null,
+					password : null,
+				},
+				registerState : {
+					id : null,
+					password : null,
+					email : null
+				}
 			}
 		},
 		methods:{
@@ -88,21 +127,41 @@
 				this.registerLeft = "50px";
 			},
 			login(){
-				if(this.loginUser.id == '' || this.loginUser.password == ''){
-					alert("로그인할 아이디나 패스워드를 입력해주세요");
+				if(this.loginUser.id == ''){
+					this.loginState.id = false
 					return false;
+				}
+				else{
+					this.loginState.id = true;
+				}
+				if(this.loginUser.password == ''){
+					this.loginState.password = false
+					return false;
+				}
+				else{
+					this.loginState.password = true;
 				}
 				this.$http.post('/api/users/login', {
 				user: this.loginUser
 				}).then(
-				(res) => {  //로그인 성공
-					alert(res.data.message);
-					// this.$router.push('/main')  // 로그인한 뒤 메인 페이지로 이동시켜야함
+				(res) => {  //로그인 
 					if (res.data.success == true){
+						alert("로그인에 성공하였습니다.");
 						this.$router.push({name: 'Main', params: {userid : this.loginUser.id}})
 						this.$router.go()
 						sessionStorage.setItem("userid",this.loginUser.id);
 					}
+					else{
+						if(res.data.message == '아이디도 비밀번호도 틀림'){
+							alert("존재하지 않는 아이디입니다.");
+							this.loginState.id = false;
+							this.loginState.password = false;
+						}
+						else{
+							alert("비밀번호가 잘못되었습니다.");
+							this.loginState.password = false;
+						}
+					}	
 				},
 				(err) => { // error 를 보여줌
 					alert('Login failed! please check your id or password');
@@ -114,10 +173,28 @@
 				})
 			},
 			register(){
-				if(this.registerUser.id == '' || this.registerUser.password == ''){
-					alert("등록할 아이디나 패스워드를 입력해주세요");
+				if(this.registerUser.id == ''){
+					this.registerState.id = false
 					return false;
 				}
+				else{
+					this.registerState.id = true;
+				}
+				if(this.registerUser.email == ''){
+					this.registerState.email = false;
+					return false
+				}
+				else{
+					this.registerState.email = true;
+				}
+				if(this.registerUser.password == ''){
+					this.registerState.password = false
+					return false;
+				}
+				else{
+					this.registerState.password = true;
+				}
+				
 				this.$http.post('/api/users/register', { 
 					user: this.registerUser
 				}).then((res) => {
@@ -130,6 +207,11 @@
 						alert(res.data.message);
 						this.registerUser.id= '';
 						this.registerUser.password = '';
+						this.registerUser.email = '';
+						this.registerState.id = null;
+						this.registerState.email = null;
+						this.registerState.password = null;
+						
 					}
 				}).catch(function (error) {
 					alert('error')
