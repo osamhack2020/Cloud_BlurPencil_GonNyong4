@@ -25,9 +25,6 @@ export default {
 body{
 	width : 100%;
 	height : 100%;
-    background-image: url(../images/background.jpg);
-    background-position: center;
-    background-size: cover;
 }
 #dashboard {
   text-align: center;

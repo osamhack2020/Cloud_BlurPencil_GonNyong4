@@ -65,7 +65,6 @@
 						v-model="deleteusr.pw"
 						:state="deleteusr.state"
 						required
-						@keyup.enter="deleteuser"
 					></b-form-input>
 					<b-form-invalid-feedback id="delete-user-pw">
 						기존 비밀번호 입력해주세요
@@ -145,17 +144,6 @@ export default {
 				return false
 			}
 		},
-		// isChanged(){
-		// 	if(this.prev.pw != this.want.pw){
-		// 		this.prev.pw = false;
-		// 		this.want.pw = false;
-		// 		this.wantmessage = "기존 비밀번호와 일치하지 않습니다."
-		// 		return false;
-		// 	}
-		// 	else{
-		// 		return true;
-		// 	}
-		// },
 		handleSubmit() {
 			if (this.prev.pw == ''){
 				this.prev.state = false
@@ -194,7 +182,7 @@ export default {
 					this.resetModal();
 				})
 				this.$nextTick(() => {
-					this.$bvModal.hide('changepw')
+					this.$bvModal.hide('deluser')
 				})
 			}
 		},
@@ -211,7 +199,6 @@ export default {
 			if(isok){
 				const userid = this.userdata.user_id;
 				const userpw = this.deleteusr.pw;
-				alert(userid + userpw);
 				this.$http.post('/api/users/delete', { 
 					user_id : userid,
 					user_pw : userpw,

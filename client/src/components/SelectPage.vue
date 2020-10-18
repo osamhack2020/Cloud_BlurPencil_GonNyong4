@@ -2,10 +2,10 @@
   <div class="sidenav">
 	<div class = "userwrap">
 		<p class = "userinfo" v-html = "userdata"></p>
-		<div class = "userprofile" v-if ="isUser">
+		<!-- <div class = "userprofile" v-if ="isUser">
 			<img src= "../images/profile.png">
 			<router-link class = "profile_text" to="/profile">profile</router-link>
-		</div>
+		</div> -->
 	</div>
 	<div class = "menuwrap">
 		<div v-if = "isUser" class = "sidemenu">
@@ -13,7 +13,7 @@
 			<a href="/" v-on:click = "logout">Logout</a>
 		</div>
 		<div v-else class = "sidemenu">
-			<router-link to="/login">Login</router-link>
+			<router-link to="/">Login</router-link>
 		</div>
 		<div v-for="item in items" :key="item.link_to" class = "sidemenu">
 			<template v-if="item.link_to !== ''">
@@ -38,6 +38,8 @@
 
   const menuList = [
     { title: 'Upload', link_to: '/upload'},
+    { title: 'Profile', link_to: '/profile'},
+    { title: 'Main', link_to: '/main'},
     // { title: 'Test', link_to: '', sub_menu:
     //   [
     //     { title: 'Test1', link_to: '/test1' },
@@ -87,7 +89,7 @@
 		const userid = sessionStorage.getItem("userid");
 		this.$http.get('/api/users?user_id='+userid)
 			.then((response) => {
-			this.userdata = response.data.data.user_id+'님<br>환영합니다.'
+			this.userdata = response.data.data.user_id+''
 		}).catch((err) =>{
 			this.userdata = '로그인이 <br>필요합니다.';
 			console.error(err);
@@ -99,12 +101,9 @@
 
 <style>
 	.userwrap{
-		background-color : #796943;
-		width : 6vw;
-		height : 14vh;
-		margin : 0 auto;
-		border-radius : 8px;
-		opacity: 0.6;
+		font-size : x-large;
+		font-weight : bold;	
+		color : white;
 	}
 	.userinfo{
 		color : white;
@@ -137,30 +136,30 @@
 		z-index: 1;
 		top: 0;
 		left: 0;
-		background-color: #262115;
+		background-color : #5f5fff;
 		overflow-x: hidden;
 		padding-top: 20px;
 	}
 	.sidemenu:hover{
-		background-color : #898870;
+		background-color : white;
+	}
+	.sidemenu{
+		margin : 2vh;
 	}
 
 	.menuwrap a, .dropdown-btn {
 		padding: 6px 6px 6px 6px;
 		text-decoration: none;
 		font-size: 1.5vw;
-		color: #818181;
+		color: white;
 		display: block;
 		border: none;
-		background: none;
+		background: none;	
 		width:100%;
 		text-align: center;
+		font-weight : bold;
 		cursor: pointer;
 		outline: none;
-	}
-
-	.menuwrap a:hover {
-		color: #f1f1f1;
 	}
 	@media screen and (max-height: 450px) {
 		.sidenav {padding-top: 15px;}
@@ -168,7 +167,8 @@
 	}
 
 	.sidenav a:hover, .dropdown-btn:hover {
-		color: #f1f1f1;
+		color: black;
+		font-weight : normal;
 	}
 	.dropdown-container {
 		display: none;
