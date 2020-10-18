@@ -3,12 +3,14 @@ import matplotlib.patches as patches
 from torchvision import transforms
 
 
-def show_detection(x, pred, gt, pred_color='r', gt_color='g'):
+def show_detection(x, pred, gt=None, pred_color='r', gt_color='g'):
     '''
     Arguements:
     x : Tensor
     bbox : Tensor
     '''
+    print('show_detection: x:', x)
+    print('show_detection: x.size() = ', x.size())
     fig, ax = plt.subplots(1)
     img = transforms.ToPILImage()(x).convert("RGB")
     ax.imshow(img)
@@ -27,6 +29,9 @@ def show_detection(x, pred, gt, pred_color='r', gt_color='g'):
                 edgecolor=gt_color, facecolor='none')
             ax.add_patch(rect)
             toClear.append(rect)
-    plt.show()
+    return fig
+    '''
+        plt.show()
     for rect in toClear:
         rect.remove()
+    '''
