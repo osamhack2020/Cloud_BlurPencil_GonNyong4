@@ -212,9 +212,9 @@ export default {
 				const userid = this.userdata.user_id;
 				const userpw = this.deleteusr.pw;
 				alert(userid + userpw);
-				this.$http.delete('/api/users/', { 
-					id : userid,
-					password : userpw,
+				this.$http.post('/api/users/delete', { 
+					user_id : userid,
+					user_pw : userpw,
 				}).then((res) => {
 					if (res.data.success == true) {
 						alert(res.data.message);
