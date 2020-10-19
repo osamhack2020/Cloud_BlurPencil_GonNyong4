@@ -19,6 +19,11 @@ goorm.manifest
 
 # PyTorch pretrained model files
 *.pth
+logo_detection/weights/*.pth
 
 # Python cache
 logo_detection/__pycache__/
+
+# nohup output file
+logo_detection/nohup.out
+nohup.out

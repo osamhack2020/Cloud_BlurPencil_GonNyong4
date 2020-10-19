@@ -1,16 +1,25 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from torchvision import transforms
+import requests
+from model import get_transform
+import config
+
+
+def img2tensor(img):
+    img = img.resize(config.img_size)
+    transform_f = get_transform(train=False)
+    img = transform_f(img)
+    x = [img]
+    return x
 
 
 def show_detection(x, pred, gt=None, pred_color='r', gt_color='g'):
     '''
     Arguements:
-    x : Tensor
+    x : Tensor of a single image
     bbox : Tensor
     '''
-    print('show_detection: x:', x)
-    print('show_detection: x.size() = ', x.size())
     fig, ax = plt.subplots(1)
     img = transforms.ToPILImage()(x).convert("RGB")
     ax.imshow(img)
@@ -30,8 +39,35 @@ def show_detection(x, pred, gt=None, pred_color='r', gt_color='g'):
             ax.add_patch(rect)
             toClear.append(rect)
     return fig
-    '''
-        plt.show()
-    for rect in toClear:
-        rect.remove()
-    '''
+
+
+# https://stackoverflow.com/a/39225039
+def download_file_from_google_drive(id, destination):
+    def get_confirm_token(response):
+        for key, value in response.cookies.items():
+            if key.startswith('download_warning'):
+                return value
+
+        return None
+
+    def save_response_content(response, destination):
+        CHUNK_SIZE = 32768
+
+        with open(destination, "wb") as f:
+            for chunk in response.iter_content(CHUNK_SIZE):
+                if chunk:  # filter out keep-alive new chunks
+                    f.write(chunk)
+
+    URL = "https://docs.google.com/uc?export=download"
+
+    session = requests.Session()
+
+    response = session.get(URL, params={'id': id}, stream=True)
+    token = get_confirm_token(response)
+
+    if token:
+        params = {'id': id, 'confirm': token}
+        response = session.get(URL, params=params, stream=True)
+
+    save_response_content(response, destination)
+
