@@ -169,7 +169,10 @@ router.post('/delete', function(req, res, next) {
 	User.deleteOne({ user_id: user_id, user_pw: user_pw })
 		.then((result) => {
 			console.log(result);
-			res.json(200, { success:true, message:`${user_id} : 회원탈퇴`});
+			if (result && result.deletedCount > 0 && result.n > 0)
+				res.json(200, { success:true, message:`${user_id} : 회원탈퇴`});
+			else
+				res.json(200, { success:false, message:`${user_id} 의 비밀번호가 틀립니다.`});
 		})
 		.catch((err) => {
 			console.error(err);

@@ -207,6 +207,8 @@ export default {
 						alert(res.data.message);
 						sessionStorage.setItem("userid",'');
 						location.href = "/";
+					} else {
+						alert(res.data.message);
 					}
 				}).catch(function (error) {
 					console.log(error)
