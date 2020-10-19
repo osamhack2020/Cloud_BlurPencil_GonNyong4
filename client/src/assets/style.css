@@ -16,7 +16,7 @@
 .message p{
 	font-weight : bold;
 	font-size : 180%;
-	color : #402828;
+	color : #212529;
 }
 .form-wraps {
     width: 380px;
@@ -30,7 +30,7 @@
 	opacity : 0.8;
 }
 .button-wraps {
-    width: 223px;
+    width: 220px;
 	margin : 10px auto;
 	top : 10px;
     transition: .5s;
@@ -46,6 +46,8 @@
     border: 0;
     outline: none;
     position: relative;
+	margin-left : 10px;
+	font-weight : bold;
 }
 #btns {
     top: 0;
@@ -53,8 +55,8 @@
     position: absolute;
     width: 110px;
     height: 100%;
-    background: linear-gradient(to right, #ff105f, #ffad06);
     border-radius: 30px;
+	border: 2px solid #494949 !important;
     transition: .5s;
 }
 .social-icons {
@@ -70,20 +72,30 @@
     position: absolute;
     width: 280px;
     transition: .5s;
+	height : 330px;
 }
 .submit {
-    width: 85%;
-    padding: 10px 30px;
-    cursor: pointer;
+    width: 100%;
     display: block;
-    margin: auto;
-    background: linear-gradient(to right, #ff105f, #ffad06);
-    border: 0;
-    outline: none;
-    border-radius: 30px;
+    cursor: pointer;
+    color: #494949 !important;
+	text-transform: uppercase;
+	text-decoration: none;
+	background: #ffffff;
+	border: 4px solid #494949 !important;
+	padding: 12px;
+	transition: all 0.4s ease 0s;
+	position : absolute;
+	bottom : 0;
+	margin : 0 auto;
+	border-radius : 40px;
+	font-weight : bold;
 }
 .submit:hover {
-  background: #adadad;
+	color: #ffffff !important;
+	background: #5f5fff;
+	border-color: #5f5fff !important;
+	transition: all 0.4s ease 0s;
 }
 span {
     color: #777;
@@ -93,4 +105,5 @@ span {
 }
 #input-group-2{
 	text-align : left;
+	font-weight : bold;
 }
