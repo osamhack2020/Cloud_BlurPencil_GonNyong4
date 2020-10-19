@@ -15,8 +15,6 @@ export default {
 </script>
 <style>
 body{
-	
-    background-image: url(./images/background.jpg);
     background-position: center;
     background-size: cover;
 }

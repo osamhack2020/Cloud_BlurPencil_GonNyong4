@@ -162,7 +162,7 @@ router.post('/password', function(req, res, next) {
  * 회원 탈퇴
  * POST /api/users/delete
  */
-router.post('/', function(req, res, next) {
+router.post('/delete', function(req, res, next) {
 	const user_id = req.body.user_id, 
 		  user_pw = req.body.user_pw;
 	
