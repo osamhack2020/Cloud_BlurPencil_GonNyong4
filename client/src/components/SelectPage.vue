@@ -2,30 +2,17 @@
   <div class="sidenav">
 	<div class = "userwrap">
 		<p class = "userinfo" v-html = "userdata"></p>
-		<!-- <div class = "userprofile" v-if ="isUser">
-			<img src= "../images/profile.png">
-			<router-link class = "profile_text" to="/profile">profile</router-link>
-		</div> -->
 	</div>
 	<div class = "menuwrap">
 		<div v-if = "isUser" class = "sidemenu">
-		<!-- <router-link v-on:click.native = "logout" to="/">Logout</router-link> -->
 			<a href="/" v-on:click = "logout">Logout</a>
 		</div>
 		<div v-else class = "sidemenu">
 			<router-link to="/">Login</router-link>
 		</div>
-		<div v-for="item in items" :key="item.link_to" class = "sidemenu">
-			<template v-if="item.link_to !== ''">
-				<router-link :to="item.link_to">{{item.title}}</router-link>
-			</template>
-			<template v-else>
-				<button @click="clickMenuBtn($event)" class="dropdown-btn">{{item.title}}</button>
-				<div class="dropdown-container">
-					<div v-for="subItem in item.sub_menu" :key="subItem.link_to">
-				<router-link :to="subItem.link_to">{{subItem.title}}</router-link>
-					</div>
-				</div>
+		<div v-for="item in items" :key="item.link_to" class = "sidemenu" v-bind:class="{selected : item.isSelected}">
+			<template>
+				<router-link v-on:click.native="isSelected(item.title)" :to="item.link_to">{{item.title}}</router-link>
 			</template>
 		</div>
 	</div>
@@ -37,23 +24,16 @@
 <script>
 
   const menuList = [
-    { title: 'Upload', link_to: '/upload'},
-    { title: 'Profile', link_to: '/profile'},
-    { title: 'Main', link_to: '/main'},
-    // { title: 'Test', link_to: '', sub_menu:
-    //   [
-    //     { title: 'Test1', link_to: '/test1' },
-    //     { title: 'Test2', link_to: '/test2' },
-    //     { title: 'Test3', link_to: '/test3' }
-    //   ]
-    // },
-	// { title: 'Login', link_to: '/login'},
+    { title: 'Upload', link_to: '/upload', isSelected : false},
+    { title: 'Profile', link_to: '/profile',isSelected : false},
+    { title: 'Main', link_to: '/main',isSelected : true},
   ]
   export default {
     data(){
 		return{
 			items : menuList,
 			userdata : '',
+			
 		}
     },
     methods: {
@@ -67,6 +47,15 @@
 		logout(){
 			sessionStorage.setItem("userid",'');
 		},
+		isSelected(item){
+			for(var i =0;i<menuList.length;i++){
+				if(menuList[i].title == item){
+					menuList[i].isSelected = true;
+				}
+				else
+					menuList[i].isSelected = false;
+			}
+		}
     },
 	computed :{
 		isUser(){
@@ -131,7 +120,7 @@
 	}
 	.sidenav {
 		height: 100%;
-		width: 10%;
+		width: 15%;
 		position: fixed;
 		z-index: 1;
 		top: 0;
@@ -140,13 +129,16 @@
 		overflow-x: hidden;
 		padding-top: 20px;
 	}
+	
 	.sidemenu:hover{
 		background-color : white;
 	}
 	.sidemenu{
 		margin : 2vh;
 	}
-
+	.selected{
+		
+	}
 	.menuwrap a, .dropdown-btn {
 		padding: 6px 6px 6px 6px;
 		text-decoration: none;
