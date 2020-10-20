@@ -204,15 +204,14 @@ export default {
 					user_pw : userpw,
 				}).then((res) => {
 					if (res.data.success == true) {
-						alert(res.data.message);
+						alert("정상적으로 회원탈퇴 되었습니다.");
 						sessionStorage.setItem("userid",'');
 						location.href = "/";
 					} else {
-						alert(res.data.message);
+						alert("입력하신 비밀번호가 일치하지 않습니다.");
 					}
 				}).catch(function (error) {
 					console.log(error)
-					alert("기존 비밀번호가 일치하지 않습니다.");
 				})
 			}
 		}

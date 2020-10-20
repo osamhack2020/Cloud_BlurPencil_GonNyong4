@@ -31,12 +31,12 @@ body{
   display : flex;   
 }
 	.child_1{
-		flex : 1;
-		width : 10%;
+		flex : 1.5;
+		width : 15%;
 	}
 	.child_2{
-		flex : 9;
-		width : 90%;
+		flex : 8.5;
+		width : 85%;
 	}
 
 #nav {

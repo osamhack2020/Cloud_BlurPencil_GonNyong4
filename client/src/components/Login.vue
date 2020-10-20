@@ -6,30 +6,28 @@
             <div class="form-wraps">
                 <div class="button-wraps">
                     <div id="btns" :style = "{left : btnLeft}"></div>
-                    <button type="button" class="togglebtns" @click = "loginbtn">LOG IN</button>
-                    <button type="button" class="togglebtns" @click = "registerbtn">REGISTER</button>
+                    <button type="button" class="togglebtns" @click = "loginbtn">로그인</button>
+                    <button type="button" class="togglebtns" @click = "registerbtn">회원가입</button>
                 </div>
 				
 				<div class = "login">
 					<div class="input-groups" :style = "{left : loginLeft}">
-						<b-form-group id="input-group-2" label="Your ID:" label-for="input-2">
+						<b-form-group id="input-group-2" label="아이디" label-for="input-2">
 							<b-form-input
 								id="login-1"
 								v-model="loginUser.id"
 								required
-								placeholder="Enter ID"
 								:state = "loginState.id"
 							></b-form-input>
 							<b-form-invalid-feedback id="login-1">
 								아이디를 입력해주세요.
 							</b-form-invalid-feedback>
 						</b-form-group>
-						<b-form-group id="input-group-2" label="Your Password:" label-for="input-2">
+						<b-form-group id="input-group-2" label="비밀번호" label-for="input-2">
 							<b-form-input
 								id="login-2"
 								v-model="loginUser.password"
 								required
-								placeholder="Enter password"
 								:state = "loginState.password"
 								@keyup.enter="login"
 							></b-form-input>
@@ -37,42 +35,39 @@
 								비밀번호를 입력해주세요.
 							</b-form-invalid-feedback>
 						</b-form-group>
-						<button class="submit" @click = "login" >Login</button>
+						<button class="submit" @click = "login" >로그인</button>
 					</div>
 				</div>	
 				<div class = "Register">
 					<div class="input-groups" :style = "{left : registerLeft}">
-						<b-form-group id="input-group-2" label="Your ID:" label-for="input-2">
+						<b-form-group id="input-group-2" label="아이디" label-for="input-2">
 							<b-form-input
 								id="register-1"
 								v-model="registerUser.id"
 								required
-								placeholder="Enter ID"
 								:state = "registerState.id"
 							></b-form-input>
 							<b-form-invalid-feedback id="register-1">
 								아이디를 입력해주세요.
 							</b-form-invalid-feedback>
 						</b-form-group>
-						<b-form-group id="input-group-2" label="Your Email:" label-for="input-2">
+						<b-form-group id="input-group-2" label="이메일" label-for="input-2">
 							<b-form-input
 								id="register-2"
 								v-model="registerUser.email"
 								required
-								placeholder="Enter email"
 								:state = "registerState.email"
 							></b-form-input>
 							<b-form-invalid-feedback id="register-2">
 								이메일을 입력해주세요.
 							</b-form-invalid-feedback>
 						</b-form-group>
-						<b-form-group id="input-group-2" label="Your Password:" label-for="input-2">
+						<b-form-group id="input-group-2" label="비밀번호" label-for="input-2">
 							<b-form-input
 								type = "password"
 								id="register-3"
 								v-model="registerUser.password"
 								required
-								placeholder="Enter password"
 								:state = "registerState.password"
 								@keyup.enter="register"
 							></b-form-input>
@@ -80,7 +75,7 @@
 								비밀번호를 입력해주세요.
 							</b-form-invalid-feedback>
 						</b-form-group>
-						<button class="submit" @click = "register">Register</button>
+						<button class="submit" @click = "register">회원가입</button>
 					</div>
 				</div>	
             </div>

@@ -39,7 +39,7 @@
 	</div>
 	<div class="container section-price" id="price">
 		<div class="price-desc">
-			<h1>Price</h1>
+			<h1>Price</h1>	
 			<p>대충 가격 정책 나열</p>
 		</div>
 	</div>
@@ -62,22 +62,32 @@ export default {
 </script>
 <style>
 /* 반응형 나중에 */
-.navbar-logo {
-	width: 3rem;
-}
-.section-intro {
-	display: flex;
-	padding-top: 10rem;
-	padding-bottom: 10rem;
-	margin-top: 74px;
-	background-color: white;
-	justify-content: space-between;
-}
-.section-intro .intro-desc {
-	padding: 5rem 5rem 5rem 1rem;
-	text-align: left;
-}
-.section-intro .intro-head-img {
-	height: 30rem;
-}
+	html {
+		scroll-behavior: smooth;
+	}
+	.navbar-logo {
+		width: 3rem;
+	}
+	.container p{
+		margin-bottom : 0;
+	}
+	.content{
+		border-bottom: 1px solid #353C46;
+	}
+		
+	.section-intro {
+		display: flex;
+		padding-top: 10rem;
+		padding-bottom: 10rem;
+		margin-top: 74px;
+		background-color: white;
+		justify-content: space-between;
+	}
+	.section-intro .intro-desc {
+		padding: 5rem 5rem 5rem 1rem;
+		text-align: left;
+	}
+	.section-intro .intro-head-img {
+		height: 30rem;
+	}
 </style>
