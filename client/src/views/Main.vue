@@ -3,7 +3,7 @@
 	<div>
 		<div class="recent-worked">
 			<h2 class="recent-title">Recently work</h2>
-			<div v-for="(i, idx) in workData" v-bind:key="idx" class="row worked-list">
+			<!-- <div v-for="(i, idx) in workData" v-bind:key="idx" class="row worked-list">
 				<div class="col-md-2">
 					<img class="worked-image" v-bind:src="serverUrl + i.fileName"/>
 				</div>
@@ -13,19 +13,52 @@
 				<div class="col-md-2">
 					{{ i.workedAt }}
 				</div>
-				<!-- {{ i }} -->
+				{{ i }}
+			</div> -->
+			<b-card-group deck>
+				<div v-for="(list	,idx) in lists" :key="idx" class = "wrap_cards">
+					<b-card
+						class = "showing_image"
+						v-if="list"
+						:title="list.fileName"
+					>
+					<b-card no-body
+						:img-src = "serverUrl + list.fileName" 
+						@click="click_image(list)"
+						style = "cursor : pointer"
+						img-alt="Image"
+						img-width = "auto"
+						img-height = "250rem"
+						img-top>
+						
+					</b-card>
+						<b-card-text>
+							
+						</b-card-text>
+						<template #footer>
+							<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
+						</template>
+					</b-card>
+				</div>
+			</b-card-group>
+			<div class = "wrap_pagination">
+				<div class ="load_page">
+					<b-pagination
+						:total-rows="totalRows" 
+						v-model="currentPage"
+						:per-page="perPage"
+					/>
+				</div>
 			</div>
 		</div>
-		<!-- <b-button>Button</b-button>
-		<b-button variant="danger">Button</b-button>
-		<b-button variant="success">Button</b-button>
-		<b-button variant="outline-primary">Button</b-button> -->
-		<h1>Query</h1>
-
-		<h2>userid: {{ $route.params.userid}}</h2>
-		<h2>
-			받아온것 : {{ workData }}
-		</h2>
+		<b-modal id="bv-modal-example" hide-footer size = "xl">
+			<template #modal-title>
+				{{clicked_image.fileName}}
+			</template>
+			<div style = "text-align : center; height : 500px;">
+				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>	  
+			</div>
+		</b-modal>
 	</div>
   </div>
 </template>
@@ -39,7 +72,7 @@ export default {
 	props: {
 		userid: {
 			type: String,
-            default : ''
+            default : '',
 		},
     },
 	components: {
@@ -48,13 +81,22 @@ export default {
 	data () {
 		return {
 			workData : '',
-			finduser : this.$route.params.userid
+			finduser : this.$route.params.userid,
+			perPage: 5,
+			currentPage: 1,
+			clicked_image : ''
 		}
+	},
+	methods : {
+		click_image (src){
+			this.clicked_image = src;
+			this.$bvModal.show('bv-modal-example');
+		}	
 	},
 	created () {
 		var userid = sessionStorage.getItem("userid");
 		var skip = 0;	// 뛰어넘기	(default 0)
-		var limit = 5;	// 개수	(default 5)
+		var limit = 100;	// 개수	(default 5)
 		var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)
 		
 		this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
@@ -62,32 +104,65 @@ export default {
 				this.workData = response.data;
 				if (this.workData.length > 0) {
 					// 작업물이 한개 이상이라도 있으면
+					this.rows = this.workData.length;
 				}
 			})
 			.catch((err) =>{
 				this.workData = err;
 			})
-	}
+	},
+	computed: {
+    lists () {
+      const items = this.workData;
+      // Return just page of items needed
+      return items.slice(
+        (this.currentPage - 1) * this.perPage,
+        this.currentPage * this.perPage
+      )
+    },
+    totalRows () {
+      return this.workData.length;
+    }
+  }
 }
 </script>
 <style>
-.main {
-	padding: 5rem;
-}
-	
-.worked-image {
-	height: 5rem;
-}
-	
-.recent-worked {
-	text-align: left;
-}
-.recent-worked .recent-title {
-	font-weight: 700;
-}
-.recent-worked .worked-list {
-	padding: 1rem;
-	vertical-align: center;
-	align-items: center;
-}
+	.main {
+		padding: 5rem;
+	}
+	.worked-image {
+		height: 500px;
+		display : inline-block;
+		margin : 0 auto;
+	}
+	.wrap_pagination{
+		text-align : center;
+		margin-top : 1rem;
+	}
+	.load_page span{
+		bottom : 0;
+		font-size : 1rem;
+	}
+	.load_page{
+		margin : 0 auto;
+		display : inline-block;
+	}
+	.recent-worked {
+		text-align: left;
+	}
+	.recent-worked .recent-title {
+		font-weight: 700;
+	}
+	.recent-worked .worked-list {
+		padding: 1rem;
+		align-items: center;
+	}
+	.showing_image{
+		height : 30rem;
+		max-width : 15rem;
+		
+	}
+	.wrap_cards{
+		margin-top : 5px;	
+	}
 </style>
