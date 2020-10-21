@@ -56,8 +56,10 @@
 				{{clicked_image.fileName}}
 			</template>
 			<div style = "text-align : center; height : 500px;">
-				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>	  
+				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
 			</div>
+			<button class="btn btn-primary float-right">다운로드</button>
+			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button>
 		</b-modal>
 	</div>
   </div>
@@ -91,15 +93,28 @@ export default {
 		click_image (src){
 			this.clicked_image = src;
 			this.$bvModal.show('bv-modal-example');
-		}	
+		},
+		removeWork (work_oid, fileName) {
+			this.$http.post(`/api/works/delete/${this.userid}`, {
+					work_oid: work_oid,
+					fileName: fileName
+				})
+				.then((response) => {
+					console.log(response.data);
+					alert('TODO : ', response.data.message);
+				})
+				.catch((err) =>{
+					this.workData = err;
+				})
+		}
 	},
 	created () {
-		var userid = sessionStorage.getItem("userid");
+		this.userid = sessionStorage.getItem("userid");
 		var skip = 0;	// 뛰어넘기	(default 0)
 		var limit = 100;	// 개수	(default 5)
 		var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)
 		
-		this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
+		this.$http.get(`/api/works/${this.userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
 			.then((response) => {
 				this.workData = response.data;
 				if (this.workData.length > 0) {
