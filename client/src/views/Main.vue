@@ -56,8 +56,10 @@
 				{{clicked_image.fileName}}
 			</template>
 			<div style = "text-align : center; height : 500px;">
-				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>	  
+				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
 			</div>
+			<button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
+			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button>
 		</b-modal>
 	</div>
   </div>
@@ -91,7 +93,36 @@ export default {
 		click_image (src){
 			this.clicked_image = src;
 			this.$bvModal.show('bv-modal-example');
-		}	
+		},
+		removeWork (work_oid, fileName) {
+			this.$http.post(`/api/works/delete/${this.userid}`, {
+					work_oid: work_oid,
+					fileName: fileName
+				})
+				.then((response) => {
+					console.log(response.data);
+					alert('TODO : ', response.data.message);
+				})
+				.catch((err) =>{
+					this.workData = err;
+				})
+		},
+		downloadWork (fileName) {
+			this.$http ({
+				url: `${this.serverUrl}${fileName}`,
+				method: 'GET',
+				responseType: 'blob',
+			}).then((response) => {
+				var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+				var fileLink = document.createElement('a');
+
+				fileLink.href = fileURL;
+				fileLink.setAttribute('download', fileName);
+				document.body.appendChild(fileLink);
+
+				fileLink.click();
+			});
+		}
 	},
 	created () {
 		var userid = sessionStorage.getItem("userid");
