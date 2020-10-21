@@ -30,7 +30,7 @@
 <script>
 
   const menuList = [
-    { title: 'Main', link_to: '/main',isSelected : true},
+    { title: 'Main', link_to: '/main',isSelected : false},
     { title: 'Profile', link_to: '/profile',isSelected : false},
     { title: 'Upload', link_to: '/upload', isSelected : false},
   ]
@@ -95,6 +95,13 @@
 			this.userdata = '로그인이 <br>필요합니다.';
 			console.error(err);
 		})
+		var para = document.location.href.split("/");
+		for(var i =0;i<menuList.length;i++){
+			if(menuList[i].link_to == ('/'+para[3])){
+				menuList[i].isSelected = true;
+			}
+		}
+
 	}
   }
 

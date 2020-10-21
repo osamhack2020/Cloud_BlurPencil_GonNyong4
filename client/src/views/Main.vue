@@ -86,7 +86,8 @@ export default {
 			finduser : this.$route.params.userid,
 			perPage: 5,
 			currentPage: 1,
-			clicked_image : ''
+			clicked_image : '',
+			user_id : '',
 		}
 	},
 	methods : {
@@ -94,18 +95,22 @@ export default {
 			this.clicked_image = src;
 			this.$bvModal.show('bv-modal-example');
 		},
-		removeWork (work_oid, fileName) {
-			this.$http.post(`/api/works/delete/${this.userid}`, {
-					work_oid: work_oid,
-					fileName: fileName
-				})
-				.then((response) => {
-					console.log(response.data);
-					alert('TODO : ', response.data.message);
-				})
-				.catch((err) =>{
-					this.workData = err;
-				})
+		removeWork(work_oid, fileName) {
+			var isok = confirm("정말 파일을 삭제하시겠습니까?");
+			if(isok){
+				this.$http.post(`/api/works/delete/${this.user_id}`, {
+						work_oid: work_oid,
+						fileName: fileName
+					})
+					.then((response) => {
+						console.log(response.data);
+						alert('파일이 삭제되었습니다.');
+						location.reload();
+					})
+					.catch((err) =>{
+						this.workData = err;
+					})
+			}
 		},
 		downloadWork (fileName) {
 			this.$http ({
@@ -126,6 +131,7 @@ export default {
 	},
 	created () {
 		var userid = sessionStorage.getItem("userid");
+		this.user_id = userid;
 		var skip = 0;	// 뛰어넘기	(default 0)
 		var limit = 100;	// 개수	(default 5)
 		var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)

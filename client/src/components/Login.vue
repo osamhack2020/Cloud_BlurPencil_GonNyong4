@@ -196,16 +196,17 @@
 					if (res.data.success == true) {
 						alert(res.data.message);
 						// this.$router.push('/login')  // 로그인한 뒤 메인 페이지로 이동시켜야함
-						this.loginbtn();
-					}
-					if (res.data.success == false) {
-						alert(res.data.message);
 						this.registerUser.id= '';
 						this.registerUser.password = '';
 						this.registerUser.email = '';
 						this.registerState.id = null;
 						this.registerState.email = null;
 						this.registerState.password = null;
+						this.loginbtn();
+					}
+					if (res.data.success == false) {
+						alert(res.data.message);
+						
 						
 					}
 				}).catch(function (error) {
