@@ -1,77 +1,89 @@
 <template>
   <div class="profile">
 	<div class = "user_profile_wrap">
-		유저 아이디 : {{userdata.user_id}}
-		<br>
-		<p v-b-modal.changepw class = "change_btn">비밀번호 변경</p>
-		<p v-b-modal.deluser class = "change_btn">회원탈퇴</p>
-		<b-modal
-			id="changepw"
-			ref="modal1"
-			title="비밀번호 변경"
-			@show="resetModal"
-			@hidden="resetModal"
-			@ok="handleOk"
-		>
-			<form ref="form" @submit.stop.prevent="handleSubmit">
-				<b-form-group label="기존 비밀번호">
-					<b-form-input
-						id="prev-pw"
-						v-model="prev.pw"
-						:state="prev.state"
-						required
-					></b-form-input>
-					<b-form-invalid-feedback id="prev-pw">
-						기존 비밀번호를 입력해주세요.
-					</b-form-invalid-feedback>
-				</b-form-group>
-				<b-form-group label="바꿀 비밀번호">
-					<b-form-input
-						id="want-pw"
-						v-model="want.pw"
-						:state="want.state"
-						required
-					></b-form-input>
-					<b-form-invalid-feedback id="want-pw">
-						{{wantmessage}}
-					</b-form-invalid-feedback>
-				</b-form-group>
-				<b-form-group label="바꿀 비밀번호 확인">
-					<b-form-input
-						id="want-pw-chk"
-						v-model="want_check.pw"
-						:state="want_check.state"
-						required
-						@keyup.enter="handleOk"
-					></b-form-input>
-					<b-form-invalid-feedback id="want-pw-chk">
-						{{checkmessage}}
-					</b-form-invalid-feedback>
-				</b-form-group>
-			</form>
-		</b-modal>
-		<b-modal
-			id="deluser"
-			ref="modal2"
-			title="회원탈퇴"
-			@show="resetModal"
-			@hidden="resetModal"
-			@ok="deleteuser"
-		>
-			<form ref="form">
-				<b-form-group label="기존 비밀번호 입력">
-					<b-form-input
-						id="delete-user-pw"
-						v-model="deleteusr.pw"
-						:state="deleteusr.state"
-						required
-					></b-form-input>
-					<b-form-invalid-feedback id="delete-user-pw">
-						기존 비밀번호 입력해주세요
-					</b-form-invalid-feedback>
-				</b-form-group>
-			</form>
-		</b-modal>
+		<div class = "user_info">
+			<div class = "user_icon">
+				<div class = "user_name">
+					{{userdata.user_id[0]}}
+				</div>	
+				
+			</div>
+			유저 아이디 : {{userdata.user_id}}<br>
+			유저 이메일 : {{userdata.user_email}}<br>
+			유저 로그 : {{userdata.user_log}}<br>
+			유저 만든 : {{userdata.user_createdAt}}<br>
+			유저 최근접 : {{userdata.user_updatedAt}}
+			<br>
+			<p v-b-modal.changepw class = "change_btn">비밀번호 변경</p>
+			<b-button variant="danger" v-b-modal.deluser class = "delete_btn">회원탈퇴</b-button>
+			<b-modal
+				id="changepw"
+				ref="modal1"
+				title="비밀번호 변경"
+				@show="resetModal"
+				@hidden="resetModal"
+				@ok="handleOk"
+			>
+				<form ref="form" @submit.stop.prevent="handleSubmit">
+					<b-form-group label="기존 비밀번호">
+						<b-form-input
+							id="prev-pw"
+							v-model="prev.pw"
+							:state="prev.state"
+							required
+						></b-form-input>
+						<b-form-invalid-feedback id="prev-pw">
+							기존 비밀번호를 입력해주세요.
+						</b-form-invalid-feedback>
+					</b-form-group>
+					<b-form-group label="바꿀 비밀번호">
+						<b-form-input
+							id="want-pw"
+							v-model="want.pw"
+							:state="want.state"
+							required
+						></b-form-input>
+						<b-form-invalid-feedback id="want-pw">
+							{{wantmessage}}
+						</b-form-invalid-feedback>
+					</b-form-group>
+					<b-form-group label="바꿀 비밀번호 확인">
+						<b-form-input
+							id="want-pw-chk"
+							v-model="want_check.pw"
+							:state="want_check.state"
+							required
+							@keyup.enter="handleOk"
+						></b-form-input>
+						<b-form-invalid-feedback id="want-pw-chk">
+							{{checkmessage}}
+						</b-form-invalid-feedback>
+					</b-form-group>
+				</form>
+			</b-modal>
+			<b-modal
+				id="deluser"
+				ref="modal2"
+				title="회원탈퇴"
+				@show="resetModal"
+				@hidden="resetModal"
+				@ok="deleteuser"
+			>
+				<form ref="form">
+					<b-form-group label="기존 비밀번호 입력">
+						<b-form-input
+							id="delete-user-pw"
+							v-model="deleteusr.pw"
+							:state="deleteusr.state"
+							required
+						></b-form-input>
+						<b-form-invalid-feedback id="delete-user-pw">
+							기존 비밀번호 입력해주세요
+						</b-form-invalid-feedback>
+					</b-form-group>
+				</form>
+			</b-modal>
+		</div>
 	</div>
   </div>
 </template>
@@ -127,9 +139,6 @@ export default {
 		handleOk(bvModalEvt) {
 			bvModalEvt.preventDefault()
 			this.handleSubmit()
-		},
-		isEmpty(){
-			
 		},
 		isSame(){
 			if(this.want.pw == this.want_check.pw){
@@ -219,8 +228,38 @@ export default {
 }
 </script>
 <style>
+	.user_profile_wrap{
+		width : 100%;
+		height : 100%;
+		text-align : left;
+	}
+	.user_icon {
+		padding-top : 2vh;
+		padding-bottom : 4vh;
+	}
+	.user_info{
+		width : 150vh;
+		height : 90vh;
+		background-color : #efeded;
+		margin :4rem 0 0 4rem;
+		border-radius : 10px;
+		box-shadow : 2px 2px 3px gray;
+		margin : 0 auto;
+		margin-top : 4rem;
+	}
+	.user_name{
+		background-color: gray;
+		width:10vh;
+		height:10vh;
+		border-radius:75px;
+		text-align:center;
+		margin:0 auto;
+		font-size:3rem;
+		color : white;
+		vertical-align:middle;
+		line-height:10vh;
+	}
 	.change_btn{
 		width : 200px;
-		margin : 0 auto;
 	}
 </style>

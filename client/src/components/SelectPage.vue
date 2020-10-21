@@ -1,19 +1,25 @@
 <template>
   <div class="sidenav">
-	<div class = "userwrap">
-		<p class = "userinfo" v-html = "userdata"></p>
+	<div class = "logowrap">
+		<p><img src="../images/logo(125x125).png" class="nav_logo"/>
+			Blur Pencil
+		</p>
 	</div>
 	<div class = "menuwrap">
-		<div v-if = "isUser" class = "sidemenu">
-			<a href="/" v-on:click = "logout">Logout</a>
+		
+		<div v-for="item in items" :key="item.link_to" 
+			class = "sidemenu" 
+			v-bind:class="{selected : item.isSelected}"
+			@click = "isSelected(item)"
+		>	
+			<a>{{item.title}}</a>
 		</div>
-		<div v-else class = "sidemenu">
-			<router-link to="/">Login</router-link>
-		</div>
-		<div v-for="item in items" :key="item.link_to" class = "sidemenu" v-bind:class="{selected : item.isSelected}">
-			<template>
-				<router-link v-on:click.native="isSelected(item.title)" :to="item.link_to">{{item.title}}</router-link>
-			</template>
+		
+		<div class = "sidemenu"
+			v-if = "isUser"
+			@click = "logout"	
+		>
+			<a>Logout</a>
 		</div>
 	</div>
     
@@ -24,9 +30,9 @@
 <script>
 
   const menuList = [
-    { title: 'Upload', link_to: '/upload', isSelected : false},
-    { title: 'Profile', link_to: '/profile',isSelected : false},
     { title: 'Main', link_to: '/main',isSelected : true},
+    { title: 'Profile', link_to: '/profile',isSelected : false},
+    { title: 'Upload', link_to: '/upload', isSelected : false},
   ]
   export default {
     data(){
@@ -45,16 +51,22 @@
         }
       },
 		logout(){
+			alert("로그아웃 되었습니다.");
 			sessionStorage.setItem("userid",'');
+			this.$router.push('/');
 		},
 		isSelected(item){
 			for(var i =0;i<menuList.length;i++){
-				if(menuList[i].title == item){
+				if(menuList[i].title == item.title){
 					menuList[i].isSelected = true;
 				}
 				else
 					menuList[i].isSelected = false;
 			}
+			this.selectmenu(item.link_to);
+		},
+		selectmenu(item){
+			this.$router.push(item);
 		}
     },
 	computed :{
@@ -89,34 +101,16 @@
 </script>
 
 <style>
-	.userwrap{
+	.nav_logo {
+		width: 3rem;
+	}
+	.logowrap{
 		font-size : x-large;
 		font-weight : bold;	
-		color : white;
-	}
-	.userinfo{
-		color : white;
-		padding-top : 1.4vh;
-	}
-	.userprofile{
-		width : fit-content;
-		height : 3.5vh;
-		margin : 0 auto;
-		border : 2px solid white;
-		border-radius : 6px;
-	}
-	.userprofile img{
-		width : 15px;
-		height : 15px;
-		float : left;
-		margin-top : 6px;
-	}
-	.profile_text{
-		float : left;
-		color : black;
+		color : #0d112a;
 	}
 	.menuwrap{
-		padding-top : 2.2vh;
+		padding-top : 2.2vh;	
 	}
 	.sidenav {
 		height: 100%;
@@ -125,47 +119,35 @@
 		z-index: 1;
 		top: 0;
 		left: 0;
-		background-color : #5f5fff;
+		background-color : white;
 		overflow-x: hidden;
 		padding-top: 20px;
-	}
-	
-	.sidemenu:hover{
-		background-color : white;
+		box-shadow : 0 2px 2px black;
 	}
 	.sidemenu{
-		margin : 2vh;
+		padding : 1vh 2vh 1vh 2vh;
+		/* padding: 6px 6px 6px 6px; */	
+		font-size: 1.5vw;
+		font-weight : bold;
+		cursor : pointer;
+	}
+	.sidemenu:hover{
+		background-color : #efeded;
+	}
+	.sidemenu a{
+		color : black;
+	}
+	.sidemenu a:hover{
+		text-decoration: none;
+		color : black;
 	}
 	.selected{
-		
-	}
-	.menuwrap a, .dropdown-btn {
-		padding: 6px 6px 6px 6px;
-		text-decoration: none;
-		font-size: 1.5vw;
-		color: white;
-		display: block;
-		border: none;
-		background: none;	
-		width:100%;
-		text-align: center;
-		font-weight : bold;
-		cursor: pointer;
-		outline: none;
+		background: linear-gradient( to right, #3e0ecc, #7c60cd );
+		color : white;
 	}
 	@media screen and (max-height: 450px) {
 		.sidenav {padding-top: 15px;}
 		.sidenav a {font-size: 18px;}
-	}
-
-	.sidenav a:hover, .dropdown-btn:hover {
-		color: black;
-		font-weight : normal;
-	}
-	.dropdown-container {
-		display: none;
-		background-color: #5eaf13;
-		padding-left: 8px;
 	}
 
 </style>
