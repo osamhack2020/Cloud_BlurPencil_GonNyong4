@@ -58,7 +58,7 @@
 			<div style = "text-align : center; height : 500px;">
 				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
 			</div>
-			<button class="btn btn-primary float-right">다운로드</button>
+			<button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
 			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button>
 		</b-modal>
 	</div>
@@ -106,15 +106,31 @@ export default {
 				.catch((err) =>{
 					this.workData = err;
 				})
+		},
+		downloadWork (fileName) {
+			this.$http ({
+				url: `${this.serverUrl}${fileName}`,
+				method: 'GET',
+				responseType: 'blob',
+			}).then((response) => {
+				var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+				var fileLink = document.createElement('a');
+
+				fileLink.href = fileURL;
+				fileLink.setAttribute('download', fileName);
+				document.body.appendChild(fileLink);
+
+				fileLink.click();
+			});
 		}
 	},
 	created () {
-		this.userid = sessionStorage.getItem("userid");
+		var userid = sessionStorage.getItem("userid");
 		var skip = 0;	// 뛰어넘기	(default 0)
 		var limit = 100;	// 개수	(default 5)
 		var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)
 		
-		this.$http.get(`/api/works/${this.userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
+		this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
 			.then((response) => {
 				this.workData = response.data;
 				if (this.workData.length > 0) {
