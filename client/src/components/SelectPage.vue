@@ -15,7 +15,7 @@
 			<a>{{item.title}}</a>
 		</div>
 		
-		<div class = "sidemenu"
+		<div class = "sidemenu bottom-menu"
 			v-if = "isUser"
 			@click = "logout"	
 		>
@@ -156,5 +156,9 @@
 		.sidenav {padding-top: 15px;}
 		.sidenav a {font-size: 18px;}
 	}
-
+	.bottom-menu {
+		position: absolute;
+		width: 100%;
+		bottom: 2rem;
+	}
 </style>
