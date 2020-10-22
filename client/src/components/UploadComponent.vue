@@ -3,6 +3,12 @@
 		<b-alert v-model="showDismissibleAlert" variant = "success"  dismissible>
 			파일이 업로드 되었습니다!
 		</b-alert>
+		<div class="progressbar">
+			<button v-on:click="step=0" v-bind:class="{'now': step===0, 'active': step > 0}">업로드</button>
+			<button v-on:click="step=1" v-bind:class="{'now': step===1, 'active': step > 1}">수정</button>
+			<button v-on:click="step=2" v-bind:class="{'now': step===2, 'active': step > 2}">필터링</button>
+			<button>다운로드</button>
+		</div>
 		<div class = "wrap">
 			<div class="helper"></div>
 			<div class="drop display-inline align-center"
@@ -11,10 +17,11 @@
 				@dragleave.prevent = "onLeave"
 				@drop="onDrop">
 				<div class="helper"></div>
-					<label v-if="!image" class="btns display-inline">
-						이곳에 이미지를 드래그하거나 선택해주세요
-						<input type="file" name="image" @change="onChange">
-					</label>
+				<img v-if="!image" class="upload-image" src="../images/image-upload.svg"/>
+				<label v-if="!image" class="btns ready-btn display-inline">
+					이곳에 이미지를 드래그하거나 선택해주세요
+					<input type="file" name="image" @change="onChange">
+				</label>
 				<div class="hidden display-inline align-center" v-else v-bind:class="{ 			'image': true }">
 					<div class = "file-preview-wrapper">
 						<img :src="image" alt="" class="img" />
@@ -37,6 +44,7 @@ export default{
 			sendFile : '',
 			file1 : null,
 			showDismissibleAlert: false,
+			step: 0
 		}
 	},
     methods: {
@@ -109,11 +117,19 @@ html, body {
   height: 100%;
 }
 .wrap {
-	margin : 2% auto;
+	margin: 2% auto;
     position: relative;
 }
+.upload-image {
+	width: 5rem;
+	position: absolute;
+    top: 40%;
+    left: 50%;
+	opacity: .5;
+    transform: translate(-50%, -40%);
+}
 .btns {
-  background-color: #d3394c;
+  background-color: #5f5fff;
   border: 0;
   color: #fff;
   cursor: pointer;
@@ -121,10 +137,13 @@ html, body {
   font-weight: bold;
   padding: 15px 35px;
   position: relative;
+  border-radius: .25rem;
 }
-
+.btns.ready-btn {
+	margin-top: 8rem;
+}
 .btns:hover {
-  background-color: #722040;
+  background-color: #212b6b;
 }
 
 input[type="file"] {
@@ -165,6 +184,7 @@ input[type="file"] {
 }
 
 .drop {
+	position: relative;
   background-color: #f2f2f2;
   border: 4px dashed #ccc;
   background-color: #f6f6f6;
@@ -194,4 +214,75 @@ input[type="file"] {
     padding: 10px;
     position: relative;
 }
+	
+.progressbar {
+ counter-reset: step;
+	margin-top: 2%;
+	min-height: 74px;
+}
+.progressbar button {
+ list-style-type: none;
+ float: left;
+ width: 25%;
+ position: relative;
+ text-align: center;
+ font-weight: 400;
+ color: #a5a5a5;
+ background-color: transparent;
+ border: 0px;
+ cursor: pointer;
+}
+.progressbar button:focus {
+ outline: none;
+}
+.progressbar button:before {
+ content: counter(step);
+ counter-increment: step;
+ counter-increment: step;
+ width: 40px;
+ height: 40px;
+ line-height: 35px;
+ border: 1px solid #ddd;
+ display: block;
+ font-size: 22px;
+ font-weight: 600;
+ text-align: center;
+ color: #a5a5a5;
+ margin: 0 auto 10px auto;
+ border-radius: 50%;
+ background-color: white;
+}
+.progressbar button:after {
+ content: '';
+ position: absolute;
+ width: 100%;
+ height: 2px;
+ margin-top: 3px;
+ background-color: #a5a5a5;
+ top: 15px;
+ left: -50%;
+ z-index: -1;
+}
+.progressbar button:first-child:after {
+ content: none;
+}
+.progressbar button.now {
+ font-weight: 700;
+}
+.progressbar button.now:before {
+ /* color: white; */
+ color: white !important;
+ background-color: #5f5fff;
+}
+.progressbar button.active, .progressbar button.now {
+ color: #5f5fff;
+}
+.progressbar button.active::before, .progressbar button.now::before {
+ color: #5f5fff;
+ border-color: #5f5fff;
+}
+.progressbar button.active + :after {
+ background-color: #5f5fff;
+}
+
 </style>
