@@ -39,6 +39,7 @@ body{
 .child_2{
 	flex : 8.5;
 	width : 85%;
+	z-index: 0;
 }
 #nav {
   padding: 30px;

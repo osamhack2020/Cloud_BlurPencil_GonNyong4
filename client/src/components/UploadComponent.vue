@@ -9,7 +9,7 @@
 			<button v-on:click="step=2" v-bind:class="{'now': step===2, 'active': step > 2}">필터링</button>
 			<button>다운로드</button>
 		</div>
-		<div class = "wrap">
+		<div class = "wrap" v-if="step === 0">
 			<div class="helper"></div>
 			<div class="drop display-inline align-center"
 				v-bind:style = "{background : color}"
@@ -30,7 +30,25 @@
 					<button class="btns" @click="uploadFile">전송</button>
 				</div>
 			</div>
-				
+		</div>
+		
+		<div class="container fix-section" v-else-if="step===1">
+			<div class="row">
+				<div class="col-md-8">
+					<div class="target-panel">
+						<img class="target-image" :src="image"/>
+						인식률 : <a href="#">높음</a> <a href="#">중간</a> <a href="#">낮음</a> (이런식으로 선택 가능하게?)
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="setting-panel">
+						<button class="btn sample-btn" v-for="(pData, idx) in predictData" :key="idx" v-on:click="pData.check = !pData.check">
+							<img class="sample-image" src="https://i.pinimg.com/originals/17/0d/f9/170df908bff9619457df64f5d4072a54.jpg"/>
+							<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
+						</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -44,7 +62,21 @@ export default{
 			sendFile : '',
 			file1 : null,
 			showDismissibleAlert: false,
-			step: 0
+			step: 0,
+			predictData: [
+				{
+					pos: '',
+					check: true
+				},
+				{
+					pos: '',
+					check: true
+				},
+				{
+					pos: '',
+					check: true
+				}
+			]
 		}
 	},
     methods: {
@@ -112,7 +144,7 @@ export default{
  }
 </script>
 
-<style>
+<style lang="scss">
 html, body {
   height: 100%;
 }
@@ -215,10 +247,15 @@ input[type="file"] {
     padding: 10px;
     position: relative;
 }
-	
+.file-preview-wrapper img {
+	width: auto;
+	max-width: 100%;
+	max-height: 220px;
+}
 .progressbar {
  counter-reset: step;
 	margin-top: 2%;
+	margin-bottom: 3rem;
 	min-height: 74px;
 }
 .progressbar button {
@@ -242,7 +279,7 @@ input[type="file"] {
  counter-increment: step;
  width: 40px;
  height: 40px;
- line-height: 35px;
+ line-height: 40px;
  border: 1px solid #ddd;
  display: block;
  font-size: 22px;
@@ -286,4 +323,38 @@ input[type="file"] {
  background-color: #5f5fff;
 }
 
+.fix-section {
+	text-align: left;
+	.target-panel {
+		padding: 1rem;
+		background-color: white;
+		border-radius: .25rem;
+		.target-image {
+			width: auto;
+			max-width: 100%;
+			max-height: 50vh;
+		}
+	}
+	.setting-panel {
+		padding: 1rem;
+		background-color: white;
+		border-radius: .25rem;
+		.sample-image {
+			width: 3rem;
+		}
+		.sample-btn {
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+			align-items: center;
+			padding: 0px;
+			&.sample-btn {
+				margin-bottom: .5rem;
+			}
+			.check {
+				width: 3rem;
+			}
+		}
+	}
+}
 </style>
