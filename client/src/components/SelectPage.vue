@@ -12,6 +12,8 @@
 			v-bind:class="{selected : item.isSelected}"
 			@click = "isSelected(item)"
 		>	
+			<img v-if = "item.isSelected" :src=item.icon_hov class="menu_icon">
+			<img v-else :src="item.icon" class="menu_icon">
 			<a>{{item.title}}</a>
 		</div>
 		
@@ -19,20 +21,20 @@
 			v-if = "isUser"
 			@click = "logout"	
 		>
+			<img src = "../images/main.svg" class = "menu_icon">
 			<a>Logout</a>
 		</div>
 	</div>
     
-	
+		
   </div>
 </template>
 
 <script>
-
   const menuList = [
-    { title: 'Main', link_to: '/main',isSelected : false},
-    { title: 'Profile', link_to: '/profile',isSelected : false},
-    { title: 'Upload', link_to: '/upload', isSelected : false},
+    { title: 'Main', link_to: '/main',isSelected : false,icon : require("../images/main.svg"),icon_hov : require('../images/main_hov.svg')},
+    { title: 'Profile', link_to: '/profile',isSelected : false,icon : require('../images/profile.svg'), icon_hov : require('../images/profile_hov.svg')},
+    { title: 'Upload', link_to: '/upload', isSelected : false, icon : require('../images/upload.svg'),icon_hov : require('../images/upload_hov.svg')},
   ]
   export default {
     data(){
@@ -77,14 +79,6 @@
 			}
 			return false
 		},
-		// userinfo(){
-		// 	var userid = sessionStorage.getItem("userid");
-		// 	if(userid){
-		// 		return userid+'<br>님 환영합니다.'
-		// 	}
-		// 	else
-		// 		return '로그인이 <br>필요합니다.';
-		// }
 	},
 	created(){
 		const userid = sessionStorage.getItem("userid");
@@ -106,7 +100,7 @@
   }
 
 </script>
-
+열
 <style>
 	.nav_logo {
 		width: 3rem;
@@ -132,6 +126,7 @@
 		box-shadow : 0 2px 2px black;
 	}
 	.sidemenu{
+		text-align : left;
 		padding : 1vh 2vh 1vh 2vh;
 		/* padding: 6px 6px 6px 6px; */	
 		font-size: 1.5vw;
@@ -147,6 +142,11 @@
 	.sidemenu a:hover{
 		text-decoration: none;
 		color : black;
+	}
+	.menu_icon{
+		width : 1.6vw;
+		margin-right : 1vh;
+		margin-left : 2vh;
 	}
 	.selected{
 		background: linear-gradient( to right, #3e0ecc, #7c60cd );
