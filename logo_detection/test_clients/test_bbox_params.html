@@ -1,0 +1,14 @@
+<form action="https://osam2020-4gb-uokiv.run.goorm.io/predict?visualize=bbox&score_threshold=0.5&nms_iou_threshold=0.3" method="POST" enctype='multipart/form-data'>
+  <div class="form-group">
+      <label>사진 업로드</label>
+      <div class="input-group">
+          <span class="input-group-btn">
+              <span class="btn btn-default btn-file">
+                  <input type="file" id="imgInp" name="file">
+              </span>
+          </span>
+      </div>
+      <img id='img-upload' style="margin-top: 10px;"/>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

@@ -1,13 +1,15 @@
 from PIL import Image
 import io
 import torch
-from torchvision.ops import boxes as box_ops
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
 from model import get_fasterrcnn_model
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import utils, config
+from matplotlib import pyplot as plt
+import utils
+import config
+import cv2
+import numpy as np
 
 app = Flask(__name__)
 CORS(app)
@@ -16,49 +18,83 @@ model = None
 
 @app.route('/')
 def hello():
-    return 'Hello World!'
+    return '''
+    Logo Detection API Server
+    Made by Seungpyo Hong [spkbk98 at gmail dot com]
+    '''
+
+
+@app.route('/blur', methods=['POST'])
+def blur(context=None):
+    if context is None:
+        boxes = request.json['boxes']
+        img = utils.extract_as_jpeg(request)
+    else:
+        boxes = context['boxes']
+        img = context['image']
+
+    img_crop = img.copy()
+    img = np.array(img)
+    img_crop = np.array(img_crop)
+
+    for xmin, ymin, xmax, ymax in boxes:
+        xmin, ymin, xmax, ymax = \
+            int(xmin), int(ymin), int(xmax), int(ymax)
+        img_crop = cv2.blur(img_crop, (9, 9))
+        img_crop[:xmin, :, :] = img[:xmin, :, :]
+        img_crop[xmax:, :, :] = img[xmax:, :, :]
+        img_crop[:, :ymin, :] = img[:, :ymin, :]
+        img_crop[:, ymax:, :] = img[:, ymax:, :]
+        img = img_crop
+    fig, ax = plt.subplots(1)
+
+    img = Image.fromarray((img).astype(np.uint8))
+    ax.imshow(img)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
 
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'file' not in request.files:
-        return jsonify('No file part')
-    file = request.files['file']
-    image_bytes = file.read()
-    img = Image.open(io.BytesIO(image_bytes))
+    visualize = request.args.get('visualize', 'none')
+    resize = request.args.get('resize', 'original')
+    score_threshold = float(
+        request.args.get('score_threshold', str(config.score_threshold)))
+    nms_iou_threshold = float(
+        request.args.get('nms_iou_threshold', str(config.nms_iou_threshold)))
+    img = utils.extract_as_jpeg(request)
 
-    # Read image as JPEG format.
-    filename = secure_filename(file.filename)
-    extension = filename.split('.')[-1]
-    # https://stackoverflow.com/a/48970633
-    if extension == 'jpg' or extension == 'jpeg':
-        pass
-    else:
-        f = io.BytesIO()
-        img.convert('RGB').save(f, format='JPEG')
-        f.seek(0)
-        img = Image.open(f)
+    x = utils.img2tensor(img, resize=True)
 
-    x = utils.img2tensor(img)
+    x_original = utils.img2tensor(img, resize=False)
+    scale = (
+        x_original[0].size()[1] / x[0].size()[1],
+        x_original[0].size()[2] / x[0].size()[2]
+    )
+
     y = model(x)
 
     ret = dict()
     if len(y[0]['boxes']) > 0:
-        nms_idx = box_ops.nms(y[0]['boxes'], y[0]['scores'], iou_threshold=0.1)
-        # print('nms index:', nms_idx)
-        # print('left after nms: {:02f}%', len(nms_idx)*100/len(y[0]['boxes']))
-        ret['boxes'] = y[0]['boxes'][nms_idx].tolist()
+        ret = utils.post_process(
+            y[0]['boxes'], y[0]['scores'], score_threshold, nms_iou_threshold)
+        if resize == 'original':
+            ret['boxes'] = utils.rescale_box(ret['boxes'], scale)
     else:
         ret['boxes'] = [[]]
+        ret['scores'] = []
 
-    visualize = request.args.get('visualize', 'none')
     if visualize == 'none':
         return jsonify(ret)
+    img_to_show = x_original[0] if resize == 'original' else x
     if visualize == 'bbox':
-        fig = utils.show_detection(x[0], ret['boxes'])
+        fig = utils.show_detection(img_to_show, ret['boxes'], pred_score=ret['scores'])
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
         return Response(output.getvalue(), mimetype='image/png')
+    elif visualize == 'blur':
+        return blur({'boxes': ret['boxes'], 'image': img})
 
 
 if __name__ == '__main__':
