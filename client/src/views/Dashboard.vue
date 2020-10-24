@@ -27,18 +27,19 @@ body{
 	height : 100%;
 }
 #dashboard {
-  text-align: center;
-  display : flex;   
+	text-align: center;
+	display : flex;   
+	height: 100%;
+	background-color: #f1f5f6 !important;
 }
-	.child_1{
-		flex : 1.5;
-		width : 15%;
-	}
-	.child_2{
-		flex : 8.5;
-		width : 85%;
-	}
-
+.child_1{
+	flex : 1.5;
+	width : 15%;
+}
+.child_2{
+	flex : 8.5;
+	width : 85%;
+}
 #nav {
   padding: 30px;
 }

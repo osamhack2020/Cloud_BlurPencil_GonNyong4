@@ -25,7 +25,7 @@
 					<b-card no-body
 						:img-src = "serverUrl + list.fileName" 
 						@click="click_image(list)"
-						style = "cursor : pointer"
+						style = "cursor : pointer; margin: 0px;"
 						img-alt="Image"
 						img-width = "auto"
 						img-height = "250rem"
@@ -201,5 +201,8 @@ export default {
 	}
 	.wrap_cards{
 		margin-top : 5px;	
+	}
+	.card-title {
+		font-size: 1rem;
 	}
 </style>

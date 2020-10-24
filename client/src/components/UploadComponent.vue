@@ -150,6 +150,7 @@ input[type="file"] {
   position: absolute;
   opacity: 0;
   z-index: -1;
+  left: 0px;
 }
 
 .align-center {
