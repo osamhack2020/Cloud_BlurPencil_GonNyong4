@@ -1,7 +1,7 @@
 from PIL import Image
 import io
 import torch
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template
 from flask_cors import CORS
 from model import get_fasterrcnn_model
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -15,9 +15,12 @@ app = Flask(__name__)
 CORS(app)
 model = None
 
-
 @app.route('/')
-def hello():
+def demo():
+    return render_template('test_clients/test_bbox')
+    
+@app.route('/about')
+def about():
     return '''
     Logo Detection API Server
     Made by Seungpyo Hong [spkbk98 at gmail dot com]
@@ -36,15 +39,15 @@ def blur(context=None):
     img_crop = img.copy()
     img = np.array(img)
     img_crop = np.array(img_crop)
-
+    print(img.shape)
     for xmin, ymin, xmax, ymax in boxes:
         xmin, ymin, xmax, ymax = \
             int(xmin), int(ymin), int(xmax), int(ymax)
         img_crop = cv2.blur(img_crop, (9, 9))
-        img_crop[:xmin, :, :] = img[:xmin, :, :]
-        img_crop[xmax:, :, :] = img[xmax:, :, :]
-        img_crop[:, :ymin, :] = img[:, :ymin, :]
-        img_crop[:, ymax:, :] = img[:, ymax:, :]
+        img_crop[:ymin, :, :] = img[:ymin, :, :]
+        img_crop[ymax:, :, :] = img[ymax:, :, :]
+        img_crop[:, :xmin, :] = img[:, :xmin, :]
+        img_crop[:, xmax:, :] = img[:, xmax:, :]
         img = img_crop
     fig, ax = plt.subplots(1)
 
