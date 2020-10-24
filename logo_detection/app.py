@@ -10,6 +10,7 @@ import utils
 import config
 import cv2
 import numpy as np
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -17,12 +18,14 @@ model = None
 
 @app.route('/')
 def demo():
-    return render_template('test_clients/test_bbox')
+    root_dir = os.path.abspath(os.path.dirname(__file__))
+    html_path = os.path.join(root_dir, 'index.html')
+    return Response(open(html_path).read(), mimetype="text/html")
     
 @app.route('/about')
 def about():
     return '''
-    Logo Detection API Server
+    Logo Detection API Server<br>
     Made by Seungpyo Hong [spkbk98 at gmail dot com]
     '''
 
@@ -50,7 +53,8 @@ def blur(context=None):
         img_crop[:, xmax:, :] = img[:, xmax:, :]
         img = img_crop
     fig, ax = plt.subplots(1)
-
+    plt.axis('off')
+    plt.margins(0, 0)
     img = Image.fromarray((img).astype(np.uint8))
     ax.imshow(img)
     output = io.BytesIO()

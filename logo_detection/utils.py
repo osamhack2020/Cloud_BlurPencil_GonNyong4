@@ -74,6 +74,8 @@ def show_detection(x, pred, gt=None, pred_score=None, pred_color='r', gt_color='
     bbox : Tensor
     '''
     fig, ax = plt.subplots(1)
+    plt.axis('off')
+    plt.margins(0, 0)
     if isinstance(x, torch.Tensor):
         img = transforms.ToPILImage()(x).convert("RGB")
     ax.imshow(img)
