@@ -1,7 +1,7 @@
 <template>
     <div class = "Login">
 			<div class = "message">
-				<p>자동 모자이크 웹 서비스</p>	
+				<!-- <p>자동 모자이크 웹 서비스</p>	 -->
 			</div>
             <div class="form-wraps">
                 <div class="button-wraps">

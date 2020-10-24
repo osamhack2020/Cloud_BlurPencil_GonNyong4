@@ -1,12 +1,13 @@
 <template>
   <div class="sidenav">
 	<div class = "logowrap">
-		<p><img src="../images/logo(125x125).png" class="nav_logo"/>
-			Blur Pencil
-		</p>
+		<img src="../images/logo(250x250).png" class="nav_logo"/>
 	</div>
 	<div class = "menuwrap">
-		
+		<!-- <button class="btn btn-primary rounded-pill fast-btn">
+			<img src = "../images/upload_hov.svg" class = "menu_icon">
+			Upload
+		</button> -->
 		<div v-for="item in items" :key="item.link_to" 
 			class = "sidemenu" 
 			v-bind:class="{selected : item.isSelected}"
@@ -14,15 +15,15 @@
 		>	
 			<img v-if = "item.isSelected" :src=item.icon_hov class="menu_icon">
 			<img v-else :src="item.icon" class="menu_icon">
-			<a>{{item.title}}</a>
+			<a class="menu_a">{{item.title}}</a>
 		</div>
 		
 		<div class = "sidemenu bottom-menu"
 			v-if = "isUser"
 			@click = "logout"	
 		>
-			<img src = "../images/main.svg" class = "menu_icon">
-			<a>Logout</a>
+			<img src = "../images/sign-out.svg" class = "menu_icon">
+			<a class="menu_a">Logout</a>
 		</div>
 	</div>
     
@@ -32,7 +33,7 @@
 
 <script>
   const menuList = [
-    { title: 'Main', link_to: '/main',isSelected : false,icon : require("../images/main.svg"),icon_hov : require('../images/main_hov.svg')},
+    { title: 'Dashboard', link_to: '/main',isSelected : false,icon : require("../images/dashboard.svg"),icon_hov : require('../images/dashboard_hov.svg')},
     { title: 'Profile', link_to: '/profile',isSelected : false,icon : require('../images/profile.svg'), icon_hov : require('../images/profile_hov.svg')},
     { title: 'Upload', link_to: '/upload', isSelected : false, icon : require('../images/upload.svg'),icon_hov : require('../images/upload_hov.svg')},
   ]
@@ -103,12 +104,14 @@
 열
 <style>
 	.nav_logo {
-		width: 3rem;
+		width: 5rem;
 	}
 	.logowrap{
 		font-size : x-large;
 		font-weight : bold;	
 		color : #0d112a;
+		padding-top: 1rem;
+		padding-bottom: 1rem;
 	}
 	.menuwrap{
 		padding-top : 2.2vh;	
@@ -123,18 +126,39 @@
 		background-color : white;
 		overflow-x: hidden;
 		padding-top: 20px;
-		box-shadow : 0 2px 2px black;
+		-webkit-box-shadow: 5px 0px 12px -2px rgba(164,171,219,0.3);
+		-moz-box-shadow: 5px 0px 12px -2px rgba(164,171,219,0.3);
+		box-shadow: 5px 0px 12px -2px rgba(164,171,219,0.3);
 	}
 	.sidemenu{
 		text-align : left;
-		padding : 1vh 2vh 1vh 2vh;
+		padding : 1.5vh 2vh 1.5vh 2vh;
 		/* padding: 6px 6px 6px 6px; */	
-		font-size: 1.5vw;
-		font-weight : bold;
+		font-size: 18px;
+		font-weight : 500;
 		cursor : pointer;
+		transition: background .5s;
+	}
+	@media (max-width: 1200px) {
+		.sidemenu{
+			/* font-size: 1.25vw; */
+			padding : 1.5vh 1vh 1.5vh 1vh;
+		}
+		.menu_icon{
+			margin-right : 1.25vh !important;
+			margin-left : 1.25vh !important;
+		}
+	}
+	@media (max-width: 992px) {
+		.sidemenu{
+			font-size: 1.5vw;
+		}
+	}
+	@media (max-width: 768px) {
+		.sidemenu { text-align: center;	}
 	}
 	.sidemenu:hover{
-		background-color : #efeded;
+		background-color : #ebebff;
 	}
 	.sidemenu a{
 		color : black;
@@ -145,20 +169,43 @@
 	}
 	.menu_icon{
 		width : 1.6vw;
-		margin-right : 1vh;
-		margin-left : 2vh;
+		margin-right : 1.8vh;
+		margin-left : 1.8vh;
 	}
-	.selected{
-		background: linear-gradient( to right, #3e0ecc, #7c60cd );
+	.selected {
+		/* background: linear-gradient( to right, #3e0ecc, #7c60cd ); */
+		background: linear-gradient( to right, #5f5fff, #5f5fff );
+		/* background-color: #5f5fff; */
 		color : white;
+	}
+	.selected a:hover {
+		color : white;
+		/* background-color: darken(#5f5fff, 10%) !important; */
+	}
+	.selected .menu_a {
+		color: white;
 	}
 	@media screen and (max-height: 450px) {
 		.sidenav {padding-top: 15px;}
 		.sidenav a {font-size: 18px;}
 	}
+	@media (max-width: 768px) {
+		.menu_icon{
+			width: 50%;
+			margin: 0px !important;
+		}
+		.menu_a {
+			display: none;
+		}
+	}
 	.bottom-menu {
 		position: absolute;
 		width: 100%;
 		bottom: 2rem;
+	}
+	.fast-btn {
+		margin-bottom: 32px !important;
+		padding: .5rem 2.5rem !important;
+		font-size: 1.5rem !important;
 	}
 </style>

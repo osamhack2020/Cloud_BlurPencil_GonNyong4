@@ -17,9 +17,11 @@ export default {
 body{
     background-position: center;
     background-size: cover;
+	/* background-color: white; */
 }
 #app {
   text-align: center; 
+	height: 100%;
 }
 
 #nav {

@@ -103,6 +103,9 @@ export default {
 	html {
 		scroll-behavior: smooth;
 	}
+	body {
+		background-color: white !important;
+	}
 	.navbar-logo {
 		width: 3rem;
 	}
