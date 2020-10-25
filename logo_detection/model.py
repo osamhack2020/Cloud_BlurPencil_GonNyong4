@@ -21,7 +21,12 @@ def get_transform(train):
 # https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html
 
 
-def get_fasterrcnn_model(num_classes):
+def get_fasterrcnn_model(num_classes, use_custom=True):
+    if use_custom:
+        if config.verbose:
+            print('Loading custom weight file:', config.model_path)
+        return torch.load(config.model_path, map_location=torch.device('cpu'))
+    
     if config.verbose:
         print('Loading pretrained Faster R-CNN...')
     # load a model pre-trained pre-trained on COCO
@@ -32,7 +37,6 @@ def get_fasterrcnn_model(num_classes):
     in_features = model.roi_heads.box_predictor.cls_score.in_features
     # replace the pre-trained head with a new one
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
-    model = torch.load(config.model_path, map_location=torch.device('cpu'))
     return model
 
 

@@ -3,18 +3,6 @@
 	<div>
 		<div class="recent-worked">
 			<h2 class="recent-title">Recently work</h2>
-			<!-- <div v-for="(i, idx) in workData" v-bind:key="idx" class="row worked-list">
-				<div class="col-md-2">
-					<img class="worked-image" v-bind:src="serverUrl + i.fileName"/>
-				</div>
-				<div class="col-md-8">
-					{{ i.fileName }}
-				</div>
-				<div class="col-md-2">
-					{{ i.workedAt }}
-				</div>
-				{{ i }}
-			</div> -->
 			<b-card-group deck>
 				<div v-for="(list	,idx) in lists" :key="idx" class = "wrap_cards">
 					<b-card
@@ -33,7 +21,8 @@
 						
 					</b-card>
 						<b-card-text>
-							
+							<!-- <img src = "../images/trash-alt.svg" v-on:click = "removeWork(list._id, list.fileName)" class = "btn_image">
+							<img src = "../images/import.svg" v-on:click="downloadWork(list.fileName)" class = "btn_image"> -->
 						</b-card-text>
 						<template #footer>
 							<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
@@ -66,9 +55,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
 	name: 'Main',
 	props: {
@@ -77,9 +63,6 @@ export default {
             default : '',
 		},
     },
-	components: {
-	// HelloWorld
-	},
 	data () {
 		return {
 			workData : '',
@@ -204,5 +187,11 @@ export default {
 	}
 	.card-title {
 		font-size: 1rem;
+	}
+	.btn_image {
+		width : 2vw;
+		float : right;
+		padding-top : 3vw;
+		cursor : pointer;
 	}
 </style>

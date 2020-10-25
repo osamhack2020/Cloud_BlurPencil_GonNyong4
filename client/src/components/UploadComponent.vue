@@ -48,7 +48,18 @@
 					</div>
 				</div>
 				<div class="col-md-4">
+					<div class ="score-panel">
+						<p class = "setting-comment">인식률</p>
+						<b-form-group>
+							<b-form-radio-group
+								v-model="selected"
+								:options="options"
+								name="radio-inline"
+							></b-form-radio-group>
+						</b-form-group>
+					</div>
 					<div class="setting-panel">
+						<p class = "setting-comment">객체 정보</p>
 						<button class="btn sample-btn" v-for="(pData, idx) in predictData" :key="idx" v-on:click="pData.check = !pData.check">
 							<!-- <img class="sample-image" src="https://i.pinimg.com/originals/17/0d/f9/170df908bff9619457df64f5d4072a54.jpg"/> -->
 							<!-- <div class="sample-div">
@@ -93,7 +104,12 @@ export default{
 			showDismissibleAlert: false,
 			step: 0,
 			waiting: false,
-			predictData: [
+			predictData: [],
+			selected: '',
+			options: [
+				{ text: '낮음', value: 'low' },
+				{ text: '중간', value: 'mid' },
+				{ text: '높음', value: 'high' }
 			]
 		}
 	},
@@ -391,10 +407,25 @@ input[type="file"] {
 			max-height: 50vh;
 		}
 	}
+	.score-panel{
+		padding : 1rem;
+		background-color : white;
+		border-radius : .25rem;
+		margin-bottom : 2rem;
+		span{
+			all : unset;
+		}
+		.setting-comment{
+			font-weight : bold;
+		}
+	}
 	.setting-panel {
 		padding: 1rem;
-		background-color: white;
+		background-color: white;	
 		border-radius: .25rem;
+		.setting-comment{
+			font-weight : bold;
+		}
 		.sample-image {
 			width: 3rem;
 		}
