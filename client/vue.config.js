@@ -5,7 +5,7 @@ module.exports = {
 	devServer : {
 		proxy : { // proxyTable 설정
 			'/api' : {
-				target : 'https://osam-server.run.goorm.io/api',
+				target : 'https://openarmy.run.goorm.io/api',
 				changeOrigin : true,
 				pathRewrite : {
 					'^/api' : ''
