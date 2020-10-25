@@ -1,5 +1,11 @@
 <template>
 	<div class = "upload">
+		<div class="waiting" v-if="waiting">
+			<div class="waiting-notice">
+				<img src="../images/sync.svg" class="sync-image"/>
+				처리중입니다.. 잠시만 기다려주세요.
+			</div>
+		</div>
 		<b-alert v-model="showDismissibleAlert" variant = "success"  dismissible>
 			파일이 업로드 되었습니다!
 		</b-alert>
@@ -28,6 +34,7 @@
 						<div class="file-close-button" @click="removeFile" 								v-if="image">x</div>
 					</div>
 					<button class="btns" @click="uploadFile">전송</button>
+					<button class="btns" @click="nextFile">다음</button>
 				</div>
 			</div>
 		</div>
@@ -43,9 +50,31 @@
 				<div class="col-md-4">
 					<div class="setting-panel">
 						<button class="btn sample-btn" v-for="(pData, idx) in predictData" :key="idx" v-on:click="pData.check = !pData.check">
-							<img class="sample-image" src="https://i.pinimg.com/originals/17/0d/f9/170df908bff9619457df64f5d4072a54.jpg"/>
+							<!-- <img class="sample-image" src="https://i.pinimg.com/originals/17/0d/f9/170df908bff9619457df64f5d4072a54.jpg"/> -->
+							<!-- <div class="sample-div">
+								<img class="sample-image2" :src="image"/>
+							</div> -->
+							<!-- <img class="sample-image" :style="{ 'position': 'absolute',  'clip': clipRect(pData.pos) }"  :src="image"/> -->
 							<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
 						</button>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top:2rem;">
+				<div class="col-md-12">
+					<div class="lists-section">
+						<div class="sample-div"
+							v-for="(pData, idx) in predictData"
+							:key="idx"
+							v-on:click="pData.check = !pData.check"
+							:class="{ 'unactive' : !pData.check }"
+							:style="{ 'width': divSize(pData.pos[2], pData.pos[0]), 'height': divSize(pData.pos[3], pData.pos[1]) }">
+							<img class="sample-image"
+								src="https://i.ytimg.com/vi/7k7Ki7JlKf4/maxresdefault.jpg"
+								alt="Card image"
+								:style="{ 'left': imagePos(pData.pos[0]), 'top': imagePos(pData.pos[1]) }">
+							<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -63,19 +92,8 @@ export default{
 			file1 : null,
 			showDismissibleAlert: false,
 			step: 0,
+			waiting: false,
 			predictData: [
-				{
-					pos: '',
-					check: true
-				},
-				{
-					pos: '',
-					check: true
-				},
-				{
-					pos: '',
-					check: true
-				}
 			]
 		}
 	},
@@ -139,6 +157,44 @@ export default{
 			}).catch((err)=>{
 				console.log(err);
 			});
+		},
+		nextFile(){
+			if(this.sendFile == ''){
+				alert('업로드할 이미지가 없습니다.');
+				return false;
+			}
+			this.waiting = true;
+			const formData = new FormData();
+			formData.append('file', this.sendFile);
+			this.$http.post('https://osam2020-4gb-uokiv.run.goorm.io/predict?visualize=none&score_threshold=0.5',formData,{
+				headers : {
+					'Content-Type' : 'multipart/form-data'
+				}
+			}).then((res) =>{
+				res.data.boxes.forEach((e, idx) => {
+					this.predictData.push(
+						{
+							pos: [ e[0], e[1], e[2], e[3] ],
+							check: true,
+							scored: res.data.scores[idx]
+						}
+					);
+				});
+				this.waiting = false;
+				this.step = 1;
+			}).catch((err)=>{
+				console.log(err);
+				this.waiting = false;
+			});
+		},
+		clipRect(pData) {
+			return `rect(${pData[0]}, ${pData[1]}, ${pData[2]}, ${pData[3]})`;
+		},
+		divSize(maxPos, minPos) {
+			return (maxPos - minPos) + 'px';
+		},
+		imagePos(pos) {
+			return '-' + pos + 'px';
 		}
     }
  }
@@ -254,7 +310,7 @@ input[type="file"] {
 }
 .progressbar {
  counter-reset: step;
-	margin-top: 2%;
+	margin-top: 5%;
 	margin-bottom: 3rem;
 	min-height: 74px;
 }
@@ -355,6 +411,78 @@ input[type="file"] {
 				width: 3rem;
 			}
 		}
+	}
+}
+	.lists-section {
+		padding: 1rem;
+		background-color: white;
+		border-radius: .25rem;
+	}
+		.sample-div {
+			border: 1px solid red;
+			display: inline-block;
+			width: 110px;
+			height: 85px;
+			overflow: hidden;
+			position: relative;
+			box-shadow: 0px 0px 10px 0px #929292;
+			cursor: pointer;
+			.sample-image {
+				position: absolute;
+				left: -70px;
+				top: -31px;
+				width: 1280px;
+				height: 720px;
+				z-index: 2;
+			}
+			.sample-bg {
+				width: 2rem;
+				height: 2rem;
+				background-color: tomato;
+				z-index: 1;
+				position: absolute;
+				border-top-left-radius: 1rem;
+				right: 0px;
+				bottom: 0px;
+			}
+			.check {
+				position: absolute;
+			}
+			&.unactive {
+				opacity: .5;
+			}
+		}
+	
+	.waiting {
+		position: fixed;
+		top: 0px;
+		width: 85%;
+		height: 100%;
+		z-index: 100;
+		background: rgba(0, 0, 0, .7);
+		.sync-image {
+			width: 1rem;
+			animation: rotation 2s infinite linear;
+			margin-right: .5rem;
+		}
+		.waiting-notice {
+			position: absolute;
+			bottom: 10rem;
+			left: 50%;
+			transform: translate(-50%, 0px);
+			color: white;
+			background: #5f5fff;
+			padding: 1rem 2.5rem 1rem 2rem;
+			border-radius: .5rem;
+		}
+	}
+	
+@keyframes rotation {
+	from {
+		transform: rotate(359deg);
+	}
+	to {
+		transform: rotate(0deg);
 	}
 }
 </style>
