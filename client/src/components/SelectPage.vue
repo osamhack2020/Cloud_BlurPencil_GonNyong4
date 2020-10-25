@@ -69,7 +69,7 @@
 			this.selectmenu(item.link_to);
 		},
 		selectmenu(item){
-			this.$router.push(item);
+			this.$router.push(item).catch(()=>{});
 		}
     },
 	computed :{
