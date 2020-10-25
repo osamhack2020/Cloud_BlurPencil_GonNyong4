@@ -3,30 +3,36 @@
 	<div>
 		<div class="recent-worked">
 			<h2 class="recent-title">Recently work</h2>
+			<div class = "menu-box" v-if="checkedList!=''"> 
+				<img src = "../images/trash-alt.svg" v-on:click = "clickDel" class = "btn_image">
+				<img src = "../images/import.svg" v-on:click="clickDown" class = "btn_image">
+			</div>
 			<b-card-group deck>
-				<div v-for="(list	,idx) in lists" :key="idx" class = "wrap_cards">
+				<div v-for="(list,idx) in lists" :key="idx" class = "wrap_cards">
 					<b-card
 						class = "showing_image"
 						v-if="list"
-						:title="list.fileName"
 					>
-					<b-card no-body
-						:img-src = "serverUrl + list.fileName" 
-						@click="click_image(list)"
-						style = "cursor : pointer; margin: 0px;"
-						img-alt="Image"
-						img-width = "auto"
-						img-height = "250rem"
-						img-top>
-						
-					</b-card>
 						<b-card-text>
-							<!-- <img src = "../images/trash-alt.svg" v-on:click = "removeWork(list._id, list.fileName)" class = "btn_image">
-							<img src = "../images/import.svg" v-on:click="downloadWork(list.fileName)" class = "btn_image"> -->
+							<input type="checkbox" v-bind:id="'check'+idx" v-bind:value="list" v-model="checkedList">
+							{{list.fileName}}
 						</b-card-text>
-						<template #footer>
-							<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
-						</template>
+						<b-card no-body
+							:img-src = "serverUrl + list.fileName" 
+							@click="click_image(list)"
+							style = "cursor : pointer; margin: 0px;"
+							img-alt="Image"
+							img-width = "auto"
+							img-height = "250rem"
+							img-top>
+
+						</b-card>
+							<b-card-text>
+								
+							</b-card-text>
+							<template #footer>
+								<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
+							</template>
 					</b-card>
 				</div>
 			</b-card-group>
@@ -47,8 +53,8 @@
 			<div style = "text-align : center; height : 500px;">
 				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
 			</div>
-			<button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
-			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button>
+			<!-- <button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
+			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button> -->
 		</b-modal>
 	</div>
   </div>
@@ -71,6 +77,7 @@ export default {
 			currentPage: 1,
 			clicked_image : '',
 			user_id : '',
+			checkedList : [],
 		}
 	},
 	methods : {
@@ -79,21 +86,17 @@ export default {
 			this.$bvModal.show('bv-modal-example');
 		},
 		removeWork(work_oid, fileName) {
-			var isok = confirm("정말 파일을 삭제하시겠습니까?");
-			if(isok){
-				this.$http.post(`/api/works/delete/${this.user_id}`, {
-						work_oid: work_oid,
-						fileName: fileName
-					})
-					.then((response) => {
-						console.log(response.data);
-						alert('파일이 삭제되었습니다.');
-						location.reload();
-					})
-					.catch((err) =>{
-						this.workData = err;
-					})
-			}
+			this.$http.post(`/api/works/delete/${this.user_id}`, {
+				work_oid: work_oid,
+				fileName: fileName
+			})
+			.then((response) => {
+				console.log(response.data);
+				location.reload();
+			})
+			.catch((err) =>{
+				this.workData = err;
+			})
 		},
 		downloadWork (fileName) {
 			this.$http ({
@@ -110,6 +113,27 @@ export default {
 
 				fileLink.click();
 			});
+		},
+		clickDel(){
+			const f = this.checkedList;
+			var isok = confirm("정말"+f.length+"개의 파일을 삭제하시겠습니까?");
+			if(isok){
+				for(var i =0;i<f.length;i++){
+					this.removeWork(f[i]._id,f[i].fileName);
+				}
+				alert("파일이 삭제되었습니다.");
+				this.checkedList = [];
+			}
+		},
+		clickDown(){
+			const f= this.checkedList;
+			var isok = confirm("정말"+f.length+"개의 파일을 다운로드하시겠습니까?");
+			if(isok){
+				for(var i =0;i<f.length;i++){
+					this.downloadWork(f[i].fileName);
+				}
+				this.checkedList = [];
+			}
 		}
 	},
 	created () {
@@ -149,6 +173,7 @@ export default {
 <style>
 	.main {
 		padding: 5rem;
+		background-color :  #f1f5f6 !important;
 	}
 	.worked-image {
 		height: 500px;
@@ -177,6 +202,13 @@ export default {
 		padding: 1rem;
 		align-items: center;
 	}
+	.menu-box{
+		background-color: #f1f5f6 !important;
+		width : 60vw;
+		height : 35px;
+		margin-bottom : 1rem;
+		border-radius : 20px;
+	}
 	.showing_image{
 		height : 30rem;
 		max-width : 15rem;
@@ -189,9 +221,9 @@ export default {
 		font-size: 1rem;
 	}
 	.btn_image {
-		width : 2vw;
-		float : right;
-		padding-top : 3vw;
+		width : 3vw;
 		cursor : pointer;
+		margin-left : 1rem;
+		margin-bottom : 2rem;
 	}
 </style>
