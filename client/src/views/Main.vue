@@ -173,6 +173,7 @@ export default {
 <style>
 	.main {
 		padding: 5rem;
+		background-color :  #f1f5f6 !important;
 	}
 	.worked-image {
 		height: 500px;
