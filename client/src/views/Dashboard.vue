@@ -29,7 +29,7 @@ body{
 #dashboard {
 	text-align: center;
 	display : flex;   
-	/* height: 100%; */
+	height: 100%;
 	background-color: #f1f5f6 !important;
 }
 .child_1{
