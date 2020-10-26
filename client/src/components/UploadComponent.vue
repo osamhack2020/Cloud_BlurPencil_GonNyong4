@@ -44,31 +44,43 @@
 				<div class="col-md-8">
 					<div class="target-panel">
 						<img class="target-image" :src="image"/>
-						인식률 : <a href="#">높음</a> <a href="#">중간</a> <a href="#">낮음</a> (이런식으로 선택 가능하게?)
 					</div>
 				</div>
 				<div class="col-md-4">
-					<div class ="score-panel">
-						<p class = "setting-comment">인식률</p>
-						<b-form-group>
-							<b-form-radio-group
-								v-model="selected"
-								:options="options"
-								name="radio-inline"
-							></b-form-radio-group>
-						</b-form-group>
-					</div>
 					<div class="setting-panel">
+						<p class="setting-comment" v-on:click="openScorePanel = !openScorePanel">인식률 <span class="show-value">{{ selectedData.score }}</span></p>
+						<div class="setting-detail" v-if="openScorePanel">
+							<p class="setting-desc">로고로 인식할 추적 점수의 최소값</p>
+							<b-form-group style="margin-top: 1rem;">
+								<b-form-radio-group
+									v-model="selectedData.score"
+									:options="options"
+									name="radio-inline"
+								></b-form-radio-group>
+							</b-form-group>
+							<input v-model="selectedData.score" type="range" class="custom-range" min="0" max="1" step="0.1" id="scoreRange">
+						</div>
+						<hr/>
+						<p class="setting-comment" v-on:click="openNMSPanel = !openNMSPanel">NMS <span class="show-value">{{ selectedData.nms }}</span></p>
+						<div class="setting-detail" v-if="openNMSPanel">
+							<p class="setting-desc">Non-Maximum Suppression에서 사용할 IoU(Intersection over Union)의 threshold 값</p>
+							<b-form-group style="margin-top: 1rem;">
+								<b-form-radio-group
+									v-model="selectedData.nms"
+									:options="options"
+									name="radio-inline"
+								></b-form-radio-group>
+							</b-form-group>
+							<input v-model="selectedData.nms" type="range" class="custom-range" min="0" max="1" step="0.1" id="nmsRange">
+						</div>
+					</div>
+					<button class="btn btn-primary btn-re" v-on:click="nextFile" :disabled="compareSelectedData()">변경된 데이터로 이미지 새로고침</button>
+					<!-- <div class="list-panel">
 						<p class = "setting-comment">객체 정보</p>
 						<button class="btn sample-btn" v-for="(pData, idx) in predictData" :key="idx" v-on:click="pData.check = !pData.check">
-							<!-- <img class="sample-image" src="https://i.pinimg.com/originals/17/0d/f9/170df908bff9619457df64f5d4072a54.jpg"/> -->
-							<!-- <div class="sample-div">
-								<img class="sample-image2" :src="image"/>
-							</div> -->
-							<!-- <img class="sample-image" :style="{ 'position': 'absolute',  'clip': clipRect(pData.pos) }"  :src="image"/> -->
 							<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
 						</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="row" style="margin-top:2rem;">
@@ -105,11 +117,21 @@ export default{
 			step: 0,
 			waiting: false,
 			predictData: [],
-			selected: '',
+			selectedData: {
+				score: 0,
+				nms: 0.2,
+			},
+			baseSelectedData: {
+				score: 0,
+				nms: 0.2,
+			},
+			openScorePanel: false,
+			openNMSPanel: false,
 			options: [
-				{ text: '낮음', value: 'low' },
-				{ text: '중간', value: 'mid' },
-				{ text: '높음', value: 'high' }
+				{ text: '낮음', value: 0.2 },
+				{ text: '중간', value: 0.5 },
+				{ text: '높음', value: 0.8 },
+				{ text: '매우높음', value: 1 }
 			]
 		}
 	},
@@ -179,10 +201,13 @@ export default{
 				alert('업로드할 이미지가 없습니다.');
 				return false;
 			}
+			this.predictData = [];
 			this.waiting = true;
+			
 			const formData = new FormData();
 			formData.append('file', this.sendFile);
-			this.$http.post('https://osam2020-4gb-uokiv.run.goorm.io/predict?visualize=none&score_threshold=0.5',formData,{
+			
+			this.$http.post(`https://osam2020-4gb-uokiv.run.goorm.io/predict?visualize=none&score_threshold=${this.selectedData.score}&nms_iou_threshold=${this.selectedData.nms}`,formData,{
 				headers : {
 					'Content-Type' : 'multipart/form-data'
 				}
@@ -198,19 +223,21 @@ export default{
 				});
 				this.waiting = false;
 				this.step = 1;
+				this.baseSelectedData.score = this.selectedData.score;
+				this.baseSelectedData.nms = this.selectedData.nms;
 			}).catch((err)=>{
 				console.log(err);
 				this.waiting = false;
 			});
-		},
-		clipRect(pData) {
-			return `rect(${pData[0]}, ${pData[1]}, ${pData[2]}, ${pData[3]})`;
 		},
 		divSize(maxPos, minPos) {
 			return (maxPos - minPos) + 'px';
 		},
 		imagePos(pos) {
 			return '-' + pos + 'px';
+		},
+		compareSelectedData() {
+			return this.selectedData.score == this.baseSelectedData.score && this.selectedData.nms == this.baseSelectedData.nms;
 		}
     }
  }
@@ -223,6 +250,10 @@ html, body {
 .wrap {
 	margin: 2% auto;
     position: relative;
+}
+.upload {
+	background-color: #f1f5f6 !important;
+	padding-bottom: 5rem;
 }
 .upload-image {
 	width: 5rem;
@@ -341,6 +372,7 @@ input[type="file"] {
  background-color: transparent;
  border: 0px;
  cursor: pointer;
+	z-index: 4;
 }
 .progressbar button:focus {
  outline: none;
@@ -361,16 +393,17 @@ input[type="file"] {
  margin: 0 auto 10px auto;
  border-radius: 50%;
  background-color: white;
+	// z-index: 1;
 }
 .progressbar button:after {
  content: '';
  position: absolute;
- width: 100%;
+ width: 50%;
  height: 2px;
  margin-top: 3px;
- background-color: #a5a5a5;
+ background-color: #c3c3c3;
  top: 15px;
- left: -50%;
+ left: -25%;
  z-index: -1;
 }
 .progressbar button:first-child:after {
@@ -407,25 +440,19 @@ input[type="file"] {
 			max-height: 50vh;
 		}
 	}
-	.score-panel{
+	.setting-panel{
 		padding : 1rem;
 		background-color : white;
 		border-radius : .25rem;
-		margin-bottom : 2rem;
+		// margin-bottom : 2rem;
 		span{
 			all : unset;
 		}
-		.setting-comment{
-			font-weight : bold;
-		}
 	}
-	.setting-panel {
+	.list-panel {
 		padding: 1rem;
 		background-color: white;	
 		border-radius: .25rem;
-		.setting-comment{
-			font-weight : bold;
-		}
 		.sample-image {
 			width: 3rem;
 		}
@@ -444,70 +471,103 @@ input[type="file"] {
 		}
 	}
 }
-	.lists-section {
-		padding: 1rem;
-		background-color: white;
-		border-radius: .25rem;
+.setting-comment {
+	font-weight : bold;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	cursor: pointer;
+	transition: background .5s;
+	&:hover {
+		background-color : #ebebff;
 	}
-		.sample-div {
-			border: 1px solid red;
-			display: inline-block;
-			width: 110px;
-			height: 85px;
-			overflow: hidden;
-			position: relative;
-			box-shadow: 0px 0px 10px 0px #929292;
-			cursor: pointer;
-			.sample-image {
-				position: absolute;
-				left: -70px;
-				top: -31px;
-				width: 1280px;
-				height: 720px;
-				z-index: 2;
-			}
-			.sample-bg {
-				width: 2rem;
-				height: 2rem;
-				background-color: tomato;
-				z-index: 1;
-				position: absolute;
-				border-top-left-radius: 1rem;
-				right: 0px;
-				bottom: 0px;
-			}
-			.check {
-				position: absolute;
-			}
-			&.unactive {
-				opacity: .5;
-			}
-		}
-	
-	.waiting {
-		position: fixed;
-		top: 0px;
-		width: 85%;
-		height: 100%;
-		z-index: 100;
-		background: rgba(0, 0, 0, .7);
-		.sync-image {
-			width: 1rem;
-			animation: rotation 2s infinite linear;
-			margin-right: .5rem;
-		}
-		.waiting-notice {
-			position: absolute;
-			bottom: 10rem;
-			left: 50%;
-			transform: translate(-50%, 0px);
-			color: white;
-			background: #5f5fff;
-			padding: 1rem 2.5rem 1rem 2rem;
-			border-radius: .5rem;
-		}
+}
+.setting-desc {
+	font-size: .8rem;
+}
+.setting-detail {
+	// padding-bottom: 1rem;
+}
+.lists-section {
+	padding: 1rem;
+	background-color: white;
+	border-radius: .25rem;
+	// 	어떻게 이쁠게 못쓸까 해서 일단 넣어봄 flex.. 정말 안이쁘다.
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    align-items: center;
+    align-content: space-around;
+    justify-content: space-around;
+}
+.sample-div {
+	// border: 1px solid red;
+	display: inline-block;
+	width: 110px;
+	height: 85px;
+	overflow: hidden;
+	position: relative;
+	box-shadow: 0px 0px 10px 0px #929292;
+	cursor: pointer;
+	.sample-image {
+		position: absolute;
+		left: -70px;
+		top: -31px;
+		width: 1280px;
+		height: 720px;
+		z-index: 2;
 	}
+	.sample-bg {
+		width: 2rem;
+		height: 2rem;
+		background-color: tomato;
+		z-index: 1;
+		position: absolute;
+		border-top-left-radius: 1rem;
+		right: 0px;
+		bottom: 0px;
+	}
+	.check {
+		position: absolute;
+	}
+	&.unactive {
+		opacity: .5;
+	}
+}
 	
+.waiting {
+	position: fixed;
+	top: 0px;
+	width: 85%;
+	height: 100%;
+	z-index: 100;
+	background: rgba(0, 0, 0, .7);
+	.sync-image {
+		width: 1rem;
+		animation: rotation 2s infinite linear;
+		margin-right: .5rem;
+	}
+	.waiting-notice {
+		position: absolute;
+		bottom: 10rem;
+		left: 50%;
+		transform: translate(-50%, 0px);
+		color: white;
+		background: #5f5fff;
+		padding: 1rem 2.5rem 1rem 2rem;
+		border-radius: .5rem;
+	}
+}
+.btn-re {
+	padding-top: .75rem !important;
+	padding-bottom: .75rem !important;
+	width: 100% !important;
+	border-radius: 0px 0px .25rem .25rem !important;
+	margin-bottom: 2rem;
+}
+.show-value {
+	font-weight: 500 !important;
+	margin-left: .5rem !important;
+}
 @keyframes rotation {
 	from {
 		transform: rotate(359deg);

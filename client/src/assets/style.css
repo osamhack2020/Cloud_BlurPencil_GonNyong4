@@ -116,9 +116,13 @@ span {
 	border-color: #5f5fff !important;
 	transition: all .4s ease !important;
 }
+.btn-primary:disabled:hover {
+	background-color: #5f5fff !important;
+	border-color: #5f5fff !important;
+}
 .btn-primary:hover {
-	background-color: #4b13e7 !important;
-	border-color: #4b13e7 !important;
+	background-color: #212b6b !important;
+	border-color: #212b6b !important;
 }
 .btn-outline-primary {
 	color: #5f5fff !important;
