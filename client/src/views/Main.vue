@@ -206,7 +206,8 @@ export default {
 		background-color: #f1f5f6 !important;
 		width : 60vw;
 		height : 35px;
-		margin-bottom : 1rem;
+		margin-bottom : 3rem;
+		margin-top : 2rem;
 		border-radius : 20px;
 	}
 	.showing_image{

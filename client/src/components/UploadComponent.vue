@@ -28,79 +28,98 @@
 					이곳에 이미지를 드래그하거나 선택해주세요
 					<input type="file" name="image" @change="onChange">
 				</label>
-				<div class="hidden display-inline align-center" v-else v-bind:class="{ 			'image': true }">
+				<div class="hidden display-inline align-center" v-else v-bind:class="{'image': true }">
 					<div class = "file-preview-wrapper">
 						<img :src="image" alt="" class="img" />
-						<div class="file-close-button" @click="removeFile" 								v-if="image">x</div>
+						<div class="file-close-button" @click="removeFile" v-if="image">x</div>
 					</div>
 					<button class="btns" @click="uploadFile">전송</button>
 					<button class="btns" @click="nextFile">다음</button>
+					
 				</div>
 			</div>
+
+			<button class="move_btn" @click = "step=1" v-if="isGet&&image">＞</button>			
+			<button class="move_btn" @click = "nextFile" v-if="image&&!isGet">＞</button>
 		</div>
 		
 		<div class="container fix-section" v-else-if="step===1">
-			<div class="row">
-				<div class="col-md-8">
-					<div class="target-panel">
-						<img class="target-image" :src="image"/>
-					</div>
+			<div class="wrap">
+				<div class ="wrap_btn" style = "float:left;">
+					<button class="move_btn" @click = "step=0" v-if="image">＜</button>
 				</div>
-				<div class="col-md-4">
-					<div class="setting-panel">
-						<p class="setting-comment" v-on:click="openScorePanel = !openScorePanel">인식률 <span class="show-value">{{ selectedData.score }}</span></p>
-						<div class="setting-detail" v-if="openScorePanel">
-							<p class="setting-desc">로고로 인식할 추적 점수의 최소값</p>
-							<b-form-group style="margin-top: 1rem;">
-								<b-form-radio-group
-									v-model="selectedData.score"
-									:options="options"
-									name="radio-inline"
-								></b-form-radio-group>
-							</b-form-group>
-							<input v-model="selectedData.score" type="range" class="custom-range" min="0" max="1" step="0.1" id="scoreRange">
-						</div>
-						<hr/>
-						<p class="setting-comment" v-on:click="openNMSPanel = !openNMSPanel">NMS <span class="show-value">{{ selectedData.nms }}</span></p>
-						<div class="setting-detail" v-if="openNMSPanel">
-							<p class="setting-desc">Non-Maximum Suppression에서 사용할 IoU(Intersection over Union)의 threshold 값</p>
-							<b-form-group style="margin-top: 1rem;">
-								<b-form-radio-group
-									v-model="selectedData.nms"
-									:options="options"
-									name="radio-inline"
-								></b-form-radio-group>
-							</b-form-group>
-							<input v-model="selectedData.nms" type="range" class="custom-range" min="0" max="1" step="0.1" id="nmsRange">
+				<div class="row" style="margin : 0 auto;">
+					<div class="col-md-8">
+						<div class="target-panel">
+							<img class="target-image" :src="image" @load = "getSize(image)"/>
 						</div>
 					</div>
-					<button class="btn btn-primary btn-re" v-on:click="nextFile" :disabled="compareSelectedData()">변경된 데이터로 이미지 새로고침</button>
-					<!-- <div class="list-panel">
-						<p class = "setting-comment">객체 정보</p>
-						<button class="btn sample-btn" v-for="(pData, idx) in predictData" :key="idx" v-on:click="pData.check = !pData.check">
-							<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
-						</button>
-					</div> -->
+					<div class="col-md-4">
+						<div class="setting-panel">
+							<p class="setting-comment" v-on:click="openScorePanel = !openScorePanel">인식률 <span class="show-value">{{ selectedData.score }}</span></p>
+							<div class="setting-detail" v-if="openScorePanel">
+								<p class="setting-desc">로고로 인식할 추적 점수의 최소값</p>
+								<b-form-group style="margin-top: 1rem;">
+									<b-form-radio-group
+										v-model="selectedData.score"
+										:options="options"
+										name="radio-inline"
+									></b-form-radio-group>
+								</b-form-group>
+								<input v-model="selectedData.score" type="range" class="custom-range" min="0" max="1" step="0.1" id="scoreRange">
+							</div>
+							<hr/>
+							<p class="setting-comment" v-on:click="openNMSPanel = !openNMSPanel">NMS <span class="show-value">{{ selectedData.nms }}</span></p>
+							<div class="setting-detail" v-if="openNMSPanel">
+								<p class="setting-desc">Non-Maximum Suppression에서 사용할 IoU(Intersection over Union)의 threshold 값</p>
+								<b-form-group style="margin-top: 1rem;">
+									<b-form-radio-group
+										v-model="selectedData.nms"
+										:options="options"
+										name="radio-inline"
+									></b-form-radio-group>
+								</b-form-group>
+								<input v-model="selectedData.nms" type="range" class="custom-range" min="0" max="1" step="0.1" id="nmsRange">
+							</div>
+						</div>
+						<button class="btn btn-primary btn-re" v-on:click="nextFile" :disabled="compareSelectedData()">변경된 데이터로 이미지 새로고침</button>
+						<!-- <div class="list-panel">
+							<p class = "setting-comment">객체 정보</p>
+							<button class="btn sample-btn" v-for="(pData, idx) in predictData" :key="idx" v-on:click="pData.check = !pData.check">
+								<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
+							</button>
+						</div> -->
+					</div>
 				</div>
+				<div class ="wrap_btn" style="float : right;">
+					<button class="move_btn" @click = "filterFile" v-if="image">＞</button>
+				</div>
+			
+				</div>
+				<div class="row" style="margin-top:2rem;">
+					<div class="col-md-12">
+						<div class="lists-section">
+							<div class="sample-div"
+								v-for="(pData, idx) in predictData"
+								:key="idx"
+								v-on:click="pData.check = !pData.check"
+								:class="{ 'unactive' : !pData.check }"
+								:style="{ 'width': divSize(pData.pos[2], pData.pos[0]), 'height': divSize(pData.pos[3], pData.pos[1]) }">
+								<img class="sample-image"
+									:src="image"
+									alt="Card image"
+									:style="{ 'width' : setw, 'height' : seth, 'left': imagePos(pData.pos[0]), 'top': imagePos(pData.pos[1]) }">
+								<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
+		<div v-if="step === 2">
+			<div class="wrap">
+				<img :src = "image" class="filtered-image">
 			</div>
-			<div class="row" style="margin-top:2rem;">
-				<div class="col-md-12">
-					<div class="lists-section">
-						<div class="sample-div"
-							v-for="(pData, idx) in predictData"
-							:key="idx"
-							v-on:click="pData.check = !pData.check"
-							:class="{ 'unactive' : !pData.check }"
-							:style="{ 'width': divSize(pData.pos[2], pData.pos[0]), 'height': divSize(pData.pos[3], pData.pos[1]) }">
-							<img class="sample-image"
-								src="https://i.ytimg.com/vi/7k7Ki7JlKf4/maxresdefault.jpg"
-								alt="Card image"
-								:style="{ 'left': imagePos(pData.pos[0]), 'top': imagePos(pData.pos[1]) }">
-							<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </template>
@@ -116,6 +135,7 @@ export default{
 			showDismissibleAlert: false,
 			step: 0,
 			waiting: false,
+			isGet : false,
 			predictData: [],
 			selectedData: {
 				score: 0,
@@ -132,8 +152,15 @@ export default{
 				{ text: '중간', value: 0.5 },
 				{ text: '높음', value: 0.8 },
 				{ text: '매우높음', value: 1 }
-			]
+			],
+			setw : '',
+			seth : '',
+			receiveimage : '',
 		}
+	},
+	created(){
+		this.image = '';
+		this.sendfile = '';
 	},
     methods: {
 		onOver(){
@@ -146,6 +173,7 @@ export default{
 			this.color = 'white'
 			e.stopPropagation();
 			e.preventDefault();
+			this.isGet = false;
 			var files = e.dataTransfer.files;
 			this.createFile(files[0]);
         },
@@ -223,12 +251,49 @@ export default{
 				});
 				this.waiting = false;
 				this.step = 1;
+				this.isGet = true;
 				this.baseSelectedData.score = this.selectedData.score;
 				this.baseSelectedData.nms = this.selectedData.nms;
 			}).catch((err)=>{
 				console.log(err);
 				this.waiting = false;
 			});
+		},
+		filterFile(){
+			if(this.sendFile == ''){
+				alert('필터링할 이미지가 없습니다.');
+				return false;
+			}
+			this.waiting = true;
+			const passposes = []
+			for(var i =0;i<this.predictData.length;i++){
+				if(this.predictData[i].check){
+					passposes.push(this.predictData[i].pos);
+				}
+			}
+			console.log(passposes);
+			const formData = new FormData();
+			formData.append('file', this.sendFile);
+			formData.append('boxes',passposes);
+			this.$http.post(`https://osam2020-4gb-uokiv.run.goorm.io/predict?visualize=blur`,formData,{
+				headers : {
+					'Content-Type' : 'multipart/form-data'
+				}
+			}).then((res) =>{
+				this.waiting = false;
+				this.step = 2;
+				this.receiveimage = res.data
+				console.log(res.data);
+			}).catch((err)=>{
+				console.log(err);
+				this.waiting = false;
+			});
+		},
+		getSize(src){
+			var img = new Image();
+			img.src = src;
+			this.setw = img.width;
+			this.seth = img.height;
 		},
 		divSize(maxPos, minPos) {
 			return (maxPos - minPos) + 'px';
@@ -274,6 +339,17 @@ html, body {
   position: relative;
   border-radius: .25rem;
 }
+	.move_btn{
+		border-radius : 50%;
+		background-color: #5f5fff;
+		color : #fff;
+		font-weight: bold;
+		padding: 10px;
+		border : 0;
+		cursor: pointer;
+		margin-left : 3px;
+		display : inline-block;
+	}
 .btns.ready-btn {
 	margin-top: 8rem;
 }
@@ -471,6 +547,9 @@ input[type="file"] {
 		}
 	}
 }
+	.filtered-image{
+		width : 40vw;
+	}
 .setting-comment {
 	font-weight : bold;
 	padding-top: 1rem;
@@ -512,8 +591,6 @@ input[type="file"] {
 		position: absolute;
 		left: -70px;
 		top: -31px;
-		width: 1280px;
-		height: 720px;
 		z-index: 2;
 	}
 	.sample-bg {
