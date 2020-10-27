@@ -11,6 +11,7 @@ import config
 import cv2
 import numpy as np
 import os
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -33,7 +34,17 @@ def about():
 @app.route('/blur', methods=['POST'])
 def blur(context=None):
     if context is None:
-        boxes = request.json['boxes']
+        print('request dump')
+        print(request)
+        boxes_json = request.form.get('boxes', '[[]]')
+        if boxes_json == '[[]]':
+            print('Emtpy box!')
+        bj = json.loads(boxes_json)
+        boxes = list()
+        for a, b, c, d in bj:
+            boxes.append([float(a),float(b),float(c),float(d)])
+        print(boxes)
+        print('{0}x{1}'.format(len(boxes), len(boxes[0])))
         img = utils.extract_as_jpeg(request)
     else:
         boxes = context['boxes']

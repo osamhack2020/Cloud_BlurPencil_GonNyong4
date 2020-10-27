@@ -1,14 +1,23 @@
-<form action="https://osam2020-4gb-uokiv.run.goorm.io/predict?visualize=blur" method="POST" enctype='multipart/form-data'>
-  <div class="form-group">
-      <label>사진 업로드</label>
-      <div class="input-group">
-          <span class="input-group-btn">
-              <span class="btn btn-default btn-file">
-                  <input type="file" id="imgInp" name="file">
-              </span>
-          </span>
-      </div>
-      <img id='img-upload' style="margin-top: 10px;"/>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+<form id="formElem">
+    <!-- Example image from https://github.com/seungpyo/Cloud_BlurPencil_GonNyong4/blob/logo_detection/logo_detection/test_imgs/subway2.png -->
+  <input type="text" name="boxes" value="[[203.2543100629534,280.38138457707,291.056124823434,307.2524530547006],[448.17743028913225,277.0742453847613,521.2885529654367,307.9938622883388],[359.41433225359236,182.85775065422058,432.0913778032575,309.1329656328474]]">
+  Picture: <input type="file" name="file" accept="image/*">
+  <input type="submit">
+<img id="result"/>
 </form>
+
+<script>
+  formElem.onsubmit = async (e) => {
+    e.preventDefault();
+	image = document.getElementById("result");
+    fetch('https://osam2020-4gb-uokiv.run.goorm.io/blur', {
+      method: 'POST',
+      body: new FormData(formElem)
+    }).then(function(response) {
+	    return response.blob();
+	}).then(function(blob) {
+		const objURL = URL.createObjectURL(blob);
+		image.src = objURL;
+	});
+  };
+</script>
