@@ -1,6 +1,7 @@
 <template>
 	<div class = "upload">
 		<div class="waiting" v-if="waiting">
+			<img src="../images/ZombieingDoodle.png" class="bored-image"/>
 			<div class="waiting-notice">
 				<img src="../images/sync.svg" class="sync-image"/>
 				처리중입니다.. 잠시만 기다려주세요.
@@ -127,13 +128,14 @@
 				<button class="btn btn-secondary move_btn" @click = "step=1" v-if="image">이전</button>
 				<button class="btn btn-primary move_btn" style="float: right" @click = "endWork" v-if="receiveimage != ''">다음</button>
 			</div>
+			<h3 style="font-weight:600;">필터링된 결과물은 다음과 같습니다.</h3>
 			<div class="wrap">
 				<img :src="receiveimage" class="filtered-image">
 			</div>
 		</div>
 		<div class="container" v-else-if='step === 3'>
 			<img src="../images/186.png" style="width:20rem; margin-top:1rem; margin-bottom:2rem;"/>
-			<h2 style="font-weight: 600;">자동으로 다운되지 않았나요?</h2>
+			<h3 style="font-weight: 600;">자동으로 다운되지 않았나요?</h3>
 			<a href="#redownload" @click="downloadWorkedImage">결과물 다시 받기</a>
 		</div>
 	</div>
@@ -472,8 +474,8 @@ input[type="file"] {
 }
 .progressbar {
  counter-reset: step;
-	margin-top: 5%;
-	margin-bottom: 3rem;
+	margin-top: 3%;
+	margin-bottom: 3%;
 	min-height: 74px;
 }
 .progressbar button {
@@ -655,7 +657,12 @@ input[type="file"] {
 	width: 85%;
 	height: 100%;
 	z-index: 100;
-	background: rgba(0, 0, 0, .7);
+	background: rgba(0, 0, 0, .8);
+	.bored-image {
+		margin-top: 15vh;
+		width: 30rem;
+		animation: rotateFlip 0.5s infinite steps(2);
+	}
 	.sync-image {
 		width: 1rem;
 		animation: rotation 2s infinite linear;
@@ -689,6 +696,14 @@ input[type="file"] {
 	}
 	to {
 		transform: rotate(0deg);
+	}
+}
+@keyframes rotateFlip {
+	from {
+		transform: rotate(10deg);
+	}
+	to {
+		transform: rotate(-10deg);
 	}
 }
 </style>
