@@ -18,6 +18,12 @@
 			<a class="menu_a">{{item.title}}</a>
 		</div>
 		
+		<div class="bottom-menu" style="bottom:7rem; padding:1rem;">
+			<div class="notice">
+				공지하고자 하는 내용이 있다면 이런식으로
+				<button class="btn" type="button" onclick="location.href='https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4'">바로가기</button>
+			</div>
+		</div>
 		<div class = "sidemenu bottom-menu"
 			v-if = "isUser"
 			@click = "logout"	
@@ -101,8 +107,8 @@
   }
 
 </script>
-열
-<style>
+
+<style lang="scss">
 	.nav_logo {
 		width: 5rem;
 	}
@@ -207,5 +213,19 @@
 		margin-bottom: 32px !important;
 		padding: .5rem 2.5rem !important;
 		font-size: 1.5rem !important;
+	}
+	.notice {
+		color: white;
+		background: #5f5fff;
+		border-radius: 1rem;
+		padding: 1rem;
+		box-shadow: 0px 5px 15px 5px #0000004a;
+		.btn {
+			background: white;
+			position: relative;
+			border-radius: .5rem;
+			margin-bottom: -50px;
+			box-shadow: 0px 10px 15px 1px #0000004a;
+		}
 	}
 </style>

@@ -47,23 +47,25 @@
 				<h1>Price</h1>	
 				<div class="row" style="justify-content: space-around;">
 					<div class="col-md-4">
-						<div class="card">
+						<div class="card price-card">
 							<div class="card-body">
-								<div class="price">Free</div>
+								<div class="price">무료</div>
 								<div class="price-content">
-									<p>회원가입을 안해도 사용 가능함.</p>
-									<p>대충 이런 내용 생각했지만 일단은 플랜은 제외</p>
+									<p>회원가입을 하지 않아도 사용가능합니다.</p>
+									<p>..</p>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-md-4">
-						<div class="card">
+						<div class="card price-card">
 							<div class="card-body">
 								<div class="price">로그인</div>
 								<div class="price-content">
-									<p>회원가입을 하면 더 많은 기능이 제공됨.</p>
-									<p>대충 이런 내용 생각했지만 일단은 플랜은 제외</p>
+									<p>회원가입시 더 많은 기능이 제공됩니다.</p>
+									<p>데이터 백업</p>
+									<p>작업 내역 저장</p>
+									<p>동료들과 작업 공유</p>
 								</div>
 							</div>
 						</div>
@@ -72,18 +74,16 @@
 			</div>
 		</div>
 	</div>
+    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
+	<login-page id="login" style="position: relative; padding-bottom: 46px;"></login-page>
 	<div class="footer container">
 		<a href="/" class="footer-brand"><img src="../images/title.png" class="footer-logo"></a>
 		<div class="footer-menu">
 			<a href="#">서비스 소개</a>
-			<a href="#">기능</a>
-			<a href="#">가격</a>
+			<a href="#feature">기능</a>
+			<a href="#price">가격</a>
 		</div>
-		<a href="#">GONYONG4</a>
-	</div>
-    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-	<div >
-		<login-page id="login"></login-page>
+		<a href="https://github.com/orgs/osamhack2020/teams/gonnyong4">GONYONG4</a>
 	</div>
   </div>
 </template>
@@ -98,7 +98,7 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 /* 반응형 나중에 */
 	html {
 		scroll-behavior: smooth;
@@ -185,5 +185,14 @@ export default {
 	}
 	.footer .footer-brand .footer-logo {
 		height: 3rem;
+	}
+	.price-card {
+		border-radius: 3rem !important;
+		padding-top: 16px;
+		padding-bottom: 16px;
+		box-shadow: 0px 5px 15px 5px #0000004a;
+		.price {
+			font-size: 3rem;
+		}
 	}
 </style>
