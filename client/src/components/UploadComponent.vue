@@ -10,12 +10,15 @@
 			파일이 업로드 되었습니다!
 		</b-alert>
 		<div class="progressbar">
-			<button v-on:click="step=0" v-bind:class="{'now': step===0, 'active': step > 0}">업로드</button>
-			<button v-on:click="step=1" v-bind:class="{'now': step===1, 'active': step > 1}">수정</button>
-			<button v-on:click="step=2" v-bind:class="{'now': step===2, 'active': step > 2}">필터링</button>
-			<button>다운로드</button>
+			<button v-on:click="step=0" v-bind:class="{'now': step===0, 'active': step > 0}" :disabled="step < 1">업로드</button>
+			<button v-on:click="step=1" v-bind:class="{'now': step===1, 'active': step > 1}" :disabled="step < 2">수정</button>
+			<button v-on:click="step=2" v-bind:class="{'now': step===2, 'active': step > 2}" :disabled="step < 3">필터링</button>
+			<button v-bind:class="{'now': step===3, 'active': step > 3}" disabled>다운로드</button>
 		</div>
-		<div class = "wrap" v-if="step === 0">
+		<div class="wrap" v-if="step === 0">
+			<div class="container" style="height: 4rem">
+				<button class="btn btn-primary move_btn" style="float: right" @click="nextFile" v-if="image">다음</button>
+			</div>
 			<div class="helper"></div>
 			<div class="drop display-inline align-center"
 				v-bind:style = "{background : color}"
@@ -34,20 +37,24 @@
 						<div class="file-close-button" @click="removeFile" v-if="image">x</div>
 					</div>
 					<button class="btns" @click="uploadFile">전송</button>
-					<button class="btns" @click="nextFile">다음</button>
+					<!-- <button class="btns" @click="nextFile">다음</button> -->
 					
 				</div>
 			</div>
 
-			<button class="move_btn" @click = "step=1" v-if="isGet && image">＞</button>			
-			<button class="move_btn" @click = "nextFile" v-if="image && !isGet">＞</button>
+			<!-- <button class="move_btn" @click = "step=1" v-if="isGet && image">＞</button>
+			<button class="move_btn" @click = "nextFile" v-if="image && !isGet">＞</button> -->
 		</div>
 		
-		<div class="container fix-section" v-else-if="step===1">
+		<div class="container fix-section" v-else-if="step === 1">
+			<div class="">
+				<button class="btn btn-secondary move_btn" @click = "step=0" v-if="image">이전</button>
+				<button class="btn btn-primary move_btn" style="float: right" @click = "filterFile" v-if="image">다음</button>
+			</div>
 			<div class="wrap">
-				<div class ="wrap_btn" style = "float:left;">
+				<!-- <div class ="wrap_btn" style = "float:left;">
 					<button class="move_btn" @click = "step=0" v-if="image">＜</button>
-				</div>
+				</div> -->
 				<div class="row" style="margin : 0 auto;">
 					<div class="col-md-8">
 						<div class="target-panel">
@@ -91,9 +98,9 @@
 						</div> -->
 					</div>
 				</div>
-				<div class ="wrap_btn" style="float : right;">
+				<!-- <div class ="wrap_btn" style="float : right;">
 					<button class="move_btn" @click = "filterFile" v-if="image">＞</button>
-				</div>
+				</div> -->
 			
 				</div>
 				<div class="row" style="margin-top:2rem;">
@@ -115,10 +122,19 @@
 					</div>
 				</div>
 		</div>
-		<div class="container" v-if="step === 2">
+		<div class="container" v-else-if="step === 2">
+			<div class="" style="text-align:left;">
+				<button class="btn btn-secondary move_btn" @click = "step=1" v-if="image">이전</button>
+				<button class="btn btn-primary move_btn" style="float: right" @click = "endWork" v-if="receiveimage != ''">다음</button>
+			</div>
 			<div class="wrap">
 				<img :src="receiveimage" class="filtered-image">
 			</div>
+		</div>
+		<div class="container" v-else-if='step === 3'>
+			<img src="../images/186.png" style="width:20rem; margin-top:1rem; margin-bottom:2rem;"/>
+			<h2 style="font-weight: 600;">자동으로 다운되지 않았나요?</h2>
+			<a href="#redownload" @click="downloadWorkedImage">결과물 다시 받기</a>
 		</div>
 	</div>
 </template>
@@ -312,6 +328,20 @@ export default{
 		},
 		compareSelectedData() {
 			return this.selectedData.score == this.baseSelectedData.score && this.selectedData.nms == this.baseSelectedData.nms;
+		},
+		endWork() {
+			this.step = 3;
+			this.downloadWorkedImage();
+		},
+		downloadWorkedImage() {
+			var fileURL = this.receiveimage;
+			var fileLink = document.createElement('a');
+
+			fileLink.href = fileURL;
+			fileLink.setAttribute('download', 'work');
+			document.body.appendChild(fileLink);
+
+			fileLink.click();
 		}
     }
  }
@@ -353,7 +383,7 @@ html, body {
 		background-color: #5f5fff;
 		color : #fff;
 		font-weight: bold;
-		padding: 10px;
+		padding: .5rem 2rem !important;
 		border : 0;
 		cursor: pointer;
 		margin-left : 3px;
@@ -456,7 +486,6 @@ input[type="file"] {
  color: #a5a5a5;
  background-color: transparent;
  border: 0px;
- cursor: pointer;
 	z-index: 4;
 }
 .progressbar button:focus {
