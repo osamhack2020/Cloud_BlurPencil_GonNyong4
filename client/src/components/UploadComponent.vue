@@ -39,8 +39,8 @@
 				</div>
 			</div>
 
-			<button class="move_btn" @click = "step=1" v-if="isGet&&image">＞</button>			
-			<button class="move_btn" @click = "nextFile" v-if="image&&!isGet">＞</button>
+			<button class="move_btn" @click = "step=1" v-if="isGet && image">＞</button>			
+			<button class="move_btn" @click = "nextFile" v-if="image && !isGet">＞</button>
 		</div>
 		
 		<div class="container fix-section" v-else-if="step===1">
@@ -115,11 +115,10 @@
 					</div>
 				</div>
 		</div>
-		<div v-if="step === 2">
+		<div class="container" v-if="step === 2">
 			<div class="wrap">
-				<img :src = "image" class="filtered-image">
+				<img :src="receiveimage" class="filtered-image">
 			</div>
-			
 		</div>
 	</div>
 </template>
@@ -264,29 +263,39 @@ export default{
 				alert('필터링할 이미지가 없습니다.');
 				return false;
 			}
+			// TODO : [ [], []. [] ] 처럼 만들기
+			// 지금 ; [ [], [], [], ]
 			this.waiting = true;
-			const passposes = []
-			for(var i =0;i<this.predictData.length;i++){
+			let passposes = [];
+			for(var i = 0; i<this.predictData.length; i++){
 				if(this.predictData[i].check){
-					passposes.push(this.predictData[i].pos);
+					passposes.push('[' + this.predictData[i].pos.join(',') + ']');
 				}
 			}
-			console.log(passposes);
+			passposes = '[' + passposes.join(',') + ']';
+			
 			const formData = new FormData();
 			formData.append('file', this.sendFile);
-			formData.append('boxes',passposes);
-			this.$http.post(`https://osam2020-4gb-uokiv.run.goorm.io/predict?visualize=blur`,formData,{
-				headers : {
-					'Content-Type' : 'multipart/form-data'
-				}
-			}).then((res) =>{
-				this.waiting = false;
-				this.step = 2;
-				this.receiveimage = res.data
-				console.log(res.data);
-			}).catch((err)=>{
-				console.log(err);
-				this.waiting = false;
+			formData.append('boxes', passposes);
+			console.log(passposes);
+			// '[' + [1, 2, 3].join(',') + ']'
+
+			let self = this;
+			fetch('https://osam2020-4gb-uokiv.run.goorm.io/blur', {
+				method: 'POST',
+				body: formData
+			}).then(function(response) {
+				console.log(response);
+				return response.blob();
+			}).then(function(blob) {
+				console.log(blob);
+				const objURL = URL.createObjectURL(blob);
+				// image.src = objURL;
+				console.log(objURL);
+				self.receiveimage = objURL;
+				
+				self.waiting = false;
+				self.step = 2;
 			});
 		},
 		getSize(src){
@@ -547,9 +556,9 @@ input[type="file"] {
 		}
 	}
 }
-	.filtered-image{
-		width : 40vw;
-	}
+.filtered-image {
+	max-width : 100%;
+}
 .setting-comment {
 	font-weight : bold;
 	padding-top: 1rem;

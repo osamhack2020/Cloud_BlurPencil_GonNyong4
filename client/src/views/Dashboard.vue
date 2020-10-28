@@ -40,6 +40,7 @@ body{
 	flex : 8.5;
 	width : 85%;
 	z-index: 0;
+	overflow: overlay;
 }
 #nav {
   padding: 30px;
