@@ -272,9 +272,8 @@ export default {
 		font-size: 1rem;
 	}
 	.btn_image {
-		width : 1rem;
-		cursor : pointer;
-		margin-right : .5rem;
+		width: 1rem;
+		margin-right: .5rem;
 	}
 	.before-btn {
 		margin-top: 2.5rem;
