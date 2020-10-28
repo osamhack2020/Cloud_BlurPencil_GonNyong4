@@ -25,12 +25,14 @@ router.post('/', upload.array('imgUploads'), function(req, res){
 	// asdf 는 테스트 용도 임시 아이디입니다.
 	// const user_id = 'asdf';
 	const user_id = req.body.userid;
+	const score = req.body.score || 0;
+	const nms = req.body.nms || 0;
 	
 	User.findOne({ user_id: user_id }, '_id')
 		.then((user) => {
 			const works = [];
 			for (var work of req.files) {
-				works.push( { user_oid: user._id, fileName: work.filename } );
+				works.push( { user_oid: user._id, fileName: work.filename, score: score, nms: nms } );
 			}
 			return Work.insertMany(works);
 		})

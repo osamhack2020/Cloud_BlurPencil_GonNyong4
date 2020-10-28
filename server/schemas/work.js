@@ -15,6 +15,14 @@ const workSchema = new Schema({
 		default: '',
 		required: true
 	},
+	score: {
+		type: Number,
+		default: 0
+	},
+	nms: {
+		type: Number,
+		default: 0	
+	},
 	// 작업날짜
 	workedAt: {
 		type: Date,
