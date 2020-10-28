@@ -1,11 +1,17 @@
 <template>
   <div class="main">
 	<div>
-		<div class="recent-worked">
-			<h2 class="recent-title">Recently work</h2>
-			<div class = "menu-box" v-if="checkedList!=''"> 
-				<img src = "../images/trash-alt.svg" v-on:click = "clickDel" class = "btn_image">
-				<img src = "../images/import.svg" v-on:click="clickDown" class = "btn_image">
+		<div class="recent-worked" v-if="!showWorkedData">
+			<h2 class="recent-title">최근 작업내역</h2>
+			<div class="menu-box"> 
+				<button class="btn" v-on:click="clickDown" :disabled="checkedList==''">
+					<img src = "../images/import.svg" class="btn_image"/>
+					다운로드
+				</button>
+				<button class="btn" v-on:click="clickDel"  :disabled="checkedList==''">
+					<img src = "../images/trash-alt.svg" class="btn_image">
+					삭제
+				</button>
 			</div>
 			<b-card-group deck>
 				<div v-for="(list,idx) in lists" :key="idx" class = "wrap_cards">
@@ -25,11 +31,9 @@
 							img-width = "auto"
 							img-height = "250rem"
 							img-top>
-
 						</b-card>
-							<b-card-text>
-								
-							</b-card-text>
+						<b-card-text>
+						</b-card-text>
 							<template #footer>
 								<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
 							</template>
@@ -46,16 +50,51 @@
 				</div>
 			</div>
 		</div>
-		<b-modal id="bv-modal-example" hide-footer size = "xl">
+		<div class="container data-section" v-else-if="showWorkedData">
+			<button class="btn before-btn" v-on:click="showWorkedData = false;">
+				<div class="before-btn-circle">
+					<p>＜</p>
+				</div>
+				최근 작업내역</button>
+			<h3 style="text-align:left;">{{clicked_image.fileName}}</h3>
+			<div class="row">
+				<div class="col-md-8">
+					<div class="data-image">
+						<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="data-setting">
+						<p class="setting-comment">인식률 <span class="show-value">{{ clicked_image.score }}</span></p>
+						<p class="setting-desc">로고로 인식할 추적 점수의 최소값</p>
+						<hr/>
+						<p class="setting-comment">NMS <span class="show-value">{{ clicked_image.nms }}</span></p>
+						<p class="setting-desc">Non-Maximum Suppression에서 사용할 IoU(Intersection over Union)의 threshold 값</p>
+						<hr/>
+						<p class="setting-comment">작업일</p>
+						<p class="setting-desc">{{ clicked_image.workedAt }}</p>
+					</div>
+				</div>
+			</div>			
+			<button class="btn" v-on:click="downloadWork(clicked_image.fileName)" style="float:right; background-color:white;">
+				<img src = "../images/import.svg" class="btn_image"/>
+				다운로드
+			</button>
+			<button class="btn" v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" style="float:right; background-color:white; margin-right:1rem;">
+				<img src = "../images/trash-alt.svg" class="btn_image">
+				삭제
+			</button>
+		</div>
+		<!-- <b-modal id="bv-modal-example" hide-footer size = "xl">
 			<template #modal-title>
 				{{clicked_image.fileName}}
 			</template>
 			<div style = "text-align : center; height : 500px;">
 				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
 			</div>
-			<!-- <button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
-			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button> -->
-		</b-modal>
+			<button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
+			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button>
+		</b-modal> -->
 	</div>
   </div>
 </template>
@@ -78,12 +117,14 @@ export default {
 			clicked_image : '',
 			user_id : '',
 			checkedList : [],
+			showWorkedData: false
 		}
 	},
 	methods : {
 		click_image (src){
 			this.clicked_image = src;
-			this.$bvModal.show('bv-modal-example');
+			// this.$bvModal.show('bv-modal-example');
+			this.showWorkedData = true;
 		},
 		removeWork(work_oid, fileName) {
 			this.$http.post(`/api/works/delete/${this.user_id}`, {
@@ -170,15 +211,18 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 	.main {
 		padding: 5rem;
 		background-color :  #f1f5f6 !important;
+		position: relative;
 	}
 	.worked-image {
-		height: 500px;
+		// height: 500px;
+		width: auto;
+		max-width: 100%;
 		display : inline-block;
-		margin : 0 auto;
+		// margin : 0 auto;
 	}
 	.wrap_pagination{
 		text-align : center;
@@ -202,13 +246,19 @@ export default {
 		padding: 1rem;
 		align-items: center;
 	}
-	.menu-box{
+	.menu-box {
 		background-color: #f1f5f6 !important;
 		width : 60vw;
 		height : 35px;
 		margin-bottom : 3rem;
 		margin-top : 2rem;
 		border-radius : 20px;
+		.btn {
+			background-color: white !important;
+			& + .btn {
+				margin-left: 1rem;
+			}
+		}
 	}
 	.showing_image{
 		height : 30rem;
@@ -222,9 +272,64 @@ export default {
 		font-size: 1rem;
 	}
 	.btn_image {
-		width : 3vw;
+		width : 1rem;
 		cursor : pointer;
-		margin-left : 1rem;
-		margin-bottom : 2rem;
+		margin-right : .5rem;
+	}
+	.before-btn {
+		margin-top: 2.5rem;
+		margin-left: 2rem;
+		position: absolute;
+		left: 1rem;
+		top: 1rem;
+		font-size: 1.2rem !important;
+		opacity: .7;
+		.before-btn-circle {
+			width: 2.5rem;
+			height: 2.5rem;
+			border: 1px solid rgba(black, .5);
+			border-radius: 3rem;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			margin-right: .5rem;
+			p {
+				font-size: .7rem;
+				line-height: 2rem;
+				margin-bottom: 0px;
+			}
+		}
+	}
+	.data-section {
+		margin-top: 5rem;
+		text-align: left;
+		.data-image {
+			padding: 1rem;
+			background-color: white;
+			border-radius: .25rem;
+		}
+		.data-setting {
+			padding: 1rem 1rem 2rem 1rem;
+			background-color: white;
+			border-radius: .25rem;
+			.setting-comment {
+				font-weight : bold;
+				padding-top: 1rem;
+				padding-bottom: 1rem;
+				transition: none;
+				cursor: auto;
+				&:hover {
+					background: none;
+				}
+				.show-value {
+					color: black;
+					font-size: 1rem;
+					bottom: 0px;
+					position: relative;
+					font-weight: 500 !important;
+					margin-left: .5rem !important;
+				}
+			}
+		}
 	}
 </style>

@@ -1,21 +1,25 @@
 <template>
 	<div class = "upload">
 		<div class="waiting" v-if="waiting">
+			<img src="../images/ZombieingDoodle.png" class="bored-image"/>
 			<div class="waiting-notice">
 				<img src="../images/sync.svg" class="sync-image"/>
 				처리중입니다.. 잠시만 기다려주세요.
 			</div>
 		</div>
 		<b-alert v-model="showDismissibleAlert" variant = "success"  dismissible>
-			파일이 업로드 되었습니다!
+			작업 내역이 업로드 되었습니다!
 		</b-alert>
 		<div class="progressbar">
-			<button v-on:click="step=0" v-bind:class="{'now': step===0, 'active': step > 0}">업로드</button>
-			<button v-on:click="step=1" v-bind:class="{'now': step===1, 'active': step > 1}">수정</button>
-			<button v-on:click="step=2" v-bind:class="{'now': step===2, 'active': step > 2}">필터링</button>
-			<button>다운로드</button>
+			<button v-on:click="step=0" v-bind:class="{'now': step===0, 'active': step > 0}" :disabled="step < 1">업로드</button>
+			<button v-on:click="step=1" v-bind:class="{'now': step===1, 'active': step > 1}" :disabled="step < 2">수정</button>
+			<button v-on:click="step=2" v-bind:class="{'now': step===2, 'active': step > 2}" :disabled="step < 3">필터링</button>
+			<button v-bind:class="{'now': step===3, 'active': step > 3}" disabled>다운로드</button>
 		</div>
-		<div class = "wrap" v-if="step === 0">
+		<div class="wrap" v-if="step === 0">
+			<div class="container" style="height: 4rem">
+				<button class="btn btn-primary move_btn" style="float: right" @click="nextFile" v-if="image">다음</button>
+			</div>
 			<div class="helper"></div>
 			<div class="drop display-inline align-center"
 				v-bind:style = "{background : color}"
@@ -33,21 +37,17 @@
 						<img :src="image" alt="" class="img" />
 						<div class="file-close-button" @click="removeFile" v-if="image">x</div>
 					</div>
-					<button class="btns" @click="uploadFile">전송</button>
-					<button class="btns" @click="nextFile">다음</button>
-					
+					<!-- <button class="btns" @click="uploadFile">전송</button> -->
 				</div>
 			</div>
-
-			<button class="move_btn" @click = "step=1" v-if="isGet && image">＞</button>			
-			<button class="move_btn" @click = "nextFile" v-if="image && !isGet">＞</button>
 		</div>
 		
-		<div class="container fix-section" v-else-if="step===1">
+		<div class="container fix-section" v-else-if="step === 1">
+			<div class="">
+				<button class="btn btn-secondary move_btn" @click = "step=0" v-if="image">이전</button>
+				<button class="btn btn-primary move_btn" style="float: right" @click = "filterFile" v-if="image">다음</button>
+			</div>
 			<div class="wrap">
-				<div class ="wrap_btn" style = "float:left;">
-					<button class="move_btn" @click = "step=0" v-if="image">＜</button>
-				</div>
 				<div class="row" style="margin : 0 auto;">
 					<div class="col-md-8">
 						<div class="target-panel">
@@ -83,18 +83,8 @@
 							</div>
 						</div>
 						<button class="btn btn-primary btn-re" v-on:click="nextFile" :disabled="compareSelectedData()">변경된 데이터로 이미지 새로고침</button>
-						<!-- <div class="list-panel">
-							<p class = "setting-comment">객체 정보</p>
-							<button class="btn sample-btn" v-for="(pData, idx) in predictData" :key="idx" v-on:click="pData.check = !pData.check">
-								<img class="check" v-bind:src="pData.check ? require('@/images/check.svg') : require('@/images/uncheck.svg')"/>
-							</button>
-						</div> -->
 					</div>
 				</div>
-				<div class ="wrap_btn" style="float : right;">
-					<button class="move_btn" @click = "filterFile" v-if="image">＞</button>
-				</div>
-			
 				</div>
 				<div class="row" style="margin-top:2rem;">
 					<div class="col-md-12">
@@ -115,10 +105,20 @@
 					</div>
 				</div>
 		</div>
-		<div class="container" v-if="step === 2">
+		<div class="container" v-else-if="step === 2">
+			<div class="" style="text-align:left;">
+				<button class="btn btn-secondary move_btn" @click = "step=1" v-if="image">이전</button>
+				<button class="btn btn-primary move_btn" style="float: right" @click = "endWork" v-if="receiveimage != ''">다음</button>
+			</div>
+			<h3 style="font-weight:600;">필터링된 결과물은 다음과 같습니다.</h3>
 			<div class="wrap">
 				<img :src="receiveimage" class="filtered-image">
 			</div>
+		</div>
+		<div class="container" v-else-if='step === 3'>
+			<img src="../images/186.png" style="width:20rem; margin-top:1rem; margin-bottom:2rem;"/>
+			<h3 style="font-weight: 600;">자동으로 다운되지 않았나요?</h3>
+			<a href="#redownload" @click="downloadWorkedImage">결과물 다시 받기</a>
 		</div>
 	</div>
 </template>
@@ -185,7 +185,6 @@ export default{
 				alert('이미지 파일을 선택해주세요');
 				return;
 			}
-			// var img = new Image();
 			var reader = new FileReader();
 			var vm = this;
 
@@ -194,7 +193,6 @@ export default{
             }
             reader.readAsDataURL(file);
 			this.sendFile = file;
-			console.log(this.sendFile);
         },
         removeFile() {
             this.image = '';
@@ -208,17 +206,20 @@ export default{
 			
 			const formData = new FormData();
 			const userid = sessionStorage.getItem('userid');
-			formData.append('imgUploads',this.sendFile);
-			formData.append('userid',userid);
+			formData.append('imgUploads', this.sendFile);
+			formData.append('userid', userid);
+			formData.append('score', this.selectedData.score);
+			formData.append('nms', this.selectedData.nms);
 			this.$http.post('/api/upload',formData,{
 				headers : {
 					'Content-Type' : 'multipart/form-data'
 				}
 			}).then((res) =>{
-				console.log(res);
 				this.image = '';
 				this.sendfile = '';
-				this.showDismissibleAlert = true;
+				if (res.status === 200 && res.statusText == 'OK') {
+					this.showDismissibleAlert = true;
+				}
 			}).catch((err)=>{
 				console.log(err);
 			});
@@ -263,8 +264,7 @@ export default{
 				alert('필터링할 이미지가 없습니다.');
 				return false;
 			}
-			// TODO : [ [], []. [] ] 처럼 만들기
-			// 지금 ; [ [], [], [], ]
+			
 			this.waiting = true;
 			let passposes = [];
 			for(var i = 0; i<this.predictData.length; i++){
@@ -277,21 +277,15 @@ export default{
 			const formData = new FormData();
 			formData.append('file', this.sendFile);
 			formData.append('boxes', passposes);
-			console.log(passposes);
-			// '[' + [1, 2, 3].join(',') + ']'
 
 			let self = this;
 			fetch('https://osam2020-4gb-uokiv.run.goorm.io/blur', {
 				method: 'POST',
 				body: formData
 			}).then(function(response) {
-				console.log(response);
 				return response.blob();
 			}).then(function(blob) {
-				console.log(blob);
 				const objURL = URL.createObjectURL(blob);
-				// image.src = objURL;
-				console.log(objURL);
 				self.receiveimage = objURL;
 				
 				self.waiting = false;
@@ -312,6 +306,21 @@ export default{
 		},
 		compareSelectedData() {
 			return this.selectedData.score == this.baseSelectedData.score && this.selectedData.nms == this.baseSelectedData.nms;
+		},
+		endWork() {
+			this.step = 3;
+			this.downloadWorkedImage();
+			this.uploadFile();
+		},
+		downloadWorkedImage() {
+			var fileURL = this.receiveimage;
+			var fileLink = document.createElement('a');
+
+			fileLink.href = fileURL;
+			fileLink.setAttribute('download', 'work');
+			document.body.appendChild(fileLink);
+
+			fileLink.click();
 		}
     }
  }
@@ -338,32 +347,32 @@ html, body {
     transform: translate(-50%, -40%);
 }
 .btns {
-  background-color: #5f5fff;
-  border: 0;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-weight: bold;
-  padding: 15px 35px;
-  position: relative;
-  border-radius: .25rem;
-}
-	.move_btn{
-		border-radius : 50%;
-		background-color: #5f5fff;
-		color : #fff;
-		font-weight: bold;
-		padding: 10px;
-		border : 0;
-		cursor: pointer;
-		margin-left : 3px;
-		display : inline-block;
+	background-color: #5f5fff;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	font-weight: bold;
+	padding: 15px 35px;
+	position: relative;
+	border-radius: .25rem;
+	&.ready-btn {
+		margin-top: 8rem;
 	}
-.btns.ready-btn {
-	margin-top: 8rem;
+	&:hover {
+		background-color: #212b6b;
+	}
 }
-.btns:hover {
-  background-color: #212b6b;
+.move_btn{
+	border-radius : 50%;
+	background-color: #5f5fff;
+	color : #fff;
+	font-weight: bold;
+	padding: .5rem 2rem !important;
+	border : 0;
+	cursor: pointer;
+	margin-left : 3px;
+	display : inline-block;
 }
 
 input[type="file"] {
@@ -378,7 +387,7 @@ input[type="file"] {
 }
 
 .helper {
-  height: 300px;
+  height: 400px;
   display: inline-block;
   vertical-align: middle;
   width: 0;
@@ -406,18 +415,17 @@ input[type="file"] {
 
 .drop {
 	position: relative;
-  background-color: #f2f2f2;
-  border: 4px dashed #ccc;
-  background-color: #f6f6f6;
-  border-radius: 15px;
-  height: 100%;
-  max-height: 400px;
-  max-width: 500px;
-  width: 100%;
+	background-color: #f2f2f2;
+	border: 4px dashed #ccc;
+	background-color: #f6f6f6;
+	border-radius: 15px;
+	height: 100%;
+	max-height: 400px;
+	max-width: 600px;
+	width: 100%;
 }
 .file-close-button {
     position: absolute;
-    /* align-items: center; */
     line-height: 18px;
     z-index: 99;
     font-size: 18px;
@@ -438,58 +446,56 @@ input[type="file"] {
 .file-preview-wrapper img {
 	width: auto;
 	max-width: 100%;
-	max-height: 220px;
+	max-height: 320px;
 }
 .progressbar {
- counter-reset: step;
-	margin-top: 5%;
-	margin-bottom: 3rem;
+	counter-reset: step;
+	margin-top: 3%;
+	margin-bottom: 3%;
 	min-height: 74px;
 }
 .progressbar button {
- list-style-type: none;
- float: left;
- width: 25%;
- position: relative;
- text-align: center;
- font-weight: 400;
- color: #a5a5a5;
- background-color: transparent;
- border: 0px;
- cursor: pointer;
+	list-style-type: none;
+	float: left;
+	width: 25%;
+	position: relative;
+	text-align: center;
+	font-weight: 400;
+	color: #a5a5a5;
+	background-color: transparent;
+	border: 0px;
 	z-index: 4;
-}
-.progressbar button:focus {
- outline: none;
-}
-.progressbar button:before {
- content: counter(step);
- counter-increment: step;
- counter-increment: step;
- width: 40px;
- height: 40px;
- line-height: 40px;
- border: 1px solid #ddd;
- display: block;
- font-size: 22px;
- font-weight: 600;
- text-align: center;
- color: #a5a5a5;
- margin: 0 auto 10px auto;
- border-radius: 50%;
- background-color: white;
-	// z-index: 1;
-}
-.progressbar button:after {
- content: '';
- position: absolute;
- width: 50%;
- height: 2px;
- margin-top: 3px;
- background-color: #c3c3c3;
- top: 15px;
- left: -25%;
- z-index: -1;
+	&:focus {
+		outline: none;
+	}
+	&:before {
+		content: counter(step);
+		counter-increment: step;
+		counter-increment: step;
+		width: 40px;
+		height: 40px;
+		line-height: 40px;
+		border: 1px solid #ddd;
+		display: block;
+		font-size: 22px;
+		font-weight: 600;
+		text-align: center;
+		color: #a5a5a5;
+		margin: 0 auto 10px auto;
+		border-radius: 50%;
+		background-color: white;
+	}
+	&:after {
+		content: '';
+		position: absolute;
+		width: 50%;
+		height: 2px;
+		margin-top: 3px;
+		background-color: #c3c3c3;
+		top: 15px;
+		left: -25%;
+		z-index: -1;
+	}
 }
 .progressbar button:first-child:after {
  content: none;
@@ -498,7 +504,6 @@ input[type="file"] {
  font-weight: 700;
 }
 .progressbar button.now:before {
- /* color: white; */
  color: white !important;
  background-color: #5f5fff;
 }
@@ -626,7 +631,12 @@ input[type="file"] {
 	width: 85%;
 	height: 100%;
 	z-index: 100;
-	background: rgba(0, 0, 0, .7);
+	background: rgba(0, 0, 0, .8);
+	.bored-image {
+		margin-top: 15vh;
+		width: 30rem;
+		animation: rotateFlip 0.5s infinite steps(2);
+	}
 	.sync-image {
 		width: 1rem;
 		animation: rotation 2s infinite linear;
@@ -660,6 +670,14 @@ input[type="file"] {
 	}
 	to {
 		transform: rotate(0deg);
+	}
+}
+@keyframes rotateFlip {
+	from {
+		transform: rotate(10deg);
+	}
+	to {
+		transform: rotate(-10deg);
 	}
 }
 </style>
