@@ -24,7 +24,8 @@
 							</b-form-invalid-feedback>
 						</b-form-group>
 						<b-form-group id="input-group-2" label="비밀번호" label-for="input-2">
-							<b-form-input
+							<b-form-input  
+								type = "password"
 								id="login-2"
 								v-model="loginUser.password"
 								required
