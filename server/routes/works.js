@@ -57,4 +57,27 @@ router.post('/delete/:user_id', function(req, res, next) {
 		})
 });
 
+router.patch('/folder', function(req, res, next) {
+	const work_oid = req.body.work_oid || '';
+	const folder_oid = req.body.folder_oid || '';
+	
+	Work.findOne({ _id: work_oid })
+		.then((result) => {
+			if (result)
+				return Work.updateOne({ _id: work_oid }, { folder: folder_oid });
+			return { success:false, message: `존재하지 않는 파일 아이디입니다.` };
+		})
+		.then((result) => {
+			if (result.ok && result.nModified)
+				res.json(200, { success:true, message:`파일이 폴더로 이동되었습니다.` });
+			else
+				res.json(400, result);
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		});
+});
+
+
 module.exports = router;
