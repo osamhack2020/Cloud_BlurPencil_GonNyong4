@@ -14,9 +14,12 @@
       method: 'POST',
       body: new FormData(formElem)
     }).then(function(response) {
+        console.log(response);
 	    return response.blob();
 	}).then(function(blob) {
+        console.log(blob);
 		const objURL = URL.createObjectURL(blob);
+        console.log(objURL);
 		image.src = objURL;
 	});
   };
