@@ -94,7 +94,7 @@ router.post('/register', function(req, res, next) {
 	
 	user.save()
 		.then((result) => {
-			res.json(200, { success:true, message:'회원가입에 성공했습니다. 같은 메세지' });
+			res.json(200, { success:true, message:'회원가입에 성공했습니다.' });
 		})
 		.catch((err) => {
 		    if (err) {

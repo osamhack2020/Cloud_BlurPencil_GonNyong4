@@ -63,7 +63,7 @@
 									<b-form-radio-group
 										v-model="selectedData.score"
 										:options="options"
-										name="radio-inline"
+										name="radio-inline1"
 									></b-form-radio-group>
 								</b-form-group>
 								<input v-model="selectedData.score" type="range" class="custom-range" min="0" max="1" step="0.1" id="scoreRange">
@@ -76,7 +76,7 @@
 									<b-form-radio-group
 										v-model="selectedData.nms"
 										:options="options"
-										name="radio-inline"
+										name="radio-inline2"
 									></b-form-radio-group>
 								</b-form-group>
 								<input v-model="selectedData.nms" type="range" class="custom-range" min="0" max="1" step="0.1" id="nmsRange">
