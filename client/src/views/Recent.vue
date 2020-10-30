@@ -50,56 +50,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="container data-section" v-else-if="showWorkedData">
-			<button class="btn before-btn" v-on:click="showWorkedData = false;">
-				<div class="before-btn-circle">
-					<p>＜</p>
-				</div>
-				최근 작업내역</button>
-			<h3 style="text-align:left;">{{clicked_image.fileName}}</h3>
-			<div class="row">
-				<div class="col-md-8">
-					<div class="data-image">
-						<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="data-setting">
-						<p class="setting-comment">인식률 <span class="show-value">{{ clicked_image.score }}</span></p>
-						<p class="setting-desc">로고로 인식할 추적 점수의 최소값</p>
-						<hr/>
-						<p class="setting-comment">NMS <span class="show-value">{{ clicked_image.nms }}</span></p>
-						<p class="setting-desc">Non-Maximum Suppression에서 사용할 IoU(Intersection over Union)의 threshold 값</p>
-						<hr/>
-						<p class="setting-comment">작업일</p>
-						<p class="setting-desc">{{ clicked_image.workedAt }}</p>
-					</div>
-				</div>
-			</div>			
-			<button class="btn" v-on:click="downloadWork(clicked_image.fileName)" style="float:right; background-color:white;">
-				<img src = "../images/import.svg" class="btn_image"/>
-				다운로드
-			</button>
-			<button class="btn" v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" style="float:right; background-color:white; margin-right:1rem;">
-				<img src = "../images/trash-alt.svg" class="btn_image">
-				삭제
-			</button>
-		</div>
-		<!-- <b-modal id="bv-modal-example" hide-footer size = "xl">
-			<template #modal-title>
-				{{clicked_image.fileName}}
-			</template>
-			<div style = "text-align : center; height : 500px;">
-				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
-			</div>
-			<button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
-			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button>
-		</b-modal> -->
+		<WorkData v-else-if="showWorkedData" @cancelWorkData="cancelWorkData" :clicked_image="clicked_image"></WorkData>
 	</div>
   </div>
 </template>
 
 <script>
+import WorkData from '@/components/WorkData.vue'
+	
 export default {
 	name: 'Recent',
 	props: {
@@ -130,35 +88,6 @@ export default {
 			// this.$bvModal.show('bv-modal-example');
 			this.showWorkedData = true;
 		},
-		removeWork(work_oid, fileName) {
-			this.$http.post(`/api/works/delete/${this.user_id}`, {
-				work_oid: work_oid,
-				fileName: fileName
-			})
-			.then((response) => {
-				console.log(response.data);
-				location.reload();
-			})
-			.catch((err) =>{
-				this.workData = err;
-			})
-		},
-		downloadWork (fileName) {
-			this.$http ({
-				url: `${this.serverUrl}${fileName}`,
-				method: 'GET',
-				responseType: 'blob',
-			}).then((response) => {
-				var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-				var fileLink = document.createElement('a');
-
-				fileLink.href = fileURL;
-				fileLink.setAttribute('download', fileName);
-				document.body.appendChild(fileLink);
-
-				fileLink.click();
-			});
-		},
 		clickDel(){
 			const f = this.checkedList;
 			var isok = confirm("정말"+f.length+"개의 파일을 삭제하시겠습니까?");
@@ -169,6 +98,9 @@ export default {
 				alert("파일이 삭제되었습니다.");
 				this.checkedList = [];
 			}
+		},
+		cancelWorkData() {
+			this.showWorkedData = false;
 		},
 		clickDown(){
 			const f= this.checkedList;
@@ -199,6 +131,9 @@ export default {
 			.catch((err) =>{
 				this.workData = err;
 			})
+	},
+	components: {
+		WorkData
 	},
 	computed: {
     lists () {
@@ -267,7 +202,6 @@ export default {
 	.showing_image{
 		height : 30rem;
 		max-width : 15rem;
-		
 	}
 	.wrap_cards{
 		margin-top : 5px;	
@@ -278,61 +212,5 @@ export default {
 	.btn_image {
 		width: 1rem;
 		margin-right: .5rem;
-	}
-	.before-btn {
-		margin-top: 2.5rem;
-		margin-left: 2rem;
-		position: absolute;
-		left: 1rem;
-		top: 1rem;
-		font-size: 1.2rem !important;
-		opacity: .7;
-		.before-btn-circle {
-			width: 2.5rem;
-			height: 2.5rem;
-			border: 1px solid rgba(black, .5);
-			border-radius: 3rem;
-			display: inline-flex;
-			justify-content: center;
-			align-items: center;
-			margin-right: .5rem;
-			p {
-				font-size: .7rem;
-				line-height: 2rem;
-				margin-bottom: 0px;
-			}
-		}
-	}
-	.data-section {
-		margin-top: 5rem;
-		text-align: left;
-		.data-image {
-			padding: 1rem;
-			background-color: white;
-			border-radius: .25rem;
-		}
-		.data-setting {
-			padding: 1rem 1rem 2rem 1rem;
-			background-color: white;
-			border-radius: .25rem;
-			.setting-comment {
-				font-weight : bold;
-				padding-top: 1rem;
-				padding-bottom: 1rem;
-				transition: none;
-				cursor: auto;
-				&:hover {
-					background: none;
-				}
-				.show-value {
-					color: black;
-					font-size: 1rem;
-					bottom: 0px;
-					position: relative;
-					font-weight: 500 !important;
-					margin-left: .5rem !important;
-				}
-			}
-		}
 	}
 </style>

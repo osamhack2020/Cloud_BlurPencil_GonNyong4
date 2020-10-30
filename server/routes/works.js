@@ -17,7 +17,7 @@ router.get('/:user_id', function(req, res, next) {
 	User.findOne({ user_id: user_id }, { _id: true })
 		.then((result) => {
 			console.log(result);
-			return Work.find({ user_oid: result._id }).skip(skip).limit(limit).sort({workedAt: sort});
+			return Work.find({ user_oid: result._id }, { user_oid: false }).skip(skip).limit(limit).sort({workedAt: sort}).populate('folder', { share: false });
 		})
 		.then((result) => {
 			result.success = true;
@@ -57,14 +57,23 @@ router.post('/delete/:user_id', function(req, res, next) {
 		})
 });
 
+/**
+ * 폴더로 이동
+ * PATCH /api/works/folder
+ */
 router.patch('/folder', function(req, res, next) {
 	const work_oid = req.body.work_oid || '';
 	const folder_oid = req.body.folder_oid || '';
+	console.log('MOVE ', work_oid, folder_oid);
 	
 	Work.findOne({ _id: work_oid })
 		.then((result) => {
-			if (result)
-				return Work.updateOne({ _id: work_oid }, { folder: folder_oid });
+			if (result) {
+				if (folder_oid === '')
+					return Work.updateOne({ _id: work_oid }, { folder: undefined });
+				else
+					return Work.updateOne({ _id: work_oid }, { folder: folder_oid });
+			}
 			return { success:false, message: `존재하지 않는 파일 아이디입니다.` };
 		})
 		.then((result) => {

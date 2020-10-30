@@ -1,25 +1,26 @@
 <template>
 	<div class="main">
-		<div class="folders-section">
+		<div class="folders-section" v-if="!showWorkedData && !showFolderData">
 			<h3>내 폴더들</h3>
 			<button class="btn folder create" @click="showCreateFolder = true">
 				<p class="folder-text">폴더생성</p>
 			</button>
-			<button class="btn folder" :class="{ 'mine' : folder.owner === user_oid, 'share' : folder.owner !== user_oid }" v-for="(folder, idx) in folderList" :key="idx">
+			<button class="btn folder" :class="{ 'mine' : folder.owner === user_oid, 'share' : folder.owner !== user_oid }" v-for="(folder, idx) in folderList" :key="idx" @click="showFolderData = true; clicked_folder = folder">
 				<p class="folder-text folder-title">{{ folder.folderName }}</p>
 			</button>
 		</div>
-		<div class="recents-section">
+		<div class="recents-section" v-if="!showWorkedData && !showFolderData">
 			<h3>최근 작업내역</h3>
 			<div>
-				<div class="recent-work" v-for="(recent, idx) in recentWorks" :key="idx">
+				<div class="recent-work" v-for="(recent, idx) in recentWorks" :key="idx" @click="showWorkedData=true; clicked_image=recent;">
 					<img class="recent-image" :src="serverUrl + recent.fileName" />
 					<p class="recent-fileName">{{ recent.fileName }}</p>
+					<p class="recent-fileName">/ {{ getFolderName(recent.folder) }}</p>
 					<p class="recent-fileName">{{ recent.workedAt }}</p>
 				</div>
 			</div>
 		</div>
-		<div class="create-folder-modal" v-if="showCreateFolder">
+		<div class="custom-modal" v-if="showCreateFolder">
 			<div class="modal-box">
 				<b-form-group label="폴더 이름을 입력해주세요." style="text-align: left; font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem;">
 					<b-form-input
@@ -35,23 +36,15 @@
 				<button class="btn" @click="showCreateFolder = false">취소</button>
 			</div>
 		</div>
-		<div v-if="showShareFolder">
-			<b-form-group id="input-group-email" label="이메일" label-for="input-email">
-				<b-form-input
-					id="invite-email"
-					v-model="inviteEmail"
-					required
-				></b-form-input>
-				<b-form-invalid-feedback id="invite-email">
-					이메일을 입력해주세요.
-				</b-form-invalid-feedback>
-			</b-form-group>
-			<button @click = "inviteFolder" >초대</button>
-		</div>
+		<WorkData v-if="showWorkedData" @cancelWorkData="cancelWorkData" :clicked_image="clicked_image"></WorkData>
+		<FolderData v-if="showFolderData" @cancelFolderData="cancelFolderData" :clicked_folder="clicked_folder"></FolderData>
 	</div>
 </template>
 
 <script>
+import WorkData from '@/components/WorkData.vue'
+import FolderData from '@/components/FolderData.vue'
+	
 export default {
 	name: 'Main',
 	props: {
@@ -62,26 +55,19 @@ export default {
     },
 	data () {
 		return {
-			user_oid: '5f82cb8b9e963310f13f5129',
+			user_oid: '',
 			inviteEmail: '',
 			folderName: '',
 			folderList: '',
 			recentWorks: '',
 			showCreateFolder: false,
-			showShareFolder: false
+			showWorkedData: false,
+			showFolderData: false,
+			clicked_image: '',
+			clicked_folder: ''
 		}
 	},
 	methods : {
-		inviteFolder() {
-			this.$http.post('/api/folders/share',{
-				email: this.inviteEmail,
-				folder_oid : '5f9a976ac0eb60083b2ecf18'
-			}).then((response) => {
-				alert(response.data);
-			}).catch((err) =>{
-				console.log(err);
-			})
-		},
 		createFolder() {
 			this.$http.post('/api/folders',{
 				folderName: this.folderName,
@@ -93,6 +79,11 @@ export default {
 				console.log(err);
 			})
 		},
+		getFolderName(data) {
+			if (!data)
+				return '';
+			return data.folderName
+		},
 		getFolders() {
 			this.$http.get(`/api/folders?user_oid=${this.user_oid}`)
 				.then((response) => {
@@ -100,31 +91,53 @@ export default {
 				}).catch((err) =>{
 					console.log(err);
 				})
+			this.$http.get(`/api/folders/shared/?user_oid=${this.user_oid}`)
+				.then((response) => {
+					this.folderList = this.folderList.concat(response.data);
+				}).catch((err) =>{
+					console.log(err);
+				})
+		},
+		cancelWorkData() {
+			this.getRecentWork();
+			this.showWorkedData = false;
+		},
+		cancelFolderData() {
+			this.getRecentWork();
+			this.showFolderData = false;
+		},
+		getRecentWork() {
+			var userid = sessionStorage.getItem("userid");
+			this.user_id = userid;
+			var skip = 0;	// 뛰어넘기	(default 0)
+			var limit = 5;	// 개수	(default 5)
+			var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)
+
+			this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
+				.then((response) => {
+					this.recentWorks = response.data;
+					console.log(this.recentWorks);
+					if (this.recentWorks.length > 0) {
+						// 작업물이 한개 이상이라도 있으면
+					}
+				})
+				.catch((err) =>{
+					this.recentWorks = err;
+				})
 		}
 	},
 	created(){
+		this.user_oid = sessionStorage.getItem("user_oid");
 		this.getFolders();
-		
-		var userid = sessionStorage.getItem("userid");
-		this.user_id = userid;
-		var skip = 0;	// 뛰어넘기	(default 0)
-		var limit = 5;	// 개수	(default 5)
-		var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)
-		
-		this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
-			.then((response) => {
-				this.recentWorks = response.data;
-				if (this.recentWorks.length > 0) {
-					// 작업물이 한개 이상이라도 있으면
-				}
-			})
-			.catch((err) =>{
-				this.recentWorks = err;
-			})
+		this.getRecentWork();
+	},
+	components: {
+		WorkData,
+		FolderData
 	}
 }
 </script>
-<style lang="scss" sc>
+<style lang="scss">
 	.main {
 		padding: 5rem;
 		position: relative;
@@ -154,8 +167,8 @@ export default {
 				background-color: #7f7ffb;
 			}
 			&.share {
-				color: #7f7ffb;
-				border: 2px solid #7f7ffb;
+				background-color: #b0abfb;
+				border: 2px solid #b0abfb;
 			}
 			.folder-text {
 				left: 0px;
@@ -186,7 +199,8 @@ export default {
 			transition: background .3s ease;
 			box-shadow: 0px 4px 5px 2px #0000000d;
 			&:hover {
-				background-color: #7f7ffb1c !important;
+				// background-color: #7f7ffb1c !important;
+				background-color: white !important;
 				box-shadow: 0px 4px 5px 2px #0000000d !important;
 			}
 			& + .recent-work {
@@ -201,12 +215,12 @@ export default {
 			}
 		}
 	}
-	.create-folder-modal {
+	.custom-modal {
 		position: absolute;
 		left: 0px;
 		top: 0px;
 		width: 100%;
-		height: 100%;
+		height: 100vh;
 		background-color: rgba(0, 0, 0, .7);
 		z-index: 10;
 		display: flex;

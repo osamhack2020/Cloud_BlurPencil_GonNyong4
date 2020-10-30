@@ -15,8 +15,6 @@ router.post('/', function(req, res, next) {
 		folderName: req.body.folderName,
 		owner: req.body.owner
 	});
-	console.log(folder.folderName);
-	console.log(folder.owner);
 	
 	folder.save()
 		.then((result) => {
@@ -34,12 +32,10 @@ router.post('/', function(req, res, next) {
 */
 router.get('/', function(req, res, next) {
 	const user_oid = req.query.user_oid;
-	console.log('aaaaaaa');
 	
 	Folder.find({ owner: user_oid })
 		.then((result) => {
 			res.json(200, result);
-			console.log('1 ', result);
 		})
 		.catch((err) => {
 			console.error(err);
@@ -48,18 +44,35 @@ router.get('/', function(req, res, next) {
 });
 
 /*
+	GET /api/folders/shared
+	user의 공유된 폴더들 가져오기
+*/
+router.get('/shared', function(req, res, next) {
+	const user_oid = req.query.user_oid;
+	
+	Folder.find({ share: user_oid }).populate('share')
+		.then((result) => {
+			console.log('---------------------------');
+			console.log(result);
+			res.json(200, result);
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		})
+});
+/*
 	GET /api/folders/files
 	폴더안 파일들 가져오기
 */
 router.get('/files/:folder_oid', function(req, res, next) {
 	const folder_oid = req.params.folder_oid || '';
-			console.log('bbbbbbbbbb');
+	console.log('foid ', folder_oid);
 	
-	Folder.find({ _id: folder_oid })
+	Work.find({ folder: folder_oid })
 		.then((result) => {
 			result.success = true;
 			res.json(200, result);
-			console.log('2 ', result);
 		})
 		.catch((err) => {
 			console.error(err);
@@ -67,6 +80,10 @@ router.get('/files/:folder_oid', function(req, res, next) {
 		})
 });
 
+/*
+	POST /api/folders/delete
+	폴더 삭제
+*/
 router.post('/delete', function(req, res, next) {
 	const owner = req.body.owner, 
 		  folder_oid = req.body.folder_oid;
