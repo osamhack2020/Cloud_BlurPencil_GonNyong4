@@ -37,7 +37,7 @@
 
 ## 기능 설계
 ### 구조
-![구조](./archi.png.png)
+![구조](./archi.png)
 
 ### 설계
 ![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
@@ -46,7 +46,7 @@
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 - 권장 : 최신 버전의 크로미움 기반 브라우저
 
-## 기술 스택 (Technique Used) (예시)
+## 기술 스택 (Technique Used)
 ### Server(back-end)
  - Node.js
  - Express
