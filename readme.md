@@ -22,98 +22,19 @@
  </a>
 </p>
 
-<!-- 
-//깃헙 레포 코드 용량
-![](https://img.shields.io/github/languages/code-size/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge)
-//깃헙 레포 닫힌 이슈 개수
-![](https://img.shields.io/github/issues-closed/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge)
-//깃헙 PR
-![](https://img.shields.io/github/issues-pr/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge)
--->
+## 📖 프로젝트 소개
 
-## 프로젝트 소개 및 동영상
-<!-- 마땅히 넣어 볼게 없어서 당장 심심해 보여 넣습니담.. 넣어두 되려나 모르겠네여 -->
-![프로젝트설명](./intro.png)
+![프로젝트 설명 이미지](./intro.png)
 <br>
 <p><strong>Blur Pencil</strong>은 Blur와 Pencil을 합친 단어로, 모자이크 처리 하고 싶은 이미지를 Pencil(연필)과 같은 우리에게 익숙한 도구로 간단하고 쉽게 Blur처리 하기 위해 고안한 아이디어 입니다. 접근하기 편리한 웹을 통해 이미지를 드래그 앤 드랍만 하면, 학습된 Blur Pencil이 이미지를 분석한 뒤, 모자이크 할 객체를 인식하며, 인식된 객체 중 원하는 객체를 골라 모자이크 처리를 할 수 있습니다. 또한 모자이크 처리 된 이미지 내역들을 저장할 수 있으며, 다른 사용자와 공유할 수 있도록 도와줍니다.</p>
-
-
-## Demo
-### UX
-![](demo/mypage.png)
-![](demo/foldername.png)
-![](demo/goonin.png)
-![](demo/sharefolder.png)
-
-### Before
-![](demo/1-2.png)
-### After
-![](demo/1-3.png)
-### Before
-![](demo/3-1.png)
-### After
-![](demo/3-3.png)
-### Before
-![](demo/4-2.png)
-### After
-![](demo/4-3.png)
-### Before
-![](demo/toktok.jpg)
-### After
-![](demo/toktok_res.png)
-### Before
-![](demo/eyedrop.jpg)
-### After
-![](demo/eyedrop_res.png)
-### Before
-![](demo/marie_src.jpg)
-### After
-![](demo/marie_res.png)
-
-
-## 기능 설계
-### 구조
-![구조](./archi.png)
-
-### 설계
-![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
-
-
-## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
-- 권장 : 최신 버전의 크로미움 기반 브라우저
-
-## 기술 스택 (Technique Used)
-### Server(back-end)
- - Node.js
- - Express
- - MongoDB
- - Flask
- - PyTorch
- 
-### front-end
- -  Vue.js
- -  Bootstrap
-
-## 설치 안내 (Installation Process)
-```bash
-$ git clone https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4.git
-```
-
-### Back-End
-```bash
-$ cd server/
-$ npm install
-```
-=======
-<br><br>
 
 <table>
 	<tr>
 		<td>
-			<a href="https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be"><img src="./goyoutube.png"></a>
+			<a href="https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be"><img src="images/goyoutube.png"></a>
 		</td>
 		<td>
-			<a href="https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx"><img src="./goppt.png"></a>
+			<a href="https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx"><img src="images/goppt.png"></a>
 		</td>
 	</tr>
 	<tr>
@@ -126,16 +47,63 @@ $ npm install
 	</tr>
 </table>
 
-<br>
-<br>
+## 📄 기능 설계 및 가이드
+### Figma Proto-typing
+![Figma](images/Figma.png)
 
-## 팀 정보 (Team Information)
-<!--
-- 팀장: 김현재 (hyeonjae.dev@gmail.com) | [Github](https://github.com/hughesgoon)
-- 팀원(Full stack): 강예찬 (kyechan99@gmail.com) | [Github](https://github.com/kyechan99) 
-- 팀원(Front-End): 배성준 (clcc001@naver.com) | 
-- 팀원(Pytorch, CV): 홍승표 (spkbk98@gmail.com) | [Github](https://github.com/seungpyo) 
--->
+### 구조
+![구조](images/archi.png)
+
+### 설계
+![설계](images/archi2.png)
+
+### API 가이드(유저 관련)
+[API 가이드](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/wiki/API-Guide)
+
+### API 가이드(로고 인식 관련)
+[API 가이드](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/wiki/API-Guide-(Logo-Detection))
+
+
+## ⚙ 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
+- 권장 : 최신 버전의 크로미움 기반 브라우저
+
+## 🔧 기술 스택 (Technique Used)
+### Server(back-end)
+ - Node.js
+ - Express
+ - MongoDB
+ - Flask
+ - PyTorch
+ 
+### front-end
+ -  Vue.js
+ -  Bootstrap
+
+## ⛏ 설치 안내 (Installation Process)
+> MongoDB 및 node.js 설치는 되어 있다는 가정하에 진행합니다.
+
+```bash
+$ git clone https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4.git
+```
+
+### Back-End
+```bash
+$ cd server/
+$ npm install
+```
+
+### Build / Test
+```bash
+$ (root) npm start
+```
+
+### 세팅시 유의 사항
+1. [vue.config.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/vue.config.js) 안에 '/api' `target` 주소를 서버주소(로컬 환경시 서버포트)로 변경
+2. [main.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/src/main.js) 안에 `serverUrl` 변수명을 서버주소(로컬 환경시 서버포트)로 변경
+
+> 구름 IDE 환경으로 개발시 로컬 주소가 아닌 URL 주소를 직접 입력해 주어야함
+
+## 👨‍💻 팀 정보 (Team Information)
 <table>
   <tr>
     <td align="center">
@@ -198,52 +166,43 @@ $ npm install
  </table>
  <br><br>
 
-## Blur Pencil 기능 및 설계
-### 구조
-![구조](./archi.png)
-
-### 설계
-![설계](./archi2.png)
-
-Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수 있습니다.
-
 ## Blur Pencil 사용법
 ### STEP 1
 <p>사진을 Drag and Drop해서 올린다.</p>
-<img src ="./1.png" width = "1024">
+<img src ="images/1.png" width = "1024">
 
 ### STEP 2
 
 <p>인식된 객체 중 모자이크 할 객체를 선택한다.</p>
-<img src ="./2.png" width = "1024">
+<img src ="images/2.png" width = "1024">
 
 ### STEP 3
 
 <p>모자이크 처리 된 이미지를 확인 후 다운로드 한다.</p>
-<img src ="./3.png" width = "1024">
+<img src ="images/3.png" width = "1024">
 
-## Blur Pencil이 가지는 장점
 ### 로그인 없이 무료로 사용 가능
-<img src ="./strength1.png" width = "1024">
+<img src ="images/strength1.png" width = "1024">
 <br>
 
 ### 폴더 기능
-<p>작업한 이미지들을 폴더 별로 나누어 저장할 수 있으며 다른 유저와 공유도 할 수 있다.</p>
+<p>작업한 이미지들을 폴더 별로 나누어 저장할 수 있으며 다른 유저와 공유도 할 수 있습니다.</p>
 
 <strong>메인 페이지</strong>
-<img src ="./prev_dash.png" width = "1024">
+<img src ="images/prev_dash.png" width = "1024">
 <br>
 <strong>폴더 저장</strong>
-<img src ="./strength_folder.png" width = "1024">
+<img src ="images/strength_folder.png" width = "1024">
 <br>
 <strong>폴더 공유</strong>
-<img src ="./strength_share.png" width = "1024">
+<img src ="images/strength_share.png" width = "1024">
 <br>
 <strong>파일 관리</strong>
-<img src ="./strength_multi.png" width = "1024">
+<img src ="images/strength_multi.png" width = "1024">
 <br><br>
 
-## DEMO
+## 💻 DEMO
+> 더 많은 테스트 케이스를 `demo` 폴더에서 확인하실 수 있습니다.
 <p align="center">
 <p align="left">
 
@@ -265,61 +224,16 @@ Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수
 <img src = "./example3.png" width = "1024">
 <p align="left">
 
-### Demo Image 4
-
-</p>
-<img src = "./example4.png" width = "1024">
-</p>
+### Functions
+![](demo/mypage.png)
+![](demo/foldername.png)
+![](demo/goonin.png)
+![](demo/sharefolder.png)
 
 ## Blur Pencil 기대 효과
-<li>빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해 등을 보완할 수 있다.</li>
-<li>강력한 보안을 필요로 하는 개인이나 집단, 저작권 보호를 중요시하는 단체에게 Blur Pencil의 기술을 통해 업무 성능 향상을 도와준다.</li>
-<li>인식률(score)과 NMS(Non-Maximum Suppression)을 조절하여 검열 대상의 인식률을 조절 할 수 있다.</li>
-
-## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
-- 권장 : 최신 버전의 크로미움 기반 브라우저
-
-## 기술 스택 (Technique Used)
-### Server(back-end)
- - Node.js
- - Express
- - MongoDB
- - Flask
- - PyTorch
- 
-### front-end
- -  Vue.js
- -  Bootstrap
-
-## 설치 안내 (Installation Process)
-```bash
-$ git clone https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4.git
-```
-
-### Back-End
-```bash
-$ cd server/
-$ npm install
-```
-
-### Front-End
-```bash
-$ cd client/
-$ npm install
-```
-
-### Build / Test
-```bash
-$ (root) npm start
-```
-
-### 세팅 유의 사항
-1. [vue.config.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/vue.config.js) 안에 '/api' `target` 주소를 서버주소(로컬 환경시 서버포트)로 변경
-2. [main.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/src/main.js) 안에 `serverUrl` 변수명을 서버주소(로컬 환경시 서버포트)로 변경
-
-> 구름 IDE 환경으로 개발시 로컬 주소가 아닌 URL 주소를 직접 입력해 주어야함
-
-
+- 빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해 등을 보완할 수 있다.
+- 강력한 보안을 필요로 하는 개인이나 집단, 저작권 보호를 중요시하는 단체에게 Blur Pencil의 기술을 통해 업무 성능 향상을 도와준다.
+- 인식률(score)과 NMS(Non-Maximum Suppression)을 조절하여 검열 대상의 인식률을 조절 할 수 있다.
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
 MIT License
