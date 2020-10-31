@@ -36,10 +36,24 @@
 ![프로젝트설명](./intro.png)
 
 ## Demo
+### UX
+![](demo/mypage.png)
+![](demo/foldername.png)
+![](demo/goonin.png)
+![](demo/sharefolder.png)
+
+### Before
+![](demo/1-2.png)
+### After
+![](demo/1-3.png)
 ### Before
 ![](demo/3-1.png)
 ### After
 ![](demo/3-3.png)
+### Before
+![](demo/4-2.png)
+### After
+![](demo/4-3.png)
 ### Before
 ![](demo/toktok.jpg)
 ### After
