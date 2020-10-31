@@ -27,8 +27,8 @@
 		<div class="intro-desc">
 			<h1>BLUR PENCIL</h1>
 			<h5>BLUR PENCIL 은 가장 강력한 모자이크 처리 서비스입니다.</h5>
-			<p style="margin-bottom: .5rem;">어쩌구 저쩌구 블라 블라 아무말이나 계속 채워 넣다 보면 뭔가는 있어보이겠지 싶어서 일단은 계속 적고 있는데 이게 정말 효과적일지는 모르겠고 더 이상 쓸말이 없으니 여기까지 쓸까 하다가도 아직 부족하다 생각도 들고 에라 모르겠다.</p>
-			<a class="btn btn-primary" href="#login">무료로 사용하기</a>
+			<p style="margin-bottom: .5rem;">접근하기 편리한 웹을 통해 이미지를 드래그 앤 드랍만 하면, 학습된 BLUR PENCIL이 이미지를 분석한 후 모자이크 할 객체를 인식하며, 인식된 객체 중 원하는 객체를 골라 모자이크 처리할 수 있습니다. 또한 모자이크 처리 된 이미지 내역들은 저장할 수 있으며, 다른 사용자들과 공유할 수 있습니다.</p>
+			<a class="btn btn-primary" href="/demo	">무료로 사용하기</a>
 		</div>
 		<img src="../images/106.png" class="intro-head-img"/>
 	</div>
@@ -37,22 +37,24 @@
 		<div class="feature-desc">
 			<h1 class="feature-desc-point">BLUR PENCIL의 검열 기능</h1>
 			<!-- <h5 class="feature-desc-point">빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해를 보완하세요!</h5> -->
-			<p>빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해를 보완하세요! 대충 이런말 쓰면 될 것같긴한데 막상 넣을 내용은 아직 없네요 한번 생각해봐주세요 어쩌구 저쩌구 블라 블라 아무말이나 넣어서 내용 있어보이게 만들기 어쩌구 저쩌구 블라 블라 아무말이나 넣어서 내용 있어보이게 만들기</p>
+			<p style="color :black;">빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해를 보완하세요!</p><p>모자이크 할 이미지를 올리고 클릭 3번이면 자동으로 이미지를 검열합니다.<br>강력한 보안을 필요로 하는 개인이나 집단, 저작권 보호를 중요시 하는 단체에게 BLUR PENCIL만의 기술을 통해 빠르고 편리하게 이미지를 자동 검열하여<br>업무 성능 향상을 도와줍니다.</p>
 		</div>
 	</div>
 	<div class="color-box"></div>
 	<div class="bg-point">
 		<div class="container section-price" id="price">
-			<div class="price-desc">
+			<div class="price-desc" style = "padding-top : 10vh">
 				<h1>Price</h1>	
 				<div class="row" style="justify-content: space-around;">
 					<div class="col-md-4">
 						<div class="card price-card">
 							<div class="card-body">
 								<div class="price">무료</div>
-								<div class="price-content">
-									<p>회원가입을 하지 않아도 사용가능합니다.</p>
-									<p>..</p>
+								<p style="margin-bottom : 0.5rem;">회원가입을 하지 않아도 사용가능합니다.</p>
+								<div class="price-content" style = "display : inline-block">
+									<div style= "text-align : left">
+										<li>이미지 모자이크 처리</li>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -61,11 +63,14 @@
 						<div class="card price-card">
 							<div class="card-body">
 								<div class="price">로그인</div>
-								<div class="price-content">
-									<p>회원가입시 더 많은 기능이 제공됩니다.</p>
-									<p>데이터 백업</p>
-									<p>작업 내역 저장</p>
-									<p>동료들과 작업 공유</p>
+								<p style="margin-bottom : 0.5rem;">회원가입시 더 많은 기능이 제공됩니다.</p>
+								<div class="price-content" style = "display : inline-block">
+									<div style= "text-align : left">
+										<li>이미지 모자이크 처리</li>
+										<li>데이터 백업</li>
+										<li>작업 내역 저장</li>
+										<li>동료들과 작업 공유</li>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -75,7 +80,7 @@
 		</div>
 	</div>
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-	<login-page id="login" style="position: relative; padding-bottom: 46px;"></login-page>
+	<login-page id="login" style="position: relative; padding-bottom: 9rem; padding-top : 7.5rem;"></login-page>
 	<div class="footer container">
 		<a href="/" class="footer-brand"><img src="../images/title.png" class="footer-logo"></a>
 		<div class="footer-menu">
@@ -168,14 +173,14 @@ export default {
 	}
 	.section-price {
 		/* color: white; */
-		padding-bottom: 10rem;
+		padding-bottom: 4rem;
 	}
 	.footer {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		width: 100%;
-		height: 10rem;
+		height: 4.5rem;
 		background-color: #FEFEFE;
 	}
 	.footer .footer-menu a {

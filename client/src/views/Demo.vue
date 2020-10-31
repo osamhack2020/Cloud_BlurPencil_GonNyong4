@@ -1,15 +1,13 @@
 <template>
-	<div class = "upload">
-		<div class="waiting" v-if="waiting">
+	<div class = "Demo">
+		<div class="waiting" v-if="waiting" style = "width : 100%;">
 			<img src="../images/ZombieingDoodle.png" class="bored-image"/>
 			<div class="waiting-notice">
 				<img src="../images/sync.svg" class="sync-image"/>
 				처리중입니다.. 잠시만 기다려주세요.
 			</div>
 		</div>
-		<b-alert v-model="showDismissibleAlert" variant = "success"  dismissible>
-			작업 내역이 업로드 되었습니다!
-		</b-alert>
+		<b-button block variant="outline-info"  v-bind:href="'/'" style="padding-top : 1rem; vertical-align : middle;">Main 페이지로 돌아가기</b-button>
 		<div class="progressbar">
 			<button v-on:click="step=0" v-bind:class="{'now': step===0, 'active': step > 0}" :disabled="step < 1">업로드</button>
 			<button v-on:click="step=1" v-bind:class="{'now': step===1, 'active': step > 1}" :disabled="step < 2">수정</button>
@@ -125,13 +123,13 @@
 
 <script>
 export default{
+	name: 'Demo',
     data(){
 		return {
 			color : '#ffffff',
 			image : '',
 			sendFile : '',
 			file1 : null,
-			showDismissibleAlert: false,
 			step: 0,
 			waiting: false,
 			isGet : false,
@@ -155,6 +153,7 @@ export default{
 			setw : '',
 			seth : '',
 			receiveimage : '',
+			update_received_file : '',
 		}
 	},
 	created(){
@@ -198,32 +197,6 @@ export default{
             this.image = '';
 			this.sendfile = '';
         },
-		uploadFile(){
-			if(this.sendFile == ''){
-				alert('업로드할 이미지가 없습니다.');
-				return false;
-			}
-			
-			const formData = new FormData();
-			const userid = sessionStorage.getItem('userid');
-			formData.append('imgUploads', this.sendFile);
-			formData.append('userid', userid);
-			formData.append('score', this.selectedData.score);
-			formData.append('nms', this.selectedData.nms);
-			this.$http.post('/api/upload',formData,{
-				headers : {
-					'Content-Type' : 'multipart/form-data'
-				}
-			}).then((res) =>{
-				this.image = '';
-				this.sendFile = '';
-				if (res.status === 200 && res.statusText == 'OK') {
-					this.showDismissibleAlert = true;
-				}
-			}).catch((err)=>{
-				console.log(err);
-			});
-		},
 		nextFile(){
 			if(this.sendFile == ''){
 				alert('업로드할 이미지가 없습니다.');
@@ -287,6 +260,8 @@ export default{
 			}).then(function(blob) {
 				const objURL = URL.createObjectURL(blob);
 				self.receiveimage = objURL;
+				const hi = new File([blob],'imagename.png');
+				self.update_received_file = hi;
 				self.waiting = false;
 				self.step = 2;
 			});
@@ -309,7 +284,6 @@ export default{
 		endWork() {
 			this.step = 3;
 			this.downloadWorkedImage();
-			this.uploadFile();
 		},
 		downloadWorkedImage() {
 			var fileURL = this.receiveimage;
@@ -630,7 +604,6 @@ input[type="file"] {
 	width: 85%;
 	height: 100%;
 	z-index: 100;
-	margin : 0 auto;
 	background: rgba(0, 0, 0, .8);
 	.bored-image {
 		margin-top: 15vh;

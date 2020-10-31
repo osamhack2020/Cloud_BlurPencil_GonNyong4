@@ -7,6 +7,7 @@ import Recent from '../views/Recent.vue'
 import Main from '../views/Main.vue'
 import Profile from '../views/Profile.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Demo from '../views/Demo.vue'
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,7 @@ const requireAuth = () => (to, from, next) =>{
 		return next();
 	}
 	alert('잘못된 접근입니다. 로그인 해주세요');
-	next('/login');
+	next('/');
 }
 
 const routes = [
@@ -52,6 +53,11 @@ const routes = [
 			beforeEnter : requireAuth()
 		}
 	],
+  },
+  {
+    path : '/demo',
+	name : 'Demo',
+	component: Demo
   },
   
 ]

@@ -1,95 +1,138 @@
 <template>
   <div class="profile">
-	<div class = "user_profile_wrap">
-		<div class = "user_info">
-			
-			<div class = "user_info_base">
-				<div class = "user_icon">
-					<div class = "user_name">
-						{{userdata.user_id && userdata.user_id.length > 0 ? userdata.user_id[0]: '' }}
-					</div>
-				</div>
-				<div class = "user_info_name">
-					{{userdata.user_id}}
-				</div>
-			</div>
-			<div class = "user_info_important">
-				<p class = "user_info_title">유저 이메일 : {{userdata.user_email}}</p>
-				<p class = "user_info_title">유저 생성일 : {{userdata.user_createdAt}}</p>
-				<p class = "user_info_title">유저 최근 접속일 : {{userdata.user_updatedAt}}</p>
-				<br>
-				<b-button variant="info" v-b-modal.changepw class = "ch	ange_btn">비밀번호 변경</b-button>
-				<b-button variant="danger" v-b-modal.deluser class = "delete_btn">회원탈퇴</b-button>
-				<b-modal
-					id="changepw"
-					ref="modal1"
-					title="비밀번호 변경"
-					@show="resetModal"
-					@hidden="resetModal"
-					@ok="handleOk"
-				>
-					<form ref="form" @submit.stop.prevent="handleSubmit">
-						<b-form-group label="기존 비밀번호">
-							<b-form-input
-								id="prev-pw"
-								v-model="prev.pw"
-								:state="prev.state"
-								required
-							></b-form-input>
-							<b-form-invalid-feedback id="prev-pw">
-								기존 비밀번호를 입력해주세요.
-							</b-form-invalid-feedback>
-						</b-form-group>
-						<b-form-group label="바꿀 비밀번호">
-							<b-form-input
-								id="want-pw"
-								v-model="want.pw"
-								:state="want.state"
-								required
-							></b-form-input>
-							<b-form-invalid-feedback id="want-pw">
-								{{wantmessage}}
-							</b-form-invalid-feedback>
-						</b-form-group>
-						<b-form-group label="바꿀 비밀번호 확인">
-							<b-form-input
-								id="want-pw-chk"
-								v-model="want_check.pw"
-								:state="want_check.state"
-								required
-								@keyup.enter="handleOk"
-							></b-form-input>
-							<b-form-invalid-feedback id="want-pw-chk">
-								{{checkmessage}}
-							</b-form-invalid-feedback>
-						</b-form-group>
-					</form>
-				</b-modal>
-				<b-modal
-					id="deluser"
-					ref="modal2"
-					title="회원탈퇴"
-					@show="resetModal"
-					@hidden="resetModal"
-					@ok="deleteuser"
-				>
-					<form ref="form">
-						<b-form-group label="기존 비밀번호 입력">
-							<b-form-input
-								id="delete-user-pw"
-								v-model="deleteusr.pw"
-								:state="deleteusr.state"
-								required
-							></b-form-input>
-							<b-form-invalid-feedback id="delete-user-pw">
-								기존 비밀번호 입력해주세요
-							</b-form-invalid-feedback>
-						</b-form-group>
-					</form>
-				</b-modal>
-			</div>
-		</div>
-	</div>
+<body>	  
+<div class="container main-secction">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 image-section">
+                <img src="../images/mountain.jpeg">
+            </div>
+            <div class="row user-left-part">
+                <div class="col-md-3 col-sm-3 col-xs-12 user-profil-part pull-left">
+                    <div class="row">
+                        <div class="col-md-12 col-md-12-sm-12 col-xs-12 user-image text-center">
+                            <img src="https://www.jamf.com/jamf-nation/img/default-avatars/generic-user-purple.png" class="rounded-circle">
+                        </div>
+                        <div class="col-md-12 user-detail-section1 text-center">
+							<div class="wrap-btns">
+								
+							<b-button variant="info" v-b-modal.changepw class = "change_btn">비밀번호 변경</b-button>
+							<b-button variant="danger" v-b-modal.deluser class = "change_btn">회원탈퇴</b-button>
+							</div>
+							<b-modal
+							id="changepw"
+							ref="modal1"
+							title="비밀번호 변경"
+							@show="resetModal"
+							@hidden="resetModal"
+							@ok="handleOk"
+							>
+								<form ref="form" @submit.stop.prevent="handleSubmit">
+									<b-form-group label="기존 비밀번호">
+										<b-form-input
+											id="prev-pw"
+											v-model="prev.pw"
+											:state="prev.state"
+											required
+										></b-form-input>
+										<b-form-invalid-feedback id="prev-pw">
+											기존 비밀번호를 입력해주세요.
+										</b-form-invalid-feedback>
+									</b-form-group>
+									<b-form-group label="바꿀 비밀번호">
+										<b-form-input
+											id="want-pw"
+											v-model="want.pw"
+											:state="want.state"
+											required
+										></b-form-input>
+										<b-form-invalid-feedback id="want-pw">
+											{{wantmessage}}
+										</b-form-invalid-feedback>
+									</b-form-group>
+									<b-form-group label="바꿀 비밀번호 확인">
+										<b-form-input
+											id="want-pw-chk"
+											v-model="want_check.pw"
+											:state="want_check.state"
+											required
+											@keyup.enter="handleOk"
+										></b-form-input>
+										<b-form-invalid-feedback id="want-pw-chk">
+											{{checkmessage}}
+										</b-form-invalid-feedback>
+									</b-form-group>
+								</form>
+							</b-modal>
+							<b-modal
+								id="deluser"
+								ref="modal2"
+								title="회원탈퇴"
+								@show="resetModal"
+								@hidden="resetModal"
+								@ok="deleteuser"
+							>
+								<form ref="form">
+									<b-form-group label="기존 비밀번호 입력">
+										<b-form-input
+											id="delete-user-pw"
+											v-model="deleteusr.pw"
+											:state="deleteusr.state"
+											required
+										></b-form-input>
+										<b-form-invalid-feedback id="delete-user-pw">
+											기존 비밀번호 입력해주세요
+										</b-form-invalid-feedback>
+									</b-form-group>
+								</form>
+							</b-modal>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 pull-right profile-right-section">
+                    <div class="row profile-right-section-row">
+                        <div class="col-md-12 profile-header">
+                            <div class="row">
+                                <div class="col-md-12 profile-header-section1 pull-left">
+                                    <h1>{{userdata.user_id}}</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 profile-content">
+                            <div class="row">
+                                <div class="col-md-8">
+									<div class="row">
+                                        <div class="col-md-5">
+                                             <label>아이디</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                             <p>{{userdata.user_id}}</p>
+                                        </div>
+									</div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+												<label>이메일</label>
+                                        </div>
+                                        <div class="col-md-7">
+											<p>{{userdata.user_email}}</p>
+                                        </div>
+                                    </div>
+									<div class="row">
+                                        <div class="col-md-5">
+                                            <label>최근 접속일</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <p>{{userdata.user_updatedAt.substring(0,10)+' '+userdata.user_updatedAt.substring(11,19)}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	</body>
   </div>
 </template>
 
@@ -112,8 +155,8 @@ export default {
 				pw : '',
 				state : null,
 			},
-			checkmessage : '바꿀 비밀번호를 확인해주세요',
-			wantmessage : "바꿀 비밀번호를 입력해주세요",
+			checkmessage : '새로운 비밀번호를 확인해주세요',
+			wantmessage : "새로운 비밀번호를 입력해주세요",
 			deleteusr : {
 				pw : '',
 				state : null,
@@ -233,52 +276,58 @@ export default {
 }
 </script>
 <style>
-	.user_profile_wrap{
-		width : 100%;
-		height : 100%;
-		text-align : left;
+	body{
+		background-color :  #f1f5f6 !important;
 	}
-	.user_icon {
-		padding-bottom : 4vh;
-	}
-	.user_name{
-		background-color: gray;
-		width:13vh;
-		height:13vh;
-		border-radius:75px;
-		text-align:center;
-		margin:0 auto;
-		font-size:10em;
-		color : white;
-		vertical-align:middle;
-		line-height:10vh;
-	}
-	.user_info{
-		width : 70vw;
-		height : 80vh;
-		display : flex;
-		align-items: center;
-		background-color : #efeded;
-		margin :4em auto;
-		border-radius : 10px;
+	.main-secction{
+		margin-top : 5%;
 		box-shadow : 0px 2px 3px gray;
 	}
-	.user_info_base{
-		height : 22vh;
-		border-right : 1px solid gray;
-		padding : 0 4em 4em 4em;
+	.image-section{
+		padding: 0px;
 	}
-	.user_info_name{
-		text-align : center;
-		font-size : 2em;
+	.image-section img{
+		width: 100%;
+		height:40vh;
+		position: relative;
 	}
-	.user_info_important{
-		margin : 4em 0 4em 4em;
+	.user-image{
+		position: absolute;
+		margin-top:-50px;
 	}
-	.user_info_title{
-		font-weight : bold;
+	.user-left-part{
+		margin: 0px;
+	}
+	.user-image img{
+		width:13vh;
+		height:13vh;
+	}
+	.user-profil-part{
+		padding-bottom:30px;
+	}
+	.user-detail-row{
+		margin:0px; 
+	}
+	.wrap-btns{
+		padding-top : 1rem;
+	}
+	.profile-right-section{
+		padding: 20px 0px 10px 15px;
+	}
+	.profile-right-section-row{
+		margin: 0px;
+	}
+	.profile-header-section1 h1{
+		font-size: 25px;
+		margin: 0px;
+	}
+	.profile-header-section1 h5{
+		color: #0062cc;
+	}
+	.profile-content{
+		padding-top : 1.5rem;
 	}
 	.change_btn{
-		width : 200px;
+		margin-bottom : 2px;
 	}
 </style>
