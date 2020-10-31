@@ -32,20 +32,19 @@
 -->
 
 ## 팀소개 및 프로젝트 설명 동영상
-(준비중)
+<!-- 마땅히 넣어 볼게 없어서 당장 심심해 보여 넣습니담.. 넣어두 되려나 모르겠네여 -->
+![프로젝트설명](./intro.png)
 
 ## 기능 설계
 ### 구조
-(준비중)
+![구조](./architecture.png)
 
 ### 설계
 ![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
 
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
-* ~~ECMAScript 6 지원 브라우저 사용~~
-* ~~권장: Google Chrome 버젼 77 이상~~
-* 패키지 선정중
+- 권장 : 최신 버전의 크로미움 기반 브라우저
 
 ## 기술 스택 (Technique Used) (예시)
 ### Server(back-end)
