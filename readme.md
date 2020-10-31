@@ -124,19 +124,19 @@ Blur Pencil의 장점은 위와 같은 과정이 클릭 3번만으로 이루어�
 <p align="left">
 Demo Image 1
 </p>
-<img src = "./example1.png" width = "125">
+<img src = "./example1.png" width = "1024">
 <p align="left">
 Demo Image 2
 </p>
-<img src = "./example2.png" width = "125">
+<img src = "./example2.png" width = "1024">
 <p align="left">
 Demo Image 3
 </p>
-<img src = "./example3.png" width = "125">
+<img src = "./example3.png" width = "1024">
 <p align="left">
 Demo Image 4
 </p>
-<img src = "./example4.png" width = "125">
+<img src = "./example4.png" width = "1024">
 </p>
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
