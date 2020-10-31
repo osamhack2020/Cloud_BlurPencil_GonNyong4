@@ -17,7 +17,7 @@
 
 <p align="center">
  <img src="https://img.shields.io/github/license/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
- <a href="https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4">
+ <a href="http://20.194.22.218:8080/">
  	<img src="https://img.shields.io/badge/LIVE-DEMO-%235f5fff?style=for-the-badge"/>
  </a>
 </p>
@@ -31,69 +31,11 @@
 ![](https://img.shields.io/github/issues-pr/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge)
 -->
 
-## 팀소개 및 프로젝트 설명 동영상
+## 프로젝트 소개 및 동영상
 <!-- 마땅히 넣어 볼게 없어서 당장 심심해 보여 넣습니담.. 넣어두 되려나 모르겠네여 -->
 ![프로젝트설명](./intro.png)
 <br>
 <p><strong>Blur Pencil</strong>은 Blur와 Pencil을 합친 단어로, 모자이크 처리 하고 싶은 이미지를 Pencil(연필)과 같은 우리에게 익숙한 도구로 간단하고 쉽게 Blur처리 하기 위해 고안한 아이디어 입니다. 접근하기 편리한 웹을 통해 이미지를 드래그 앤 드랍만 하면, 학습된 Blur Pencil이 이미지를 분석한 뒤, 모자이크 할 객체를 인식하며, 인식된 객체 중 원하는 객체를 골라 모자이크 처리를 할 수 있습니다. 또한 모자이크 처리 된 이미지 내역들을 저장할 수 있으며, 다른 사용자와 공유할 수 있도록 도와줍니다.</p>
-
-<a href ="https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be">Blur Pencil 소개 영상</a>
-<br>
-<br>
-<a href = "https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">Blur Pencil 발표 자료</a>
-## 기능 설계
-### 구조
-![구조](./archi.png)
-
-Blur Pencil의 장점은 위와 같은 과정이 클릭 3번만으로 이루어진다는 것입니다.
-
-### 설계
-![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
-
-
-## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
-- 권장 : 최신 버전의 크로미움 기반 브라우저
-
-## 기술 스택 (Technique Used)
-### Server(back-end)
- - Node.js
- - Express
- - MongoDB
- - Flask
- - PyTorch
- 
-### front-end
- -  Vue.js
- -  Bootstrap
-
-## 설치 안내 (Installation Process)
-```bash
-$ git clone https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4.git
-```
-
-### Back-End
-```bash
-$ cd server/
-$ npm install
-```
-
-### Front-End
-```bash
-$ cd client/
-$ npm install
-```
-
-### Build / Test
-```bash
-$ (root) npm start
-```
-
-### 세팅 유의 사항
-1. [vue.config.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/vue.config.js) 안에 '/api' `target` 주소를 서버주소(로컬 환경시 서버포트)로 변경
-2. [main.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/src/main.js) 안에 `serverUrl` 변수명을 서버주소(로컬 환경시 서버포트)로 변경
-
-> 구름 IDE 환경으로 개발시 로컬 주소가 아닌 URL 주소를 직접 입력해 주어야함
-
 
 ## 팀 정보 (Team Information)
 <!--
@@ -163,6 +105,84 @@ $ (root) npm start
    </td>
   </tr>
  </table>
+
+<a href ="https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be">Blur Pencil 소개 영상</a>
+<br>
+<br>
+<a href = "https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">Blur Pencil 발표 자료</a>
+## 기능 설계
+### 구조
+![구조](./archi.png)
+
+Blur Pencil의 장점은 위와 같은 과정이 클릭 3번만으로 이루어진다는 것입니다.
+
+### 설계
+![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
+
+## DEMO
+<p align="center">
+<p align="left">
+Demo Image 1
+</p>
+<img src = "./example1.png" width = "125">
+<p align="left">
+Demo Image 2
+</p>
+<img src = "./example2.png" width = "125">
+<p align="left">
+Demo Image 3
+</p>
+<img src = "./example3.png" width = "125">
+<p align="left">
+Demo Image 4
+</p>
+<img src = "./example4.png" width = "125">
+</p>
+
+## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
+- 권장 : 최신 버전의 크로미움 기반 브라우저
+
+## 기술 스택 (Technique Used)
+### Server(back-end)
+ - Node.js
+ - Express
+ - MongoDB
+ - Flask
+ - PyTorch
+ 
+### front-end
+ -  Vue.js
+ -  Bootstrap
+
+## 설치 안내 (Installation Process)
+```bash
+$ git clone https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4.git
+```
+
+### Back-End
+```bash
+$ cd server/
+$ npm install
+```
+
+### Front-End
+```bash
+$ cd client/
+$ npm install
+```
+
+### Build / Test
+```bash
+$ (root) npm start
+```
+
+### 세팅 유의 사항
+1. [vue.config.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/vue.config.js) 안에 '/api' `target` 주소를 서버주소(로컬 환경시 서버포트)로 변경
+2. [main.js](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/client/src/main.js) 안에 `serverUrl` 변수명을 서버주소(로컬 환경시 서버포트)로 변경
+
+> 구름 IDE 환경으로 개발시 로컬 주소가 아닌 URL 주소를 직접 입력해 주어야함
+
+
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
 MIT License
