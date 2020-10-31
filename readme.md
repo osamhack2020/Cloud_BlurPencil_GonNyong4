@@ -37,6 +37,74 @@
 <br>
 <p><strong>Blur Pencil</strong>은 Blur와 Pencil을 합친 단어로, 모자이크 처리 하고 싶은 이미지를 Pencil(연필)과 같은 우리에게 익숙한 도구로 간단하고 쉽게 Blur처리 하기 위해 고안한 아이디어 입니다. 접근하기 편리한 웹을 통해 이미지를 드래그 앤 드랍만 하면, 학습된 Blur Pencil이 이미지를 분석한 뒤, 모자이크 할 객체를 인식하며, 인식된 객체 중 원하는 객체를 골라 모자이크 처리를 할 수 있습니다. 또한 모자이크 처리 된 이미지 내역들을 저장할 수 있으며, 다른 사용자와 공유할 수 있도록 도와줍니다.</p>
 
+
+## Demo
+### UX
+![](demo/mypage.png)
+![](demo/foldername.png)
+![](demo/goonin.png)
+![](demo/sharefolder.png)
+
+### Before
+![](demo/1-2.png)
+### After
+![](demo/1-3.png)
+### Before
+![](demo/3-1.png)
+### After
+![](demo/3-3.png)
+### Before
+![](demo/4-2.png)
+### After
+![](demo/4-3.png)
+### Before
+![](demo/toktok.jpg)
+### After
+![](demo/toktok_res.png)
+### Before
+![](demo/eyedrop.jpg)
+### After
+![](demo/eyedrop_res.png)
+### Before
+![](demo/marie_src.jpg)
+### After
+![](demo/marie_res.png)
+
+
+## 기능 설계
+### 구조
+![구조](./archi.png)
+
+### 설계
+![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
+
+
+## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
+- 권장 : 최신 버전의 크로미움 기반 브라우저
+
+## 기술 스택 (Technique Used)
+### Server(back-end)
+ - Node.js
+ - Express
+ - MongoDB
+ - Flask
+ - PyTorch
+ 
+### front-end
+ -  Vue.js
+ -  Bootstrap
+
+## 설치 안내 (Installation Process)
+```bash
+$ git clone https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4.git
+```
+
+### Back-End
+```bash
+$ cd server/
+$ npm install
+```
+=======
 <br><br>
 
 <table>

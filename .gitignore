@@ -19,6 +19,10 @@ goorm.manifest
 
 # PyTorch pretrained model files
 *.pth
+# Test images
+logo_detection/test_imgs/
+
+# Google Drive helper script
 logo_detection/weights/*.pth
 
 # Python cache
