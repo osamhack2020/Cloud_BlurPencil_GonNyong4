@@ -75,6 +75,7 @@ export default {
 				owner : this.user_oid
 			}).then((response) => {
 				alert(response.data.message);
+				location.reload();
 				this.showCreateFolder = false;
 				this.getFolders();
 			}).catch((err) =>{
@@ -169,6 +170,7 @@ export default {
 			overflow: hidden;
 			& + .folder {
 				margin-left: 1rem;
+				margin-top : 0.5rem;
 			}
 			&.create {
 				color: #7f7ffb;
