@@ -11,11 +11,6 @@
 
 <p align="center">
  <img src="https://img.shields.io/github/repo-size/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
- <img src="https://img.shields.io/github/commit-activity/y/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
- <img src="https://img.shields.io/github/last-commit/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
-</p>
-
-<p align="center">
  <img src="https://img.shields.io/github/license/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
  <a href="http://20.194.22.218:8080/">
  	<img src="https://img.shields.io/badge/LIVE-DEMO-%235f5fff?style=for-the-badge"/>
@@ -49,7 +44,8 @@
 
 ## 📄 기능 설계 및 가이드
 ### Figma Proto-typing
-![Figma](images/Figma.png)
+> 이미지 클릭 시 이동
+[![Figma](images/Figma.png)](https://www.figma.com/file/ZokPcCmd6r5E2HvDRCOfDb/OSAM-HACK-2020-Blur-Pencil?node-id=0%3A1)
 
 ### 구조
 ![구조](images/archi.png)
@@ -58,10 +54,10 @@
 ![설계](images/archi2.png)
 
 ### API 가이드(유저 관련)
-[API 가이드](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/wiki/API-Guide)
+[📝 가이드 문서](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/wiki/API-Guide)
 
 ### API 가이드(로고 인식 관련)
-[API 가이드](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/wiki/API-Guide-(Logo-Detection))
+[📝 가이드 문서](https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/wiki/API-Guide-(Logo-Detection))
 
 
 ## ⚙ 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
