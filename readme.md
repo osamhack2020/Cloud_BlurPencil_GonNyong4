@@ -141,13 +141,16 @@ Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수
 
 ## Blur Pencil 사용법
 ### STEP 1
-<br>
 <p>사진을 Drag and Drop해서 올린다.</p>
 <img src ="./1.png" width = "1024">
+
 ### STEP 2
+
 <p>인식된 객체 중 모자이크 할 객체를 선택한다.</p>
 <img src ="./2.png" width = "1024">
+
 ### STEP 3
+
 <p>모자이크 처리 된 이미지를 확인 후 다운로드 한다.</p>
 <img src ="./3.png" width = "1024">
 
@@ -161,10 +164,13 @@ Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수
 
 <strong>메인 페이지</strong>
 <img src ="./prev_dash.png" width = "1024">
+<br>
 <strong>폴더 저장</strong>
 <img src ="./strength_folder.png" width = "1024">
+<br>
 <strong>폴더 공유</strong>
 <img src ="./strength_share.png" width = "1024">
+<br>
 <strong>파일 관리</strong>
 <img src ="./strength_multi.png" width = "1024">
 <br><br>
@@ -201,7 +207,6 @@ Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수
 <li>빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해 등을 보완할 수 있다.</li>
 <li>강력한 보안을 필요로 하는 개인이나 집단, 저작권 보호를 중요시하는 단체에게 Blur Pencil의 기술을 통해 업무 성능 향상을 도와준다.</li>
 <li>인식률(score)과 NMS(Non-Maximum Suppression)을 조절하여 검열 대상의 인식률을 조절 할 수 있다.</li>
-<li>계속해서 </li>
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 - 권장 : 최신 버전의 크로미움 기반 브라우저
