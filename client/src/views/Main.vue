@@ -6,6 +6,7 @@
 				<p class="folder-text">폴더생성</p>
 			</button>
 			<button class="btn folder" :class="{ 'mine' : folder.owner === user_oid, 'share' : folder.owner !== user_oid }" v-for="(folder, idx) in folderList" :key="idx" @click="showFolderData = true; clicked_folder = folder">
+				<div class="share-user-profile" v-for="(user, idx2) in folder.share" :key="idx2">{{ user.user_id }}</div>
 				<p class="folder-text folder-title">{{ folder.folderName }}</p>
 			</button>
 		</div>
@@ -155,6 +156,14 @@ export default {
 			position: relative;
 			background-color: tomato;
 			box-shadow: 3px 5px 10px 2px #00000030;
+			padding-left: 1.5rem;
+			padding-right: 1.5rem;
+			padding-top: 1.5rem;
+			display: inline-flex;
+			/* text-align: left; */
+			/* align-content: flex-start; */
+			/* vertical-align: top; */
+			overflow: hidden;
 			& + .folder {
 				margin-left: 1rem;
 			}
@@ -237,5 +246,14 @@ export default {
 				width: 100%;
 			}
 		}
+	}
+	.share-user-profile {
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 1rem;
+		background-color: white;
+		margin-right: .5rem;
+		overflow: hidden;
+		box-shadow: 2px 2px 3px 1px #00000030;
 	}
 </style>

@@ -33,9 +33,26 @@ router.post('/', function(req, res, next) {
 router.get('/', function(req, res, next) {
 	const user_oid = req.query.user_oid;
 	
-	Folder.find({ owner: user_oid })
+	Folder.find({ owner: user_oid }).populate('share', 'user_id')
 		.then((result) => {
 			res.json(200, result);
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		})
+});
+
+/*
+	GET /api/folders/sharing
+	폴더의 공유된 유저들 정보 가져오기
+*/
+router.get('/sharing', function(req, res, next) {
+	const folder_oid = req.query.folder_oid;
+	
+	Folder.findOne({ _id: folder_oid }, { share: true }).populate('share', 'user_id')
+		.then((result) => {
+			res.json(200, result.share);
 		})
 		.catch((err) => {
 			console.error(err);
@@ -50,10 +67,8 @@ router.get('/', function(req, res, next) {
 router.get('/shared', function(req, res, next) {
 	const user_oid = req.query.user_oid;
 	
-	Folder.find({ share: user_oid }).populate('share')
+	Folder.find({ share: user_oid }).populate('share', 'user_id')
 		.then((result) => {
-			console.log('---------------------------');
-			console.log(result);
 			res.json(200, result);
 		})
 		.catch((err) => {
@@ -87,6 +102,8 @@ router.get('/files/:folder_oid', function(req, res, next) {
 router.post('/delete', function(req, res, next) {
 	const owner = req.body.owner, 
 		  folder_oid = req.body.folder_oid;
+	
+	// TODO : 폴더를 삭제하면 관련된 파일들도 삭제할지 or 폴더만 삭제할지
 	
 	Folder.deleteOne({ owner: owner, _id: folder_oid })
 		.then((result) => {
@@ -132,10 +149,10 @@ router.post('/share', function(req, res, next) {
 	폴더 공유 해제
 */
 router.post('/unshare', function(req, res, next) {
-	const share_email = req.body.email;
+	const share_id = req.body.share_id;
 	const folder_oid = req.body.folder_oid;
 	
-	User.findOne({ user_email: share_email }, { _id: true })
+	User.findOne({ user_id: share_id }, { _id: true })
 		.then((result) => {
 			if (result)
 				return Folder.updateOne({ _id: folder_oid }, { $pull: { share: result._id } });
@@ -145,7 +162,7 @@ router.post('/unshare', function(req, res, next) {
 		.then((result) => {
 			console.log('UNSHARE ', result);
 			if (result.ok)
-				res.json(200, { success:true, message:`${share_email} 님의 폴더 공유를 해제했습니다.` });
+				res.json(200, { success:true, message:`${share_id} 님의 폴더 공유를 해제했습니다.` });
 			else
 				res.json(200, result);
 		})
