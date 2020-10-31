@@ -1,54 +1,55 @@
 <template>
   <div class="sidenav">
-	<div class = "userwrap">
-		<p class = "userinfo" v-html = "userinfo"></p>
+	<div class = "logowrap">
+		<img src="../images/logo.png" class="nav_logo"/>
 	</div>
 	<div class = "menuwrap">
-		<div v-if = "isUser" class = "sidemenu">
-		<!-- <router-link v-on:click.native = "logout" to="/">Logout</router-link> -->
-			<a href="/" v-on:click = "logout">Logout</a>
+		<!-- <button class="btn btn-primary rounded-pill fast-btn">
+			<img src = "../images/upload_hov.svg" class = "menu_icon">
+			Upload
+		</button> -->
+		<div v-for="item in items" :key="item.link_to" 
+			class = "sidemenu" 
+			v-bind:class="{selected : item.isSelected}"
+			@click = "isSelected(item)"
+		>	
+			<img v-if = "item.isSelected" :src=item.icon_hov class="menu_icon">
+			<img v-else :src="item.icon" class="menu_icon">
+			<a class="menu_a">{{item.title}}</a>
 		</div>
-		<div v-else class = "sidemenu">
-			<router-link to="/login">Login</router-link>
+		
+		<div class="bottom-menu" style="bottom:7rem; padding:1rem;">
+			<div class="notice">
+				BLUR PENCIL의 컨트리뷰터가 되어주세요!
+				<button class="btn" type="button" onclick="location.href='https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4'">바로가기</button>
+			</div>
 		</div>
-		<div v-for="item in items" :key="item.link_to" class = "sidemenu">
-			<template v-if="item.link_to !== ''">
-				<router-link :to="item.link_to">{{item.title}}</router-link>
-			</template>
-			<template v-else>
-				<button @click="clickMenuBtn($event)" class="dropdown-btn">{{item.title}}</button>
-				<div class="dropdown-container">
-					<div v-for="subItem in item.sub_menu" :key="subItem.link_to">
-				<router-link :to="subItem.link_to">{{subItem.title}}</router-link>
-					</div>
-				</div>
-			</template>
+		<div class = "sidemenu bottom-menu"
+			v-if = "isUser"
+			@click = "logout"	
+		>
+			<img src = "../images/sign-out.svg" class = "menu_icon">
+			<a class="menu_a">Logout</a>
 		</div>
 	</div>
     
-	
+		
   </div>
 </template>
 
 <script>
-
   const menuList = [
-    { title: 'Home', link_to: '/'},
-    { title: 'Upload', link_to: '/upload'},
-    // { title: 'Test', link_to: '', sub_menu:
-    //   [
-    //     { title: 'Test1', link_to: '/test1' },
-    //     { title: 'Test2', link_to: '/test2' },
-    //     { title: 'Test3', link_to: '/test3' }
-    //   ]
-    // },
-	// { title: 'Login', link_to: '/login'},
+    { title: 'Dashboard', link_to: '/main',isSelected : false,icon : require("../images/dashboard.svg"),icon_hov : require('../images/dashboard_hov.svg')},
+    { title: 'Recent', link_to: '/recent', isSelected : false, icon : require('../images/current.svg'),icon_hov : require('../images/current_hov.svg')},
+    { title: 'Profile', link_to: '/profile',isSelected : false,icon : require('../images/profile.svg'), icon_hov : require('../images/profile_hov.svg')},
+    { title: 'Upload', link_to: '/upload', isSelected : false, icon : require('../images/upload.svg'),icon_hov : require('../images/upload_hov.svg')},
   ]
   export default {
     data(){
 		return{
 			items : menuList,
-			userid : '',
+			userdata : '',
+			
 		}
     },
     methods: {
@@ -60,8 +61,23 @@
         }
       },
 		logout(){
+			alert("로그아웃 되었습니다.");
 			sessionStorage.setItem("userid",'');
+			this.$router.push('/');
 		},
+		isSelected(item){
+			for(var i =0;i<menuList.length;i++){
+				if(menuList[i].title == item.title){
+					menuList[i].isSelected = true;
+				}
+				else
+					menuList[i].isSelected = false;
+			}
+			this.selectmenu(item.link_to);
+		},
+		selectmenu(item){
+			this.$router.push(item).catch(()=>{});
+		}
     },
 	computed :{
 		isUser(){
@@ -71,79 +87,150 @@
 			}
 			return false
 		},
-		userinfo(){
-			var userid = sessionStorage.getItem("userid");
-			if(userid){
-				return userid+'<br>님 환영합니다.'
+	},
+	created(){
+		const userid = sessionStorage.getItem("userid");
+		console.log('__ ', userid);
+		
+		this.$http.get(`/api/users/?user_id=${userid}`)
+		.then((response) => {
+			console.log('R ', response.data);
+			this.userdata = response.data.data.user_id+''
+			console.log('R ', this.userdata);
+		}).catch((err) =>{
+			this.userdata = '로그인이 <br>필요합니다.';
+			console.error(err);
+		})
+		var para = document.location.href.split("/");
+		for(var i =0;i<menuList.length;i++){
+			if(menuList[i].link_to == ('/'+para[3])){
+				menuList[i].isSelected = true;
 			}
-			else
-				return '로그인이 <br>필요합니다.';
 		}
+
 	}
   }
 
 </script>
 
-<style>
-	.userwrap{
-		background-color : #796943;
-		width : 6vw;
-		height : 14vh;
-		margin : 0 auto;
-		border-radius : 8px;
-		opacity: 0.6;
+<style lang="scss">
+	.nav_logo {
+		width: 2rem;
 	}
-	.userinfo{
-		color : white;
-		padding-top : 3vh;
+	.logowrap{
+		font-size : x-large;
+		font-weight : bold;	
+		color : #0d112a;
+		padding-top: 1rem;
+		padding-bottom: 1rem;
 	}
 	.menuwrap{
-		padding-top : 2.2vh;
+		padding-top : 2.2vh;	
 	}
 	.sidenav {
 		height: 100%;
-		width: 10%;
+		width: 15%;
 		position: fixed;
 		z-index: 1;
 		top: 0;
 		left: 0;
-		background-color: #262115;
+		background-color : white;
 		overflow-x: hidden;
 		padding-top: 20px;
+		-webkit-box-shadow: 5px 0px 12px -2px rgba(164,171,219,0.3);
+		-moz-box-shadow: 5px 0px 12px -2px rgba(164,171,219,0.3);
+		box-shadow: 5px 0px 12px -2px rgba(164,171,219,0.3);
+	}
+	.sidemenu{
+		text-align : left;
+		padding : 1.5vh 2vh 1.5vh 2vh;
+		/* padding: 6px 6px 6px 6px; */	
+		font-size: 18px;
+		font-weight : 500;
+		cursor : pointer;
+		transition: background .5s;
+	}
+	@media (max-width: 1200px) {
+		.sidemenu{
+			/* font-size: 1.25vw; */
+			padding : 1.5vh 1vh 1.5vh 1vh;
+		}
+		.menu_icon{
+			margin-right : 1.25vh !important;
+			margin-left : 1.25vh !important;
+		}
+	}
+	@media (max-width: 992px) {
+		.sidemenu{
+			font-size: 1.5vw;
+		}
+	}
+	@media (max-width: 768px) {
+		.sidemenu { text-align: center;	}
 	}
 	.sidemenu:hover{
-		background-color : #898870;
+		background-color : #ebebff;
 	}
-
-	.sidenav a, .dropdown-btn {
-		padding: 6px 6px 6px 6px;
+	.sidemenu a{
+		color : black;
+	}
+	.sidemenu a:hover{
 		text-decoration: none;
-		font-size: 1.5vw;
-		color: #818181;
-		display: block;
-		border: none;
-		background: none;
-		width:100%;
-		text-align: center;
-		cursor: pointer;
-		outline: none;
+		color : black;
 	}
-
-	.sidenav a:hover {
-		color: #f1f1f1;
+	.menu_icon{
+		width : 1.6vw;
+		margin-right : 1.8vh;
+		margin-left : 1.8vh;
+	}
+	.selected {
+		/* background: linear-gradient( to right, #3e0ecc, #7c60cd ); */
+		background: linear-gradient( to right, #5f5fff, #5f5fff );
+		/* background-color: #5f5fff; */
+		color : white;
+	}
+	.selected a:hover {
+		color : white;
+		/* background-color: darken(#5f5fff, 10%) !important; */
+	}
+	.selected .menu_a {
+		color: white;
 	}
 	@media screen and (max-height: 450px) {
 		.sidenav {padding-top: 15px;}
 		.sidenav a {font-size: 18px;}
 	}
-
-	.sidenav a:hover, .dropdown-btn:hover {
-		color: #f1f1f1;
+	@media (max-width: 768px) {
+		.menu_icon{
+			width: 50%;
+			margin: 0px !important;
+		}
+		.menu_a {
+			display: none;
+		}
 	}
-	.dropdown-container {
-		display: none;
-		background-color: #5eaf13;
-		padding-left: 8px;
+	.bottom-menu {
+		position: absolute;
+		width: 100%;
+		bottom: 2rem;
 	}
-
+	.fast-btn {
+		margin-bottom: 32px !important;
+		padding: .5rem 2.5rem !important;
+		font-size: 1.5rem !important;
+	}
+	.notice {
+		color: white;
+		background: #5f5fff;
+		border-radius: 1rem;
+		padding: 1rem;
+		box-shadow: 0px 5px 15px 5px #0000004a;
+		.btn {
+			background: white;
+			position: relative;
+			border-radius: .5rem;
+			margin-bottom: -50px;
+			box-shadow: 0px 10px 15px 1px #0000004a;
+		}
+	}
 </style>

@@ -1,44 +1,28 @@
 <template>
   <div id="app">
-    <div class ="child_1">
-		<select-page/>
-		
-	</div>
-    <div class = "child_2">
-		<router-view/>	
-	</div>
-    </div>
+	<router-view></router-view>  
+  </div>
 </template>
 
 
 <script>
-import SelectPage from '@/components/SelectPage.vue'
 
 export default {
   name: 'App',
   components: {
-    SelectPage
   }
 }
 </script>
 <style>
 body{
-	height: 100%;
-    width: 100%;
-    background-image: url(./images/background.jpg);
     background-position: center;
     background-size: cover;
+	/* background-color: white; */
 }
 #app {
-  text-align: center;
-  display : flex;   
+  text-align: center; 
+	height: 100%;
 }
-	.child_1{
-		flex : 1;
-	}
-	.child_2{
-		flex : 9;
-	}
 
 #nav {
   padding: 30px;

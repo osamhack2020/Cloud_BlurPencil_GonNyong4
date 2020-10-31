@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
+// import Login from '../views/Login.vue'
 import Upload from '../views/Upload.vue'
+import Recent from '../views/Recent.vue'
 import Main from '../views/Main.vue'
+import Profile from '../views/Profile.vue'
+import Dashboard from '../views/Dashboard.vue'
+import Demo from '../views/Demo.vue'
 
 Vue.use(VueRouter)
 
@@ -11,8 +15,8 @@ const requireAuth = () => (to, from, next) =>{
 	if (sessionStorage.getItem("userid")){
 		return next();
 	}
-	alert('로그인 해주세요');
-	next('/login');
+	alert('잘못된 접근입니다. 로그인 해주세요');
+	next('/');
 }
 
 const routes = [
@@ -21,22 +25,41 @@ const routes = [
     name: 'Home',
     component: Home
   },
-  { // 로그인해야들어갈수있음
-    path: '/upload',
-    name: 'Upload',
-	component: Upload,
-	beforeEnter : requireAuth()
-  },
-  { 
-    path: '/main',
-    name: 'Main',
-    component: Main
+  {
+	path : '/dashboard',
+	name : 'Dashboard',
+	component : Dashboard,
+	children : [
+		{ // 로그인해야들어갈수있음
+			path: '/upload',
+			name: 'Upload',
+			component: Upload,
+			beforeEnter : requireAuth()
+		},
+		{ 
+			path: '/main',
+			name: 'Main',
+			component: Main
+		},
+		{ 
+			path: '/recent',
+			name: 'Recent',
+			component: Recent
+		},
+		{
+			path : '/profile',
+			name : 'Profile',
+			component : Profile,
+			beforeEnter : requireAuth()
+		}
+	],
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  }
+    path : '/demo',
+	name : 'Demo',
+	component: Demo
+  },
+  
 ]
 
 const router = new VueRouter({

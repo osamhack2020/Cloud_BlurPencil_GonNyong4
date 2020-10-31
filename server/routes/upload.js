@@ -23,13 +23,16 @@ const upload = multer({ storage: storage });
 router.post('/', upload.array('imgUploads'), function(req, res){
 	// 아이디를 저장할지 ObjectId를 저장할지 아직 미정이라 임시로 작성합니다.
 	// asdf 는 테스트 용도 임시 아이디입니다.
-	const user_id = 'asdf';
+	// const user_id = 'asdf';
+	const user_id = req.body.userid;
+	const score = req.body.score || 0;
+	const nms = req.body.nms || 0;
 	
-	User.findOne({ user_id: 'asdf' }, '_id')
+	User.findOne({ user_id: user_id }, '_id')
 		.then((user) => {
 			const works = [];
 			for (var work of req.files) {
-				works.push( { user_oid: user._id, fileName: work.filename } );
+				works.push( { user_oid: user._id, fileName: work.filename, score: score, nms: nms } );
 			}
 			return Work.insertMany(works);
 		})

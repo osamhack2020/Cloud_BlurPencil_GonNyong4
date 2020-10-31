@@ -28,10 +28,12 @@ router.post('/checkuser', function (req, res) {
  * GET /api/users
  */
 router.get('/', function(req, res, next) {
-	const user_id = req.body.user_id || req.params.user_id;
+	const user_id = req.query.user_id;
+		console.log(user_id);
 	
 	User.findOne({ user_id: user_id }, { user_pw: false })
 		.then((result) => {
+			console.log(result);
 			if (result)
 				res.json(200, { success:true, data:result, message:`${user_id} 의 정보` });
 			else
@@ -53,7 +55,8 @@ router.post('/login', function(req, res, next) {
 		user_id: req.body.user.id,
 		user_pw: req.body.user.password
 	});
-		
+	let user_oid = '';
+	
 	User.findOne({ user_id: user.user_id })
 		.then((result) => {
 			if (!result) {
@@ -61,6 +64,7 @@ router.post('/login', function(req, res, next) {
 				return { success:false, message:`아이디도 비밀번호도 틀림` };
 			} else if (result.user_pw === user.user_pw) {
 				// 로그인 성공
+				user_oid = result._id;
 				return User.updateOne({ user_id: user.user_id }, { user_updatedAt: new Date().toISOString() });		
 			} else {
 				// 이메일만 성공
@@ -68,8 +72,8 @@ router.post('/login', function(req, res, next) {
 			}
 		})
 		.then((result) => {
-			if (result.ok)
-				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공` });
+			if (result.ok) 
+				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공`, _id:user_oid });
 			else
 				res.json(200, result);
 			
@@ -88,12 +92,13 @@ router.post('/login', function(req, res, next) {
 router.post('/register', function(req, res, next) {
 	const user = new User({
 		user_id: req.body.user.id,
+		user_email: req.body.user.email,
 		user_pw: req.body.user.password
 	});
 	
 	user.save()
 		.then((result) => {
-			res.json(200, { success:true, message:'회원가입에 성공했습니다. 같은 메세지' });
+			res.json(200, { success:true, message:'회원가입에 성공했습니다.' });
 		})
 		.catch((err) => {
 		    if (err) {
@@ -109,9 +114,9 @@ router.post('/register', function(req, res, next) {
 
 /**
  * 비밀번호 변경
- * PUT /api/users/password
+ * PATCH /api/users/password
  */
-router.put('/password', function(req, res, next) {
+router.patch('/password', function(req, res, next) {
 	const user_id = req.body.user_id;
 	const user_prev_pw = req.body.user_prev_pw;
 	const user_want_pw = req.body.user_want_pw;
@@ -123,7 +128,7 @@ router.put('/password', function(req, res, next) {
 			return { success:false, message:`아이디 혹은 비밀번호가 틀렸습니다.` };
 		})
 		.then((result) => {
-			if (result.ok)
+			if (result.ok && result.nModified)
 				res.json(200, { success:true, message:`${user_id}의 비밀번호가 변경되었습니다.` });
 			else
 				res.json(400, result);
@@ -134,5 +139,49 @@ router.put('/password', function(req, res, next) {
 		});
 });
 
+/**
+ * 비밀번호 분실시
+ * POST /api/users/password
+ * TODO : 차후 이메일 인증 기능을 넣게 되면 이메일 인증코드를 받고나서 가능하도록 변경해야함.
+ */
+router.post('/password', function(req, res, next) {
+	const user_id = req.body.user_id;
+	const user_email = req.body.user_email;
+	const user_want_pw = req.body.user_want_pw;
+	
+	User.updateOne({ user_id: user_id, user_email: user_email }, { user_pw: user_want_pw })
+		.then((result) => {
+			if (result.ok && result.nModified)
+				res.json(200, { success:true, message:`${user_id}의 비밀번호가 변경되었습니다.` });
+			else
+				res.json(400, result);
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		});
+});
+
+/**
+ * 회원 탈퇴
+ * POST /api/users/delete
+ */
+router.post('/delete', function(req, res, next) {
+	const user_id = req.body.user_id, 
+		  user_pw = req.body.user_pw;
+	
+	User.deleteOne({ user_id: user_id, user_pw: user_pw })
+		.then((result) => {
+			console.log(result);
+			if (result && result.deletedCount > 0 && result.n > 0)
+				res.json(200, { success:true, message:`${user_id} : 회원탈퇴`});
+			else
+				res.json(200, { success:false, message:`${user_id} 의 비밀번호가 틀립니다.`});
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		})
+});
 
 module.exports = router;

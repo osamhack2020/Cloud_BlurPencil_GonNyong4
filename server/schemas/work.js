@@ -15,6 +15,18 @@ const workSchema = new Schema({
 		default: '',
 		required: true
 	},
+	score: {
+		type: Number,
+		default: 0
+	},
+	nms: {
+		type: Number,
+		default: 0	
+	},
+	folder: {
+		type: ObjectId,
+		ref: 'Folder'
+	},
 	// 작업날짜
 	workedAt: {
 		type: Date,

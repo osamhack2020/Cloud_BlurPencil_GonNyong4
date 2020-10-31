@@ -8,6 +8,11 @@ const userSchema = new Schema({
 		required: true,
 		unique: true
 	},
+	user_email: {
+		type: String,
+		required: true,
+		unique: true
+	},
 	// 비밀번호
 	user_pw: {
 		type: String,
