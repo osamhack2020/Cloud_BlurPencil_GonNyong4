@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./client/src/images/logo(250x250).png" style="width: 150px;"/>
+  <img src="./client/src/images/logo.png" style="width: 150px;"/>
 </p>
 <p align="center">
   자동 검열 모자이크 서비스, BLUR PENCIL
@@ -15,7 +15,11 @@
 
 <p align="center">
  <img src="https://img.shields.io/github/license/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
- </p>
+ <a href="https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4">
+ 	<img src="https://img.shields.io/badge/LIVE-DEMO-%235f5fff?style=for-the-badge"/>
+ </a>
+</p>
+
 <!-- 
 //깃헙 레포 코드 용량
 ![](https://img.shields.io/github/languages/code-size/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge)

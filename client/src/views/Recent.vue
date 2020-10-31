@@ -35,7 +35,7 @@
 						<b-card-text>
 						</b-card-text>
 							<template #footer>
-								<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
+								<small class="text-muted">최근 수정 <br>{{list.workedAt.substring(0,10)+' '+list.workedAt.substring(11,19)}}</small>
 							</template>
 					</b-card>
 				</div>
