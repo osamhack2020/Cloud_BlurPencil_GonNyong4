@@ -50,7 +50,7 @@
 				</div>
 			</div>
 		</div>
-		<WorkData v-else-if="showWorkedData" @cancelWorkData="cancelWorkData" :clicked_image="clicked_image"></WorkData>
+		<WorkData v-else-if="showWorkedData" @cancelWorkData="cancelWorkData" :clicked_image="clicked_image" :beforeComponent="'최근 작업내역'"></WorkData>
 	</div>
   </div>
 </template>
@@ -84,6 +84,7 @@ export default {
 			console.log('invite');
 		},
 		click_image (src){
+			src.user_oid = sessionStorage.getItem("user_oid");
 			this.clicked_image = src;
 			// this.$bvModal.show('bv-modal-example');
 			this.showWorkedData = true;

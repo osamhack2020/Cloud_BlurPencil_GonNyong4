@@ -1,64 +1,104 @@
 <template>
-	<div class="container data-section">
-		<button class="btn before-btn" @click="cancelFolderData();">
-			<div class="before-btn-circle">
-				<p>＜</p>
+	<div>
+		<div class="container data-section" v-if="!showWorkedData">
+			<button class="btn before-btn" @click="cancelFolderData();">
+				<div class="before-btn-circle">
+					<p>＜</p>
+				</div>
+				대시보드</button>
+			<h3 style="text-align:left; display: inline-block">{{ clicked_folder.folderName }}</h3>
+			<div v-show="user_oid === clicked_folder.owner" style="float: right;">
+				<!-- <button class="btn" v-on:click="downloadWork(clicked_folder.fileName)" style="float:right; background-color:white;">
+					<img src = "../images/import.svg" class="btn_image"/>
+					다운로드
+				</button> -->
+				<button class="btn" v-on:click="showShareFolder = true;" style="background-color:white; margin-right:1rem;">
+					<img src = "../images/share.svg" class="btn_image">
+					폴더 공유
+				</button>
+				<button class="btn" v-on:click="removeFolder()" style="background-color:white;">
+					<img src = "../images/trash-alt.svg" class="btn_image">
+					폴더 삭제
+				</button>
 			</div>
-			뒤로가기</button>
-		<h3 style="text-align:left; display: inline-block">{{ clicked_folder.folderName }}</h3>
-		<div v-show="user_oid === clicked_folder.owner" style="float: right;">
-			<!-- <button class="btn" v-on:click="downloadWork(clicked_folder.fileName)" style="float:right; background-color:white;">
-				<img src = "../images/import.svg" class="btn_image"/>
-				다운로드
-			</button> -->
-			<button class="btn" v-on:click="showShareFolder = true;" style="background-color:white; margin-right:1rem;">
-				<img src = "../images/share.svg" class="btn_image">
-				폴더 공유
-			</button>
-			<button class="btn" v-on:click="removeWork(clicked_folder._id, clicked_folder.fileName)" style="background-color:white;">
-				<img src = "../images/trash-alt.svg" class="btn_image">
-				폴더 삭제
-			</button>
-		</div>
-		<div class="show-shared-user">
-			<p>공유한 사람들 : </p>
-			<div @click="unSharedClickedUser = user.user_id; showUnShared = true;" class="share-user-profile" v-for="(user, idx2) in clicked_folder.share" :key="idx2">{{ user.user_id }}</div>
-		</div>
-		<div>
-			{{ fileList }}
-		</div>
-		<div class="custom-modal" v-if="showShareFolder" style="text-align:center;">
-			<div class="modal-box">
-				<b-form-group id="input-group-email" label="초대할 상대방의 이메일을 입력해주세요." style="font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem;">
-					<b-form-input
-						id="invite-email"
-						v-model="inviteEmail"
-						required
-					></b-form-input>
-					<b-form-invalid-feedback id="invite-email">
-						이메일을 입력해주세요.
-					</b-form-invalid-feedback>
-				</b-form-group>
-				<button class="btn btn-primary" @click="inviteFolder" >초대</button>
-				<button class="btn" @click="showShareFolder = false">취소</button>
+			<div class="show-shared-user">
+				<p>공유한 사람들 : </p>
+				<div @click="unSharedClickedUser = user.user_id; showUnShared = true;" class="share-user-profile" v-for="(user, idx2) in clicked_folder.share" :key="idx2">{{ user.user_id }}</div>
+			</div>
+			<div v-if="!showWorkedData">
+				<b-card-group deck>
+					<div v-for="(list, idx) in fileList" :key="idx" class = "wrap_cards">
+						<b-card
+							class = "showing_image"
+							v-if="list"
+						>
+							<b-card-text>
+								<input type="checkbox" v-bind:id="'check'+idx" v-bind:value="list" v-model="checkedList">
+								{{list.fileName}}
+							</b-card-text>
+							<b-card no-body
+								:img-src = "serverUrl + list.fileName" 
+								@click="click_image(list)"
+								style = "cursor : pointer; margin: 0px;"
+								img-alt="Image"
+								img-width = "auto"
+								img-height = "250rem"
+								img-top>
+							</b-card>
+							<b-card-text>
+							</b-card-text>
+								<template #footer>
+									<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
+								</template>
+						</b-card>
+					</div>
+				</b-card-group>
+				<div class = "wrap_pagination">
+					<div class ="load_page">
+						<b-pagination
+							:total-rows="totalRows" 
+							v-model="currentPage"
+							:per-page="perPage"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="custom-modal" v-if="showShareFolder" style="text-align:center;">
+				<div class="modal-box">
+					<b-form-group id="input-group-email" label="초대할 상대방의 이메일을 입력해주세요." style="font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem;">
+						<b-form-input
+							id="invite-email"
+							v-model="inviteEmail"
+							required
+						></b-form-input>
+						<b-form-invalid-feedback id="invite-email">
+							이메일을 입력해주세요.
+						</b-form-invalid-feedback>
+					</b-form-group>
+					<button class="btn btn-primary" @click="inviteFolder" >초대</button>
+					<button class="btn" @click="showShareFolder = false">취소</button>
+				</div>
+			</div>
+			<div class="custom-modal unsharedUserModal" v-if="showUnShared" style="text-align:center;">
+				<div class="modal-box">
+					<b-form-group label="공유를 해제하시겠습니까?" style="font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem;">
+						해제 대상 : {{ unSharedClickedUser }}
+					</b-form-group>
+					<button class="btn btn-primary" @click=" cancelShareToUser()" >공유 해제</button>
+					<button class="btn" @click="showUnShared = false">취소</button>
+				</div>
 			</div>
 		</div>
-		<div class="custom-modal unsharedUserModal" v-if="showUnShared" style="text-align:center;">
-			<div class="modal-box">
-				<b-form-group label="공유를 해제하시겠습니까?" style="font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem;">
-					해제 대상 : {{ unSharedClickedUser }}
-				</b-form-group>
-				<button class="btn btn-primary" @click=" cancelShareToUser()" >공유 해제</button>
-				<button class="btn" @click="showUnShared = false">취소</button>
-			</div>
-		</div>
+		<WorkData v-if="showWorkedData" @cancelWorkData="cancelWorkData" :clicked_image="clicked_image" :beforeComponent="clicked_folder.folderName"></WorkData>
 	</div>
 </template>
 
 
-<script>	
+<script>
+import WorkData from '@/components/WorkData.vue'
+
 export default {
-	name: 'WorkData',
+	name: 'FolderData',
 	props: {
 		userid: {
 			type: String,
@@ -70,12 +110,18 @@ export default {
     },
 	data () {
 		return {
+			workData : [],
 			user_oid: '',
 			fileList: [],
 			inviteEmail: '',
 			showShareFolder: false,
 			showUnShared: false,
-			unSharedClickedUser: ''
+			unSharedClickedUser: '',
+			checkedList : [],
+			perPage: 5,
+			currentPage: 1,
+			clicked_image: '',
+			showWorkedData: false
 		}
 	},
 	created(){
@@ -89,7 +135,7 @@ export default {
 		getFolderFiles () {
 			this.$http.get(`/api/folders/files/${this.clicked_folder._id}`)
 				.then((response) => {	// eslint-disable-line no-unused-vars
-					console.log(response);
+					// console.log(response);
 					this.fileList = response.data;
 				})
 				.catch((err) =>{
@@ -117,6 +163,10 @@ export default {
 				console.log(err);
 			})
 		},
+		cancelWorkData() {
+			this.getFolderFiles();
+			this.showWorkedData = false;
+		},
 		downloadWork (fileName) {
 			this.$http ({
 				url: `${this.serverUrl}${fileName}`,
@@ -139,8 +189,8 @@ export default {
 				work_oid: work_oid,
 				fileName: fileName
 			})
-			.then((response) => {
-				console.log(response.data);
+			.then((response) => {	// eslint-disable-line no-unused-vars
+				// console.log(response.data);
 				location.reload();
 			})
 			.catch((err) =>{
@@ -152,8 +202,8 @@ export default {
 				owner: this.user_oid,
 				folder_oid: this.clicked_folder._id
 			})
-			.then((response) => {
-				console.log(response.data);
+			.then((response) => {	// eslint-disable-line no-unused-vars
+				// console.log(response.data);
 				location.reload();
 			})
 			.catch((err) =>{
@@ -182,7 +232,29 @@ export default {
 			.catch((err) =>{
 				this.workData = err;
 			})
+		},
+		click_image (src){
+			src.folder = { _id: src.folder };
+			this.clicked_image = src;
+			console.log('폴더 ', this.clicked_image);
+			this.showWorkedData = true;
+		},
+	},
+	computed: {
+		lists () {
+			const items = this.workData;
+			// Return just page of items needed
+			return items.slice(
+				(this.currentPage - 1) * this.perPage,
+				this.currentPage * this.perPage
+			)
+		},
+		totalRows () {
+			return this.workData.length;
 		}
+	},
+	components: {
+		WorkData
 	}
 };
 </script>

@@ -4,7 +4,7 @@
 			<div class="before-btn-circle">
 				<p>＜</p>
 			</div>
-			최근 작업내역</button>
+			{{ beforeComponent }}</button>
 		<h3 style="text-align:left;">{{clicked_image.fileName}}</h3>
 		<div class="row">
 			<div class="col-lg-8">
@@ -13,8 +13,7 @@
 				</div>
 			</div>
 			<div class="col-lg-4">
-				<select class="form-control form-control-lg folder-select" v-model="workFolder" @change="folderChange($event)">
-					<!-- <option value="" :selected="true">(폴더 없음)</option> -->
+				<select class="form-control form-control-lg folder-select" v-model="workFolder" @change="folderChange($event)" v-show="user_oid == clicked_image.user_oid">
 					<option v-for="(folder, idx) in folderList"
 							:key="idx"
 							:value="folder._id"
@@ -31,15 +30,17 @@
 					<p class="setting-desc">{{ clicked_image.workedAt }}</p>
 				</div>
 			</div>
-		</div>			
-		<button class="btn" v-on:click="downloadWork(clicked_image.fileName)" style="float:right; background-color:white;">
-			<img src = "../images/import.svg" class="btn_image"/>
-			다운로드
-		</button>
-		<button class="btn" v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" style="float:right; background-color:white; margin-right:1rem;">
-			<img src = "../images/trash-alt.svg" class="btn_image">
-			삭제
-		</button>
+		</div>
+		<div v-show="user_oid == clicked_image.user_oid">
+			<button class="btn" v-on:click="downloadWork(clicked_image.fileName)" style="float:right; background-color:white;">
+				<img src = "../images/import.svg" class="btn_image"/>
+				다운로드
+			</button>
+			<button class="btn" v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" style="float:right; background-color:white; margin-right:1rem;">
+				<img src = "../images/trash-alt.svg" class="btn_image">
+				삭제
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -54,16 +55,21 @@ export default {
 		},
 		/*eslint no-dupe-keys: "error"*/
 		clicked_image: {
+		},
+		beforeComponent: {
+			type: String,
+			default: '뒤로가기'
 		}
     },
 	data () {
 		return {
-			user_oid: '5f82cb8b9e963310f13f5129',
+			user_oid: '',
 			folderList: [],
 			workFolder: this.clicked_image.folder ? this.clicked_image.folder._id : ''
 		}
 	},
 	created(){
+		this.user_oid = sessionStorage.getItem("user_oid");
 		this.getFolderList();
 	},
 	methods : {	
@@ -117,7 +123,6 @@ export default {
 				.then((response) => {
 					this.folderList.push({ folderName: '(폴더 없음)', _id: '' })
 					this.folderList = this.folderList.concat(response.data);
-				// console.log(response.data);
 				}).catch((err) =>{
 					console.log(err);
 				})

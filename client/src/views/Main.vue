@@ -13,7 +13,7 @@
 		<div class="recents-section" v-if="!showWorkedData && !showFolderData">
 			<h3>최근 작업내역</h3>
 			<div>
-				<div class="recent-work" v-for="(recent, idx) in recentWorks" :key="idx" @click="showWorkedData=true; clicked_image=recent;">
+				<div class="recent-work" v-for="(recent, idx) in recentWorks" :key="idx" @click="showWorkedData=true; recent.user_oid = user_oid; clicked_image=recent;">
 					<img class="recent-image" :src="serverUrl + recent.fileName" />
 					<p class="recent-fileName">{{ recent.fileName }}</p>
 					<p class="recent-fileName">/ {{ getFolderName(recent.folder) }}</p>
@@ -117,7 +117,8 @@ export default {
 			this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
 				.then((response) => {
 					this.recentWorks = response.data;
-					console.log(this.recentWorks);
+					// console.log(this.recentWorks);
+					// console.log(this.recentWorks);
 					if (this.recentWorks.length > 0) {
 						// 작업물이 한개 이상이라도 있으면
 					}
