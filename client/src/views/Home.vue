@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="padding: 1rem;">
 	<div class="container">
-	<a class="navbar-brand" href="#"><img src="../images/logo(125x125).png" class="navbar-logo"/></a>
+	<a class="navbar-brand" href="#"><img src="../images/logo.png" class="navbar-logo"/></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	<span class="navbar-toggler-icon"></span>
 	</button>
@@ -12,10 +12,10 @@
 	<li class="nav-item active">
 		<a class="nav-link" href="#info">서비스 소개 <span class="sr-only">(current)</span></a>
 	</li>
-	<li class="nav-item">
+	<li class="nav-item active">
 		<a class="nav-link" href="#feature">기능</a>
 	</li>
-	<li class="nav-item">
+	<li class="nav-item active">
 		<a class="nav-link" href="#price">가격</a>
 	</li>
 	</ul>
@@ -82,7 +82,7 @@
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
 	<login-page id="login" style="position: relative; padding-bottom: 9rem; padding-top : 7.5rem;"></login-page>
 	<div class="footer container">
-		<a href="/" class="footer-brand"><img src="../images/title.png" class="footer-logo"></a>
+		<a href="/" class="footer-brand"><img src="../images/logo.png" class="footer-logo">BLUR PENCIL</a>
 		<div class="footer-menu">
 			<a href="#">서비스 소개</a>
 			<a href="#feature">기능</a>
@@ -112,7 +112,7 @@ export default {
 		background-color: white !important;
 	}
 	.navbar-logo {
-		width: 3rem;
+		width: 1.5rem;
 	}
 	.container p{
 		margin-bottom : 0;
@@ -188,8 +188,13 @@ export default {
 		margin-left: 1rem;
 		margin-right: 1rem;
 	}
+	.footer .footer-brand  {
+		color: black;
+		text-decoration: none;
+	}
 	.footer .footer-brand .footer-logo {
-		height: 3rem;
+		height: 1.8rem;
+		margin-right: .5rem;
 	}
 	.price-card {
 		border-radius: 3rem !important;

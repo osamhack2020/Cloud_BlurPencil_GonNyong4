@@ -276,9 +276,9 @@ export default {
 }
 </script>
 <style>
-	body{
+	/* body{
 		background-color :  #f1f5f6 !important;
-	}
+	} */
 	.main-secction{
 		margin-top : 5%;
 		box-shadow : 0px 2px 3px gray;
