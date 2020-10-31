@@ -39,16 +39,24 @@
 
 <br><br>
 
-<p align = "center">
-	<a href = "https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be">
-		<img src="./goyoutube.png" width = "256" height ="128">
-	</a>
-	<p>Blur Pencil 소개 영상</p>
-	<a href = "https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">
-		<img src="./goppt.png" width = "256" height ="128">
-	</a>
-	<p>Blur Pencil 발표 자료</p>
-</p>
+<table>
+	<tr>
+		<td>
+			<a href="https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be"><img src="./goyoutube.png"></a>
+		</td>
+		<td>
+			<a href="https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx"><img src="./goppt.png"></a>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<b>소개 영상</b>
+		</td>
+		<td align="center">
+			<b>발표 자료</b>
+		</td>
+	</tr>
+</table>
 
 <br>
 <br>
@@ -60,7 +68,6 @@
 - 팀원(Front-End): 배성준 (clcc001@naver.com) | 
 - 팀원(Pytorch, CV): 홍승표 (spkbk98@gmail.com) | [Github](https://github.com/seungpyo) 
 -->
-<br><br>
 <table>
   <tr>
     <td align="center">
@@ -121,30 +128,28 @@
    </td>
   </tr>
  </table>
+ <br><br>
 
-## 기능 설계
+## Blur Pencil 기능 및 설계
 ### 구조
 ![구조](./archi.png)
 
+### 설계
+![설계](./archi2.png)
+
 Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수 있습니다.
-<p align = "center">
-<p>
-<strong font-size="30px">STEP 1</strong>
+
+## Blur Pencil 사용법
+### STEP 1
 <br>
 <p>사진을 Drag and Drop해서 올린다.</p>
-</p>
 <img src ="./1.png" width = "1024">
-<p>
-<strong font-size="30px">STEP 2</strong>
+### STEP 2
 <p>인식된 객체 중 모자이크 할 객체를 선택한다.</p>
-</p>
 <img src ="./2.png" width = "1024">
-<p>
-<strong font-size="30px">STEP 3</strong>
+### STEP 3
 <p>모자이크 처리 된 이미지를 확인 후 다운로드 한다.</p>
-</p>
 <img src ="./3.png" width = "1024">
-</p>
 
 ## Blur Pencil이 가지는 장점
 ### 로그인 없이 무료로 사용 가능
@@ -152,38 +157,51 @@ Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수
 <br>
 
 ### 폴더 기능
-<li>작업한 이미지들을 폴더 별로 나누어 저장할 수 있으며 다른 유저와 공유도 할 수 있다.</li>
-<strong font-size ="30px">메인 페이지</strong>
-<img src ="./prev_dash.png" width = "1024">
-<strong font-size ="30px">폴더 저장</strong>
-<img src ="./strength_folder.png" width = "1024">
-<strong font-size ="30px">폴더 공유</strong>
-<img src ="./strength_share.png" width = "1024">
-<strong font-size ="30px">파일 관리</strong>
-<img src ="./strength_multi.png" width = "1024">
+<p>작업한 이미지들을 폴더 별로 나누어 저장할 수 있으며 다른 유저와 공유도 할 수 있다.</p>
 
-### 설계
-![설계](./archi2.png)
+<strong>메인 페이지</strong>
+<img src ="./prev_dash.png" width = "1024">
+<strong>폴더 저장</strong>
+<img src ="./strength_folder.png" width = "1024">
+<strong>폴더 공유</strong>
+<img src ="./strength_share.png" width = "1024">
+<strong>파일 관리</strong>
+<img src ="./strength_multi.png" width = "1024">
+<br><br>
 
 ## DEMO
 <p align="center">
 <p align="left">
-Demo Image 1
+
+### Demo Image 1
+
 </p>
 <img src = "./example1.png" width = "1024">
 <p align="left">
-Demo Image 2
+
+### Demo Image 2
+
 </p>
 <img src = "./example2.png" width = "1024">
 <p align="left">
-Demo Image 3
+
+### Demo Image 3
+
 </p>
 <img src = "./example3.png" width = "1024">
 <p align="left">
-Demo Image 4
+
+### Demo Image 4
+
 </p>
 <img src = "./example4.png" width = "1024">
 </p>
+
+## Blur Pencil 기대 효과
+<li>빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해 등을 보완할 수 있다.</li>
+<li>강력한 보안을 필요로 하는 개인이나 집단, 저작권 보호를 중요시하는 단체에게 Blur Pencil의 기술을 통해 업무 성능 향상을 도와준다.</li>
+<li>인식률(score)과 NMS(Non-Maximum Suppression)을 조절하여 검열 대상의 인식률을 조절 할 수 있다.</li>
+<li>계속해서 </li>
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 - 권장 : 최신 버전의 크로미움 기반 브라우저
