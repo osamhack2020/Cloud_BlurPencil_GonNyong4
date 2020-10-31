@@ -170,6 +170,7 @@ export default {
 			overflow: hidden;
 			& + .folder {
 				margin-left: 1rem;
+				margin-top : 0.5rem;
 			}
 			&.create {
 				color: #7f7ffb;

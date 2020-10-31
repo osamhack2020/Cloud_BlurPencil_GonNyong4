@@ -121,7 +121,7 @@
                                             <label>최근 접속일</label>
                                         </div>
                                         <div class="col-md-7">
-                                            <p>{{userdata.user_updatedAt.substring(0,10)+' '+userdata.user_updatedAt.substring(11,19)}}</p>
+                                            <p>{{(userdata.user_updatedAt+'').substring(0,10)+' '+(userdata.user_updatedAt+'').substring(11,19)}}</p>
                                         </div>
                                     </div>
                                 </div>
