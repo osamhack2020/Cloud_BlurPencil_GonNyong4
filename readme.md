@@ -118,14 +118,18 @@ Blur Pencil의 장점은 위와 같은 과정이 클릭 3번만으로 이루어�
 <p align = "center">
 <p>
 <strong>STEP 1</strong>
+<br>
+<p>사진을 Drag and Drop해서 올린다.</p>
 </p>
 <img src ="./1.png" width = "1024">
 <p>
 <strong>STEP 2</strong>
+<p>인식된 객체 중 모자이크 할 객체를 선택한다.</p>
 </p>
 <img src ="./2.png" width = "1024">
 <p>
 <strong>STEP 3</strong>
+<p>모자이크 처리 된 이미지를 확인 후 다운로드 한다.</p>
 </p>
 <img src ="./3.png" width = "1024">
 </p>
