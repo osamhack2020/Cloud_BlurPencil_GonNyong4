@@ -36,7 +36,10 @@
 ![프로젝트설명](./intro.png)
 
 ## Demo
-### 
+### Before
+![](demo/3-1.png)
+### After
+![](demo/3-3.png)
 ### Before
 ![](demo/toktok.jpg)
 ### After
