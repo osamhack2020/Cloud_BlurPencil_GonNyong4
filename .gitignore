@@ -19,9 +19,15 @@ goorm.manifest
 
 # PyTorch pretrained model files
 *.pth
-
 # Test images
 logo_detection/test_imgs/
 
 # Google Drive helper script
-get_pth.py
+logo_detection/weights/*.pth
+
+# Python cache
+logo_detection/__pycache__/
+
+# nohup output file
+logo_detection/nohup.out
+nohup.out
