@@ -1,7 +1,7 @@
 <template>
   <div class="sidenav">
 	<div class = "logowrap">
-		<img src="../images/logo(250x250).png" class="nav_logo"/>
+		<img src="../images/logo.png" class="nav_logo"/>
 	</div>
 	<div class = "menuwrap">
 		<!-- <button class="btn btn-primary rounded-pill fast-btn">
@@ -20,7 +20,7 @@
 		
 		<div class="bottom-menu" style="bottom:7rem; padding:1rem;">
 			<div class="notice">
-				공지하고자 하는 내용이 있다면 이런식으로
+				BLUR PENCIL의 컨트리뷰터가 되어주세요!
 				<button class="btn" type="button" onclick="location.href='https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4'">바로가기</button>
 			</div>
 		</div>
@@ -90,9 +90,13 @@
 	},
 	created(){
 		const userid = sessionStorage.getItem("userid");
-		this.$http.get('/api/users?user_id='+userid)
-			.then((response) => {
+		console.log('__ ', userid);
+		
+		this.$http.get(`/api/users/?user_id=${userid}`)
+		.then((response) => {
+			console.log('R ', response.data);
 			this.userdata = response.data.data.user_id+''
+			console.log('R ', this.userdata);
 		}).catch((err) =>{
 			this.userdata = '로그인이 <br>필요합니다.';
 			console.error(err);
@@ -111,7 +115,7 @@
 
 <style lang="scss">
 	.nav_logo {
-		width: 5rem;
+		width: 2rem;
 	}
 	.logowrap{
 		font-size : x-large;

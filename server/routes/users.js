@@ -29,9 +29,11 @@ router.post('/checkuser', function (req, res) {
  */
 router.get('/', function(req, res, next) {
 	const user_id = req.query.user_id;
+		console.log(user_id);
 	
 	User.findOne({ user_id: user_id }, { user_pw: false })
 		.then((result) => {
+			console.log(result);
 			if (result)
 				res.json(200, { success:true, data:result, message:`${user_id} 의 정보` });
 			else

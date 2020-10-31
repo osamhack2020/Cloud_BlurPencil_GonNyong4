@@ -17,7 +17,7 @@
 					<img class="recent-image" :src="serverUrl + recent.fileName" />
 					<p class="recent-fileName">{{ recent.fileName }}</p>
 					<p class="recent-fileName">/ {{ getFolderName(recent.folder) }}</p>
-					<p class="recent-fileName">{{ recent.workedAt }}</p>
+					<p class="recent-fileName">{{recent.workedAt.substring(0,10)+' '+recent.workedAt.substring(11,19)}}</p>
 				</div>
 			</div>
 		</div>
@@ -77,6 +77,7 @@ export default {
 				alert(response.data.message);
 				location.reload();
 				this.showCreateFolder = false;
+				this.getFolders();
 			}).catch((err) =>{
 				console.log(err);
 			})
@@ -131,6 +132,7 @@ export default {
 	},
 	created(){
 		this.user_oid = sessionStorage.getItem("user_oid");
+		console.log('uid ', sessionStorage.getItem("userid"));
 		this.getFolders();
 		this.getRecentWork();
 	},

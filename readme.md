@@ -1,8 +1,10 @@
+
 <p align="center">
-  <img src="./client/src/images/logo(250x250).png" style="width: 150px;"/>
+  <img src="./client/src/images/logo.png" width="125"/>
 </p>
+<br/>
 <p align="center">
-  자동 검열 모자이크 서비스, BLUR PENCIL
+  자동 검열 모자이크 서비스, <strong>BLUR PENCIL</strong>
   <br/>  
  빠르고 편리한 자동 검열 기능을 통해 취약한 보안을 강화하고 저작권 침해를 예방합니다.
 </p>
@@ -15,7 +17,11 @@
 
 <p align="center">
  <img src="https://img.shields.io/github/license/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
- </p>
+ <a href="https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4">
+ 	<img src="https://img.shields.io/badge/LIVE-DEMO-%235f5fff?style=for-the-badge"/>
+ </a>
+</p>
+
 <!-- 
 //깃헙 레포 코드 용량
 ![](https://img.shields.io/github/languages/code-size/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge)
