@@ -38,15 +38,17 @@
 <p><strong>Blur Pencil</strong>은 Blur와 Pencil을 합친 단어로, 모자이크 처리 하고 싶은 이미지를 Pencil(연필)과 같은 우리에게 익숙한 도구로 간단하고 쉽게 Blur처리 하기 위해 고안한 아이디어 입니다. 접근하기 편리한 웹을 통해 이미지를 드래그 앤 드랍만 하면, 학습된 Blur Pencil이 이미지를 분석한 뒤, 모자이크 할 객체를 인식하며, 인식된 객체 중 원하는 객체를 골라 모자이크 처리를 할 수 있습니다. 또한 모자이크 처리 된 이미지 내역들을 저장할 수 있으며, 다른 사용자와 공유할 수 있도록 도와줍니다.</p>
 
 <br><br>
-<p style = "margin : 0 auto;">
-<img src="./goyoutube" href="https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be">
+<a href = "https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be">
+<img src="./goyoutube" width = "512" float="left">
+</a>
 <p>Blur Pencil 소개 영상</p>
-<img src="./goppt" href="https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">
+<a href = "https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">
+<img src="./goppt" width = "512" float="left">
+</a>
 <p>Blur Pencil 발표 자료</p>
 </p>
 <br>
 <br>
-<a href = "https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">Blur Pencil 발표 자료</a>
 ## 팀 정보 (Team Information)
 <!--
 - 팀장: 김현재 (hyeonjae.dev@gmail.com) | [Github](https://github.com/hughesgoon)
