@@ -44,7 +44,6 @@
 		<img src="./goyoutube.png" width = "256" height ="128">
 	</a>
 	<p>Blur Pencil 소개 영상</p>
-
 	<a href = "https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">
 		<img src="./goppt.png" width = "256" height ="128">
 	</a>
@@ -127,25 +126,41 @@
 ### 구조
 ![구조](./archi.png)
 
-Blur Pencil의 장점은 위와 같은 과정이 클릭 3번만으로 이루어진다는 것입니다.
+Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수 있습니다.
 <p align = "center">
 <p>
-<strong style="font-size : 30px">STEP 1</strong>
+<strong font-size="30px">STEP 1</strong>
 <br>
 <p>사진을 Drag and Drop해서 올린다.</p>
 </p>
 <img src ="./1.png" width = "1024">
 <p>
-<strong style="font-size : 30px">STEP 2</strong>
+<strong font-size="30px">STEP 2</strong>
 <p>인식된 객체 중 모자이크 할 객체를 선택한다.</p>
 </p>
 <img src ="./2.png" width = "1024">
 <p>
-<strong style="font-size : 30px">STEP 3</strong>
+<strong font-size="30px">STEP 3</strong>
 <p>모자이크 처리 된 이미지를 확인 후 다운로드 한다.</p>
 </p>
 <img src ="./3.png" width = "1024">
 </p>
+
+## Blur Pencil이 가지는 장점
+### 로그인 없이 무료로 사용 가능
+<img src ="./strength1.png" width = "512">
+<br>
+
+### 폴더 기능
+<li>작업한 이미지들을 폴더 별로 나누어 저장할 수 있으며 다른 유저와 공유도 할 수 있다.</li>
+<strong font-size ="30px">메인 페이지</strong>
+<img src ="./prev_dash.png" width = "1024">
+<strong font-size ="30px">폴더 저장</strong>
+<img src ="./strength_folder.png" width = "1024">
+<strong font-size ="30px">폴더 공유</strong>
+<img src ="./strength_share.png" width = "1024">
+<strong font-size ="30px">파일 관리</strong>
+<img src ="./strength_multi.png" width = "1024">
 
 ### 설계
 ![설계](./archi2.png)
