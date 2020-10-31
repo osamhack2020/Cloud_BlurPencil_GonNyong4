@@ -103,6 +103,35 @@ export default {
 		cancelWorkData() {
 			this.showWorkedData = false;
 		},
+		downloadWork (fileName) {
+			this.$http ({
+				url: `${this.serverUrl}${fileName}`,
+				method: 'GET',
+				responseType: 'blob',
+			}).then((response) => {
+				var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+				var fileLink = document.createElement('a');
+
+				fileLink.href = fileURL;
+				fileLink.setAttribute('download', fileName);
+				document.body.appendChild(fileLink);
+
+				fileLink.click();
+			});
+		},
+		removeWork(work_oid, fileName) {
+			var user_id = sessionStorage.getItem("userid");
+			this.$http.post(`/api/works/delete/${user_id}`, {
+				work_oid: work_oid,
+				fileName: fileName
+			})
+			.then((response) => {	// eslint-disable-line no-unused-vars
+				location.reload();
+			})
+			.catch((err) =>{
+				this.workData = err;
+			})
+		},
 		clickDown(){
 			const f= this.checkedList;
 			var isok = confirm("정말"+f.length+"개의 파일을 다운로드하시겠습니까?");

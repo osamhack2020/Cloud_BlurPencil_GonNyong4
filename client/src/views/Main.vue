@@ -75,6 +75,7 @@ export default {
 				owner : this.user_oid
 			}).then((response) => {
 				alert(response.data.message);
+				location.reload();
 				this.showCreateFolder = false;
 			}).catch((err) =>{
 				console.log(err);
