@@ -1,15 +1,13 @@
 <template>
 	<div class = "Demo">
-		<div class="waiting" v-if="waiting">
+		<div class="waiting" v-if="waiting" style = "width : 100%;">
 			<img src="../images/ZombieingDoodle.png" class="bored-image"/>
 			<div class="waiting-notice">
 				<img src="../images/sync.svg" class="sync-image"/>
 				처리중입니다.. 잠시만 기다려주세요.
 			</div>
 		</div>
-		<a style = "width : 100%; height : 3rem;" href="/">
-			Main 페이지로 돌아가기	
-		</a>
+		<b-button block variant="outline-info"  v-bind:href="'/'" style="padding-top : 1rem; vertical-align : middle;">Main 페이지로 돌아가기</b-button>
 		<div class="progressbar">
 			<button v-on:click="step=0" v-bind:class="{'now': step===0, 'active': step > 0}" :disabled="step < 1">업로드</button>
 			<button v-on:click="step=1" v-bind:class="{'now': step===1, 'active': step > 1}" :disabled="step < 2">수정</button>
@@ -603,7 +601,7 @@ input[type="file"] {
 .waiting {
 	position: fixed;
 	top: 0px;
-	width: 100%;
+	width: 85%;
 	height: 100%;
 	z-index: 100;
 	background: rgba(0, 0, 0, .8);

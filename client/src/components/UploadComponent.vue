@@ -155,7 +155,6 @@ export default{
 			setw : '',
 			seth : '',
 			receiveimage : '',
-			update_received_file : '',
 		}
 	},
 	created(){
@@ -200,14 +199,14 @@ export default{
 			this.sendfile = '';
         },
 		uploadFile(){
-			if(this.update_received_file == ''){
+			if(this.sendFile == ''){
 				alert('업로드할 이미지가 없습니다.');
 				return false;
 			}
 			
 			const formData = new FormData();
 			const userid = sessionStorage.getItem('userid');
-			formData.append('imgUploads', this.update_received_file);
+			formData.append('imgUploads', this.sendFile);
 			formData.append('userid', userid);
 			formData.append('score', this.selectedData.score);
 			formData.append('nms', this.selectedData.nms);
@@ -217,7 +216,7 @@ export default{
 				}
 			}).then((res) =>{
 				this.image = '';
-				this.update_received_file = '';
+				this.sendFile = '';
 				if (res.status === 200 && res.statusText == 'OK') {
 					this.showDismissibleAlert = true;
 				}
@@ -288,8 +287,6 @@ export default{
 			}).then(function(blob) {
 				const objURL = URL.createObjectURL(blob);
 				self.receiveimage = objURL;
-				const hi = new File([blob],'imagename.png');
-				self.update_received_file = hi;
 				self.waiting = false;
 				self.step = 2;
 			});
@@ -633,6 +630,7 @@ input[type="file"] {
 	width: 85%;
 	height: 100%;
 	z-index: 100;
+	margin : 0 auto;
 	background: rgba(0, 0, 0, .8);
 	.bored-image {
 		margin-top: 15vh;

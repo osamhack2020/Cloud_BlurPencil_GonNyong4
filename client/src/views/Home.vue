@@ -37,7 +37,7 @@
 		<div class="feature-desc">
 			<h1 class="feature-desc-point">BLUR PENCIL의 검열 기능</h1>
 			<!-- <h5 class="feature-desc-point">빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해를 보완하세요!</h5> -->
-			<p>빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해를 보완하세요! 모자이크 할 이미지를 올리고 클릭 3번이면 자동으로 이미지를 검열합니다. 강력한 보안을 필요로 하는 개인이나 집단, 저작권 보호를 중요시 하는 단체에게 BLUR PENCIL은 빠르고 편리하게 이미지를 자동 검열하여 업무 성능 향상을 도와줍니다. </p>
+			<p style="color :black;">빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해를 보완하세요!</p><p>모자이크 할 이미지를 올리고 클릭 3번이면 자동으로 이미지를 검열합니다.<br>강력한 보안을 필요로 하는 개인이나 집단, 저작권 보호를 중요시 하는 단체에게 BLUR PENCIL만의 기술을 통해 빠르고 편리하게 이미지를 자동 검열하여<br>업무 성능 향상을 도와줍니다.</p>
 		</div>
 	</div>
 	<div class="color-box"></div>
@@ -50,9 +50,11 @@
 						<div class="card price-card">
 							<div class="card-body">
 								<div class="price">무료</div>
-								<div class="price-content">
-									<p>회원가입을 하지 않아도 사용가능합니다.</p>
-									<p>..</p>
+								<p style="margin-bottom : 0.5rem;">회원가입을 하지 않아도 사용가능합니다.</p>
+								<div class="price-content" style = "display : inline-block">
+									<div style= "text-align : left">
+										<li>이미지 모자이크 처리</li>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -61,11 +63,14 @@
 						<div class="card price-card">
 							<div class="card-body">
 								<div class="price">로그인</div>
-								<div class="price-content">
-									<p>회원가입시 더 많은 기능이 제공됩니다.</p>
-									<p>데이터 백업</p>
-									<p>작업 내역 저장</p>
-									<p>동료들과 작업 공유</p>
+								<p style="margin-bottom : 0.5rem;">회원가입시 더 많은 기능이 제공됩니다.</p>
+								<div class="price-content" style = "display : inline-block">
+									<div style= "text-align : left">
+										<li>이미지 모자이크 처리</li>
+										<li>데이터 백업</li>
+										<li>작업 내역 저장</li>
+										<li>동료들과 작업 공유</li>
+									</div>
 								</div>
 							</div>
 						</div>
