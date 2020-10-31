@@ -37,7 +37,7 @@
 
 ## 기능 설계
 ### 구조
-![구조](./architecture.png)
+![구조](./archi.png.png)
 
 ### 설계
 ![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
