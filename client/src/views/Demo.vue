@@ -154,6 +154,7 @@ export default{
 			seth : '',
 			receiveimage : '',
 			update_received_file : '',
+			isempty : false,
 		}
 	},
 	created(){
@@ -225,6 +226,10 @@ export default{
 				this.waiting = false;
 				this.step = 1;
 				this.isGet = true;
+				if(this.predictData=='')
+					this.isempty = true
+				else
+					this.isempty = false;
 				this.baseSelectedData.score = this.selectedData.score;
 				this.baseSelectedData.nms = this.selectedData.nms;
 			}).catch((err)=>{
@@ -237,13 +242,24 @@ export default{
 				alert('필터링할 이미지가 없습니다.');
 				return false;
 			}
-			
+			if(this.isempty){
+				alert("인식된 객체가 없습니다.");
+				this.step=0;
+				this.image= '';
+				this.sendFile = '';
+				return false;
+			}
 			this.waiting = true;
 			let passposes = [];
 			for(var i = 0; i<this.predictData.length; i++){
 				if(this.predictData[i].check){
 					passposes.push('[' + this.predictData[i].pos.join(',') + ']');
 				}
+			}
+			if(passposes ==''){
+				alert("선택된 객체가 없습니다");
+				this.waiting = false;
+				return false;
 			}
 			passposes = '[' + passposes.join(',') + ']';
 			
