@@ -115,7 +115,20 @@
 ![구조](./archi.png)
 
 Blur Pencil의 장점은 위와 같은 과정이 클릭 3번만으로 이루어진다는 것입니다.
-
+<p align = "center">
+<p>
+<strong>STEP 1</strong>
+</p>
+<img src ="./1.png" width = "1024">
+<p>
+<strong>STEP 2</strong>
+</p>
+<img src ="./2.png" width = "1024">
+<p>
+<strong>STEP 3</strong>
+</p>
+<img src ="./3.png" width = "1024">
+</p>
 ### 설계
 ![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
 
