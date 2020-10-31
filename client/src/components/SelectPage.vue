@@ -40,6 +40,7 @@
 <script>
   const menuList = [
     { title: 'Dashboard', link_to: '/main',isSelected : false,icon : require("../images/dashboard.svg"),icon_hov : require('../images/dashboard_hov.svg')},
+    { title: 'Recent', link_to: '/recent', isSelected : false, icon : require('../images/current.svg'),icon_hov : require('../images/current_hov.svg')},
     { title: 'Profile', link_to: '/profile',isSelected : false,icon : require('../images/profile.svg'), icon_hov : require('../images/profile_hov.svg')},
     { title: 'Upload', link_to: '/upload', isSelected : false, icon : require('../images/upload.svg'),icon_hov : require('../images/upload_hov.svg')},
   ]

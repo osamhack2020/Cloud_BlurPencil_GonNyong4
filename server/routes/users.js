@@ -53,7 +53,8 @@ router.post('/login', function(req, res, next) {
 		user_id: req.body.user.id,
 		user_pw: req.body.user.password
 	});
-		
+	let user_oid = '';
+	
 	User.findOne({ user_id: user.user_id })
 		.then((result) => {
 			if (!result) {
@@ -61,6 +62,7 @@ router.post('/login', function(req, res, next) {
 				return { success:false, message:`아이디도 비밀번호도 틀림` };
 			} else if (result.user_pw === user.user_pw) {
 				// 로그인 성공
+				user_oid = result._id;
 				return User.updateOne({ user_id: user.user_id }, { user_updatedAt: new Date().toISOString() });		
 			} else {
 				// 이메일만 성공
@@ -68,8 +70,8 @@ router.post('/login', function(req, res, next) {
 			}
 		})
 		.then((result) => {
-			if (result.ok)
-				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공` });
+			if (result.ok) 
+				res.json(200, { success:true, message:`${user.user_id} : 로그인 성공`, _id:user_oid });
 			else
 				res.json(200, result);
 			
@@ -94,7 +96,7 @@ router.post('/register', function(req, res, next) {
 	
 	user.save()
 		.then((result) => {
-			res.json(200, { success:true, message:'회원가입에 성공했습니다. 같은 메세지' });
+			res.json(200, { success:true, message:'회원가입에 성공했습니다.' });
 		})
 		.catch((err) => {
 		    if (err) {

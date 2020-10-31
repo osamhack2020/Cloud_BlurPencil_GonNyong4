@@ -11,6 +11,7 @@ var upload 		= require('./routes/upload');
 var uploadpage 	= require('./routes/uploadpage');
 var users 		= require('./routes/users');
 var works 		= require('./routes/works');
+var folders		= require('./routes/folders');
 
 var connectMongoDB = require('./schemas');
 
@@ -32,6 +33,7 @@ app.use('/', index);
 app.use('/api/upload', upload);
 app.use('/api/users', users);
 app.use('/api/works', works);
+app.use('/api/folders', folders);
 app.use('/uploadpage',uploadpage);
 
 // catch 404 and forward to error handler

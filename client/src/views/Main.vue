@@ -1,105 +1,51 @@
 <template>
-  <div class="main">
-	<div>
-		<div class="recent-worked" v-if="!showWorkedData">
-			<h2 class="recent-title">최근 작업내역</h2>
-			<div class="menu-box"> 
-				<button class="btn" v-on:click="clickDown" :disabled="checkedList==''">
-					<img src = "../images/import.svg" class="btn_image"/>
-					다운로드
-				</button>
-				<button class="btn" v-on:click="clickDel"  :disabled="checkedList==''">
-					<img src = "../images/trash-alt.svg" class="btn_image">
-					삭제
-				</button>
-			</div>
-			<b-card-group deck>
-				<div v-for="(list,idx) in lists" :key="idx" class = "wrap_cards">
-					<b-card
-						class = "showing_image"
-						v-if="list"
-					>
-						<b-card-text>
-							<input type="checkbox" v-bind:id="'check'+idx" v-bind:value="list" v-model="checkedList">
-							{{list.fileName}}
-						</b-card-text>
-						<b-card no-body
-							:img-src = "serverUrl + list.fileName" 
-							@click="click_image(list)"
-							style = "cursor : pointer; margin: 0px;"
-							img-alt="Image"
-							img-width = "auto"
-							img-height = "250rem"
-							img-top>
-						</b-card>
-						<b-card-text>
-						</b-card-text>
-							<template #footer>
-								<small class="text-muted">Last updated at <br>{{list.workedAt}}</small>
-							</template>
-					</b-card>
-				</div>
-			</b-card-group>
-			<div class = "wrap_pagination">
-				<div class ="load_page">
-					<b-pagination
-						:total-rows="totalRows" 
-						v-model="currentPage"
-						:per-page="perPage"
-					/>
+	<div class="main">
+		<div class="folders-section" v-if="!showWorkedData && !showFolderData">
+			<h3>내 폴더들</h3>
+			<button class="btn folder create" @click="showCreateFolder = true">
+				<p class="folder-text">폴더생성</p>
+			</button>
+			<button class="btn folder" :class="{ 'mine' : folder.owner === user_oid, 'share' : folder.owner !== user_oid }" v-for="(folder, idx) in folderList" :key="idx" @click="showFolderData = true; clicked_folder = folder">
+				<div class="share-user-profile" v-for="(user, idx2) in folder.share" :key="idx2">{{ user.user_id }}</div>
+				<p class="folder-text folder-title">{{ folder.folderName }}</p>
+			</button>
+		</div>
+		<div class="recents-section" v-if="!showWorkedData && !showFolderData">
+			<h3>최근 작업내역</h3>
+			<div>
+				<div class="recent-work" v-for="(recent, idx) in recentWorks" :key="idx" @click="showWorkedData=true; recent.user_oid = user_oid; clicked_image=recent;">
+					<img class="recent-image" :src="serverUrl + recent.fileName" />
+					<p class="recent-fileName">{{ recent.fileName }}</p>
+					<p class="recent-fileName">/ {{ getFolderName(recent.folder) }}</p>
+					<p class="recent-fileName">{{ recent.workedAt }}</p>
 				</div>
 			</div>
 		</div>
-		<div class="container data-section" v-else-if="showWorkedData">
-			<button class="btn before-btn" v-on:click="showWorkedData = false;">
-				<div class="before-btn-circle">
-					<p>＜</p>
-				</div>
-				최근 작업내역</button>
-			<h3 style="text-align:left;">{{clicked_image.fileName}}</h3>
-			<div class="row">
-				<div class="col-md-8">
-					<div class="data-image">
-						<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="data-setting">
-						<p class="setting-comment">인식률 <span class="show-value">{{ clicked_image.score }}</span></p>
-						<p class="setting-desc">로고로 인식할 추적 점수의 최소값</p>
-						<hr/>
-						<p class="setting-comment">NMS <span class="show-value">{{ clicked_image.nms }}</span></p>
-						<p class="setting-desc">Non-Maximum Suppression에서 사용할 IoU(Intersection over Union)의 threshold 값</p>
-						<hr/>
-						<p class="setting-comment">작업일</p>
-						<p class="setting-desc">{{ clicked_image.workedAt }}</p>
-					</div>
-				</div>
-			</div>			
-			<button class="btn" v-on:click="downloadWork(clicked_image.fileName)" style="float:right; background-color:white;">
-				<img src = "../images/import.svg" class="btn_image"/>
-				다운로드
-			</button>
-			<button class="btn" v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" style="float:right; background-color:white; margin-right:1rem;">
-				<img src = "../images/trash-alt.svg" class="btn_image">
-				삭제
-			</button>
-		</div>
-		<!-- <b-modal id="bv-modal-example" hide-footer size = "xl">
-			<template #modal-title>
-				{{clicked_image.fileName}}
-			</template>
-			<div style = "text-align : center; height : 500px;">
-				<img class="worked-image" v-if="workData[0]" v-bind:src="serverUrl + clicked_image.fileName"/>
+		<div class="custom-modal" v-if="showCreateFolder">
+			<div class="modal-box">
+				<b-form-group label="폴더 이름을 입력해주세요." style="text-align: left; font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem;">
+					<b-form-input
+						id="folder-input"
+						v-model="folderName"
+						required
+					></b-form-input>
+					<b-form-invalid-feedback id="folder-input">
+						폴더명을 입력해주세요.
+					</b-form-invalid-feedback>
+				</b-form-group>
+				<button class="btn btn-primary" @click="createFolder" >폴더생성</button>
+				<button class="btn" @click="showCreateFolder = false">취소</button>
 			</div>
-			<button v-on:click="downloadWork(clicked_image.fileName)" class="btn btn-primary float-right">다운로드</button>
-			<button v-on:click="removeWork(clicked_image._id, clicked_image.fileName)" class="btn btn-danger float-right">삭제</button>
-		</b-modal> -->
+		</div>
+		<WorkData v-if="showWorkedData" @cancelWorkData="cancelWorkData" :clicked_image="clicked_image"></WorkData>
+		<FolderData v-if="showFolderData" @cancelFolderData="cancelFolderData" :clicked_folder="clicked_folder"></FolderData>
 	</div>
-  </div>
 </template>
 
 <script>
+import WorkData from '@/components/WorkData.vue'
+import FolderData from '@/components/FolderData.vue'
+	
 export default {
 	name: 'Main',
 	props: {
@@ -110,225 +56,205 @@ export default {
     },
 	data () {
 		return {
-			workData : '',
-			finduser : this.$route.params.userid,
-			perPage: 5,
-			currentPage: 1,
-			clicked_image : '',
-			user_id : '',
-			checkedList : [],
-			showWorkedData: false
+			user_oid: '',
+			inviteEmail: '',
+			folderName: '',
+			folderList: '',
+			recentWorks: '',
+			showCreateFolder: false,
+			showWorkedData: false,
+			showFolderData: false,
+			clicked_image: '',
+			clicked_folder: ''
 		}
 	},
 	methods : {
-		click_image (src){
-			this.clicked_image = src;
-			// this.$bvModal.show('bv-modal-example');
-			this.showWorkedData = true;
-		},
-		removeWork(work_oid, fileName) {
-			this.$http.post(`/api/works/delete/${this.user_id}`, {
-				work_oid: work_oid,
-				fileName: fileName
-			})
-			.then((response) => {
-				console.log(response.data);
-				location.reload();
-			})
-			.catch((err) =>{
-				this.workData = err;
-			})
-		},
-		downloadWork (fileName) {
-			this.$http ({
-				url: `${this.serverUrl}${fileName}`,
-				method: 'GET',
-				responseType: 'blob',
+		createFolder() {
+			this.$http.post('/api/folders',{
+				folderName: this.folderName,
+				owner : this.user_oid
 			}).then((response) => {
-				var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-				var fileLink = document.createElement('a');
-
-				fileLink.href = fileURL;
-				fileLink.setAttribute('download', fileName);
-				document.body.appendChild(fileLink);
-
-				fileLink.click();
-			});
+				alert(response.data.message);
+				this.showCreateFolder = false;
+			}).catch((err) =>{
+				console.log(err);
+			})
 		},
-		clickDel(){
-			const f = this.checkedList;
-			var isok = confirm("정말"+f.length+"개의 파일을 삭제하시겠습니까?");
-			if(isok){
-				for(var i =0;i<f.length;i++){
-					this.removeWork(f[i]._id,f[i].fileName);
-				}
-				alert("파일이 삭제되었습니다.");
-				this.checkedList = [];
-			}
+		getFolderName(data) {
+			if (!data)
+				return '';
+			return data.folderName
 		},
-		clickDown(){
-			const f= this.checkedList;
-			var isok = confirm("정말"+f.length+"개의 파일을 다운로드하시겠습니까?");
-			if(isok){
-				for(var i =0;i<f.length;i++){
-					this.downloadWork(f[i].fileName);
-				}
-				this.checkedList = [];
-			}
+		getFolders() {
+			this.$http.get(`/api/folders?user_oid=${this.user_oid}`)
+				.then((response) => {
+					this.folderList = response.data;
+				}).catch((err) =>{
+					console.log(err);
+				})
+			this.$http.get(`/api/folders/shared/?user_oid=${this.user_oid}`)
+				.then((response) => {
+					this.folderList = this.folderList.concat(response.data);
+				}).catch((err) =>{
+					console.log(err);
+				})
+		},
+		cancelWorkData() {
+			this.getRecentWork();
+			this.showWorkedData = false;
+		},
+		cancelFolderData() {
+			this.getRecentWork();
+			this.showFolderData = false;
+		},
+		getRecentWork() {
+			var userid = sessionStorage.getItem("userid");
+			this.user_id = userid;
+			var skip = 0;	// 뛰어넘기	(default 0)
+			var limit = 5;	// 개수	(default 5)
+			var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)
+
+			this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
+				.then((response) => {
+					this.recentWorks = response.data;
+					// console.log(this.recentWorks);
+					// console.log(this.recentWorks);
+					if (this.recentWorks.length > 0) {
+						// 작업물이 한개 이상이라도 있으면
+					}
+				})
+				.catch((err) =>{
+					this.recentWorks = err;
+				})
 		}
 	},
-	created () {
-		var userid = sessionStorage.getItem("userid");
-		this.user_id = userid;
-		var skip = 0;	// 뛰어넘기	(default 0)
-		var limit = 100;	// 개수	(default 5)
-		var sort = -1;	// -1 최신순부터, 1 예전순부터 (default -1)
-		
-		this.$http.get(`/api/works/${userid}/?skip=${skip}&limit=${limit}&sort=${sort}`)
-			.then((response) => {
-				this.workData = response.data;
-				if (this.workData.length > 0) {
-					// 작업물이 한개 이상이라도 있으면
-					this.rows = this.workData.length;
-				}
-			})
-			.catch((err) =>{
-				this.workData = err;
-			})
+	created(){
+		this.user_oid = sessionStorage.getItem("user_oid");
+		this.getFolders();
+		this.getRecentWork();
 	},
-	computed: {
-    lists () {
-      const items = this.workData;
-      // Return just page of items needed
-      return items.slice(
-        (this.currentPage - 1) * this.perPage,
-        this.currentPage * this.perPage
-      )
-    },
-    totalRows () {
-      return this.workData.length;
-    }
-  }
+	components: {
+		WorkData,
+		FolderData
+	}
 }
 </script>
 <style lang="scss">
 	.main {
 		padding: 5rem;
-		background-color :  #f1f5f6 !important;
 		position: relative;
 	}
-	.worked-image {
-		// height: 500px;
-		width: auto;
-		max-width: 100%;
-		display : inline-block;
-		// margin : 0 auto;
-	}
-	.wrap_pagination{
-		text-align : center;
-		margin-top : 1rem;
-	}
-	.load_page span{
-		bottom : 0;
-		font-size : 1rem;
-	}
-	.load_page{
-		margin : 0 auto;
-		display : inline-block;
-	}
-	.recent-worked {
+	.folders-section {
 		text-align: left;
-	}
-	.recent-worked .recent-title {
-		font-weight: 700;
-	}
-	.recent-worked .worked-list {
-		padding: 1rem;
-		align-items: center;
-	}
-	.menu-box {
-		background-color: #f1f5f6 !important;
-		width : 60vw;
-		height : 35px;
-		margin-bottom : 3rem;
-		margin-top : 2rem;
-		border-radius : 20px;
-		.btn {
-			background-color: white !important;
-			& + .btn {
+		margin-bottom: 5rem;
+		h3 {
+			font-weight: 700;
+		}
+		.folder {
+			width: 12rem;
+			height: 10rem;
+			border-radius: 1rem;
+			position: relative;
+			background-color: tomato;
+			box-shadow: 3px 5px 10px 2px #00000030;
+			padding-left: 1.5rem;
+			padding-right: 1.5rem;
+			padding-top: 1.5rem;
+			display: inline-flex;
+			/* text-align: left; */
+			/* align-content: flex-start; */
+			/* vertical-align: top; */
+			overflow: hidden;
+			& + .folder {
 				margin-left: 1rem;
+			}
+			&.create {
+				color: #7f7ffb;
+				border: 2px dashed #7f7ffb;
+				background-color: white;
+			}
+			&.mine {
+				background-color: #7f7ffb;
+			}
+			&.share {
+				background-color: #b0abfb;
+				border: 2px solid #b0abfb;
+			}
+			.folder-text {
+				left: 0px;
+				bottom: 0px;
+				text-align: left;
+				position: absolute;
+				margin-left: 24px;
+				margin-bottom: 24px;
+				font-weight: 600;
+			}
+			.folder-title {
+				color: white;
 			}
 		}
 	}
-	.showing_image{
-		height : 30rem;
-		max-width : 15rem;
-		
-	}
-	.wrap_cards{
-		margin-top : 5px;	
-	}
-	.card-title {
-		font-size: 1rem;
-	}
-	.btn_image {
-		width: 1rem;
-		margin-right: .5rem;
-	}
-	.before-btn {
-		margin-top: 2.5rem;
-		margin-left: 2rem;
-		position: absolute;
-		left: 1rem;
-		top: 1rem;
-		font-size: 1.2rem !important;
-		opacity: .7;
-		.before-btn-circle {
-			width: 2.5rem;
-			height: 2.5rem;
-			border: 1px solid rgba(black, .5);
-			border-radius: 3rem;
-			display: inline-flex;
-			justify-content: center;
+	.recents-section {
+		text-align: left;
+		h3 {
+			font-weight: 700;
+		}
+		.recent-work {
+			display: flex;
 			align-items: center;
-			margin-right: .5rem;
-			p {
-				font-size: .7rem;
-				line-height: 2rem;
+			justify-content: space-between;
+			cursor: pointer;
+			padding: 1rem 1rem;
+			border-radius: .5rem;
+			transition: background .3s ease;
+			box-shadow: 0px 4px 5px 2px #0000000d;
+			&:hover {
+				// background-color: #7f7ffb1c !important;
+				background-color: white !important;
+				box-shadow: 0px 4px 5px 2px #0000000d !important;
+			}
+			& + .recent-work {
+				margin-top: 1rem;
+			}
+			.recent-image {
+				// max-width: 3rem;
+				max-height: 3rem;
+			}
+			.recent-fileName {
 				margin-bottom: 0px;
 			}
 		}
 	}
-	.data-section {
-		margin-top: 5rem;
-		text-align: left;
-		.data-image {
-			padding: 1rem;
+	.custom-modal {
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+		height: 100vh;
+		background-color: rgba(0, 0, 0, .7);
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.modal-box {
+			padding: 4rem 2rem;
+			width: 30rem;
+			border-radius: 1rem;
 			background-color: white;
-			border-radius: .25rem;
-		}
-		.data-setting {
-			padding: 1rem 1rem 2rem 1rem;
-			background-color: white;
-			border-radius: .25rem;
-			.setting-comment {
-				font-weight : bold;
-				padding-top: 1rem;
-				padding-bottom: 1rem;
-				transition: none;
-				cursor: auto;
-				&:hover {
-					background: none;
-				}
-				.show-value {
-					color: black;
-					font-size: 1rem;
-					bottom: 0px;
-					position: relative;
-					font-weight: 500 !important;
-					margin-left: .5rem !important;
-				}
+			box-shadow: 0px 5px 15px 5px #ffffff17;
+			.btn-primary {
+				margin-top: 16px;
+				width: 100%;
 			}
 		}
+	}
+	.share-user-profile {
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 1rem;
+		background-color: white;
+		margin-right: .5rem;
+		overflow: hidden;
+		box-shadow: 2px 2px 3px 1px #00000030;
 	}
 </style>
