@@ -156,7 +156,7 @@ Blur Pencil은 위와 같은 과정을 클릭 3번만으로 쉽게 작동할 수
 
 ## Blur Pencil이 가지는 장점
 ### 로그인 없이 무료로 사용 가능
-<img src ="./strength1.png" width = "512">
+<img src ="./strength1.png" width = "1024">
 <br>
 
 ### 폴더 기능
