@@ -146,6 +146,7 @@
 						this.$router.push({name: 'Main', params: {userid : this.loginUser.id}})
 						this.$router.go()
 						sessionStorage.setItem("userid",this.loginUser.id);
+						sessionStorage.setItem("user_oid",res.data._id);
 					}
 					else{
 						if(res.data.message == '아이디도 비밀번호도 틀림'){

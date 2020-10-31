@@ -1,7 +1,7 @@
 from PIL import Image
 import io
 import torch
-from flask import Flask, request, jsonify, Response, render_template
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from model import get_fasterrcnn_model
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -12,6 +12,8 @@ import cv2
 import numpy as np
 import os
 import json
+import time
+import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -63,14 +65,12 @@ def blur(context=None):
         img_crop[:, :xmin, :] = img[:, :xmin, :]
         img_crop[:, xmax:, :] = img[:, xmax:, :]
         img = img_crop
-    fig, ax = plt.subplots(1)
-    plt.axis('off')
-    plt.margins(0, 0)
+    # https://stackoverflow.com/a/59367737
     img = Image.fromarray((img).astype(np.uint8))
-    ax.imshow(img)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+    byte_arr = io.BytesIO()
+    img.save(byte_arr, format='PNG')
+    byte_arr.seek(0)
+    return Response(byte_arr.getvalue(), mimetype='image/png')
 
 
 @app.route('/predict', methods=['POST'])
