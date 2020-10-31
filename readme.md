@@ -38,15 +38,18 @@
 <p><strong>Blur Pencil</strong>은 Blur와 Pencil을 합친 단어로, 모자이크 처리 하고 싶은 이미지를 Pencil(연필)과 같은 우리에게 익숙한 도구로 간단하고 쉽게 Blur처리 하기 위해 고안한 아이디어 입니다. 접근하기 편리한 웹을 통해 이미지를 드래그 앤 드랍만 하면, 학습된 Blur Pencil이 이미지를 분석한 뒤, 모자이크 할 객체를 인식하며, 인식된 객체 중 원하는 객체를 골라 모자이크 처리를 할 수 있습니다. 또한 모자이크 처리 된 이미지 내역들을 저장할 수 있으며, 다른 사용자와 공유할 수 있도록 도와줍니다.</p>
 
 <br><br>
+<div float = "left">
 <a href = "https://www.youtube.com/watch?v=Dpo0IvrmeTA&feature=youtu.be">
-<img src="./goyoutube" width = "512" float="left">
+<img src="./goyoutube.png" width = "512">
 </a>
 <p>Blur Pencil 소개 영상</p>
+</div>
+<div float = "left">
 <a href = "https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4/blob/master/PPT/Blur%20Pencil%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx">
-<img src="./goppt" width = "512" float="left">
+<img src="./goppt.png" width = "512" float="left">
 </a>
 <p>Blur Pencil 발표 자료</p>
-</p>
+</div>
 <br>
 <br>
 ## 팀 정보 (Team Information)
@@ -125,24 +128,25 @@
 Blur Pencil의 장점은 위와 같은 과정이 클릭 3번만으로 이루어진다는 것입니다.
 <p align = "center">
 <p>
-<strong style="font-size : 30px;">STEP 1</strong>
+<strong style="font-size : 30px">STEP 1</strong>
 <br>
 <p>사진을 Drag and Drop해서 올린다.</p>
 </p>
 <img src ="./1.png" width = "1024">
 <p>
-<strong style="font-size : 30px;">STEP 2</strong>
+<strong style="font-size : 30px">STEP 2</strong>
 <p>인식된 객체 중 모자이크 할 객체를 선택한다.</p>
 </p>
 <img src ="./2.png" width = "1024">
 <p>
-<strong style="font-size : 30px;">STEP 3</strong>
+<strong style="font-size : 30px">STEP 3</strong>
 <p>모자이크 처리 된 이미지를 확인 후 다운로드 한다.</p>
 </p>
 <img src ="./3.png" width = "1024">
 </p>
+
 ### 설계
-![설계](https://user-images.githubusercontent.com/7239579/96877750-01658a80-14b5-11eb-9fe7-118d594dc8a7.png)
+![설계](./archi2.png)
 
 ## DEMO
 <p align="center">
