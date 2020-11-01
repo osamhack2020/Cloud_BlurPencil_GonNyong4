@@ -80,6 +80,14 @@
 
 ```bash
 $ git clone https://github.com/osamhack2020/Cloud_BlurPencil_GonNyong4.git
+$ cd Cloud_BlurPencil_GonNyong4
+$ npm install
+```
+
+### Front-End
+```bash
+$ cd client/
+$ npm install
 ```
 
 ### Back-End
@@ -219,12 +227,6 @@ $ (root) npm start
 </p>
 <img src = "./example3.png" width = "1024">
 <p align="left">
-
-### Functions
-![](demo/mypage.png)
-![](demo/foldername.png)
-![](demo/goonin.png)
-![](demo/sharefolder.png)
 
 ## Blur Pencil 기대 효과
 - 빠르고 편리한 자동 검열 기능을 통해 보안 취약점과 저작권 침해 등을 보완할 수 있다.
