@@ -213,19 +213,19 @@ $ (root) npm start
 ### Demo Image 1
 
 </p>
-<img src = "./example1.png" width = "1024">
+<img src = "images/example1.png" width = "1024">
 <p align="left">
 
 ### Demo Image 2
 
 </p>
-<img src = "./example2.png" width = "1024">
+<img src = "images/example2.png" width = "1024">
 <p align="left">
 
 ### Demo Image 3
 
 </p>
-<img src = "./example3.png" width = "1024">
+<img src = "images/example3.png" width = "1024">
 <p align="left">
 
 ## Blur Pencil 기대 효과
