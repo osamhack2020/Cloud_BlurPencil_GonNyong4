@@ -12,7 +12,7 @@
 <p align="center">
  <img src="https://img.shields.io/github/repo-size/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
  <img src="https://img.shields.io/github/license/osamhack2020/Cloud_BlurPencil_GonNyong4?style=for-the-badge"/>
- <a href="http://20.194.22.218:8080/">
+ <a href="http://gonnyong4.koreacentral.cloudapp.azure.com:8080">
  	<img src="https://img.shields.io/badge/LIVE-DEMO-%235f5fff?style=for-the-badge"/>
  </a>
 </p>
